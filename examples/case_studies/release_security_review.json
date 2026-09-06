@@ -1,0 +1,11 @@
+{
+  "case": "release_security_review",
+  "sanitized": true,
+  "remaining_limit_percent": 12,
+  "recommended_model": "gpt-5.6-sol",
+  "routing_decision": "sol_only_for_now",
+  "premium_turns_spent": 0,
+  "reset_credits_used": 0,
+  "reason": "Premium Shadow Mode after Sol would increase total workflow cost for the current evidence state.",
+  "public_lesson": "A premium review can be valid later while still being wasteful now."
+}

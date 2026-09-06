@@ -28,6 +28,7 @@ def main(argv: list[str] | None = None) -> int:
 
     route = sub.add_parser("route", help="Decide whether a requested model should be allowed")
     route.add_argument("--input", required=True)
+    route.add_argument("--plain", action="store_true", help="Print a compact human-readable decision")
 
     capsule = sub.add_parser("capsule", help="Build a safe premium-model capsule")
     capsule.add_argument("--root", default=".")
@@ -76,11 +77,35 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(json.dumps({"ok": False, "error": str(exc)}))
         return 2
-    if isinstance(result, str):
+    if args.cmd == "route" and getattr(args, "plain", False):
+        print(_plain_route(result))
+    elif isinstance(result, str):
         print(result, end="" if result.endswith("\n") else "\n")
     else:
         print(json.dumps({"ok": True, "result": result}, indent=2, sort_keys=True))
     return 0
+
+
+def _plain_route(result: object) -> str:
+    if not isinstance(result, dict):
+        return str(result)
+    lines = [
+        f"decision: {result.get('decision')}",
+        f"recommended_model: {result.get('recommended_model')}",
+    ]
+    parity = result.get("parity")
+    if isinstance(parity, dict):
+        lines.extend(
+            [
+                f"premium_plan_credits: {parity.get('premium_plan_credits')}",
+                f"premium_to_sol_ratio: {parity.get('premium_to_sol_ratio')}",
+                f"sol_parity_met: {parity.get('sol_parity_met')}",
+            ]
+        )
+    blocks = result.get("blocks")
+    if blocks:
+        lines.append(f"blocks: {', '.join(str(item) for item in blocks)}")
+    return "\n".join(lines)
 
 
 def _load_json(path: str) -> dict[str, object]:

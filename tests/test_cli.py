@@ -10,7 +10,7 @@ def test_cli_route(tmp_path: Path, capsys):
         '"sol_baseline_tokens":{"input":100000},"premium_plan_tokens":{"input":70000}}',
         encoding="utf-8",
     )
-    assert main(["route", "--input", str(packet)]) == 0
+    assert main(["route", "--input", str(packet), "--plain"]) == 0
     assert "block_or_route_to_sol" in capsys.readouterr().out
 
 

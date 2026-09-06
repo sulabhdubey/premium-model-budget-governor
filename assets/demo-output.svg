@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="390" viewBox="0 0 980 390" role="img" aria-labelledby="title desc">
+  <title id="title">Demo output</title>
+  <desc id="desc">Terminal-style output showing a premium model route decision.</desc>
+  <rect width="980" height="390" fill="#101317"/>
+  <rect x="24" y="24" width="932" height="342" rx="14" fill="#151b22" stroke="#303a44"/>
+  <circle cx="54" cy="52" r="7" fill="#ef476f"/>
+  <circle cx="78" cy="52" r="7" fill="#f4a261"/>
+  <circle cx="102" cy="52" r="7" fill="#2a9d8f"/>
+  <g font-family="Cascadia Mono, Consolas, monospace" font-size="21">
+    <text x="54" y="104" fill="#9be7e8">$ pm-bg route --input examples/route_packet.json</text>
+    <text x="54" y="154" fill="#ffffff">decision: allow_premium_capsule</text>
+    <text x="54" y="190" fill="#ffffff">recommended_model: gpt-6-astra</text>
+    <text x="54" y="226" fill="#ffffff">premium_plan_credits: 12.5</text>
+    <text x="54" y="262" fill="#ffffff">premium_to_sol_ratio: 0.8333</text>
+    <text x="54" y="298" fill="#2a9d8f">sol_parity_met: true</text>
+  </g>
+</svg>

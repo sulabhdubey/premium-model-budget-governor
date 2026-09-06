@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "premium-model-budget-governor": {
+      "command": "python",
+      "args": [
+        "-m",
+        "premium_model_budget_governor.mcp_server"
+      ]
+    }
+  }
+}
