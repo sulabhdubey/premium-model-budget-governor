@@ -1,5 +1,9 @@
 # MCP Server
 
+Whole-workflow tools: `plan_model_workflow` plans substantive Astra participation
+under a complete task budget; `manage_task_budget` atomically reserves and
+reconciles caller-reported spend. See [Astra-preferred workflows](ASTRA_PREFERRED.md).
+
 Premium Model Budget Governor includes an optional Model Context Protocol server
 so compatible agents can call the governor as tools instead of shelling out to
 the CLI.
@@ -74,3 +78,23 @@ python -m pytest tests/test_mcp_runtime.py
 The MCP server is local-first and does not call model providers. It reads files
 only when explicit file paths are supplied by the caller. It does not persist raw
 prompts through the telemetry tool.
+## Measured Experiments And Evidence
+
+`compare_workflow_experiments(packet)` compares identical task, snapshot, rubric,
+and repeat IDs. Supply complete host receipts; missing usage is not zero. Actual
+token counts produce rate-based estimates, not subscription consumption proof.
+
+`select_requested_evidence(packet)` accepts explicit items with id, source, text,
+sha256 and optional required=true, plus requested_ids and max_chars. Mandatory
+and requested content must fit intact; otherwise it returns needs_replan. Hashes
+check consistency, not truth. Pattern scans are not a security boundary.
+
+`plan_model_workflow` also supports minimum_input_tokens_per_call and
+require_context_calibration. `manage_task_budget` defaults new budgets to
+max_pending_leases=1. Reconcile before another call. Higher concurrency must be
+explicitly configured when opening a budget. Token-derived settlements carry
+cost_basis=token_rate_estimate. These controls require a cooperating host.
+
+Codex rollout import is deliberately CLI-only: `pm-bg receipt --input <path>
+--call-id <opaque-id>`. It reads one explicitly chosen local single-model log and
+returns counters, not conversation content. See [Experiments](EXPERIMENTS.md).

@@ -22,6 +22,10 @@ from .scanners import scan_text
 from .shadow import build_shadow_packet
 from .telemetry import normalize_usage
 from .tournament import rank_candidates
+from .workflow import plan_workflow
+from .leases import budget_action
+from .experiments import compare_runs
+from .evidence_demand import evidence_packet
 
 try:
     from mcp.server import MCPServer
@@ -32,6 +36,30 @@ except ImportError as exc:  # pragma: no cover - only exercised without optional
 
 
 mcp = MCPServer("Premium Model Budget Governor")
+
+
+@mcp.tool()
+def compare_workflow_experiments(packet: dict[str, Any]) -> dict[str, Any]:
+    """Compare supplied matched-run receipts; does not execute models or infer missing costs."""
+    return compare_runs(packet)
+
+
+@mcp.tool()
+def select_requested_evidence(packet: dict[str, Any]) -> dict[str, Any]:
+    """Select mandatory and requested content by ID/hash. Scans are heuristic, not a security boundary."""
+    return evidence_packet(packet)
+
+
+@mcp.tool()
+def plan_model_workflow(packet: dict[str, Any]) -> dict[str, Any]:
+    """Plan Astra participation and all remaining stages under a whole-task budget. Does not execute models."""
+    return plan_workflow(packet)
+
+
+@mcp.tool()
+def manage_task_budget(packet: dict[str, Any]) -> dict[str, Any]:
+    """Open, reserve, settle, cancel, or inspect local task budgets. Host must call before spending."""
+    return budget_action(packet, Path.home() / ".pm-bg" / "budget.sqlite3")
 
 
 @mcp.tool()
@@ -93,6 +121,8 @@ def build_shadow_review_packet(
     evidence_summary: str,
     contradictions: list[str] | None = None,
     remaining_limit_percent: int | None = None,
+    explicit_approval: bool = False,
+    sol_baseline_tokens: dict[str, int] | None = None,
 ) -> dict[str, Any]:
     """Build an Astra Shadow Mode packet that asks a premium model to approve, reject, or patch."""
     return build_shadow_packet(
@@ -100,6 +130,8 @@ def build_shadow_review_packet(
         evidence_summary=evidence_summary,
         contradictions=contradictions or [],
         remaining_limit_percent=remaining_limit_percent,
+        explicit_approval=explicit_approval,
+        sol_baseline_tokens=sol_baseline_tokens,
     )
 
 

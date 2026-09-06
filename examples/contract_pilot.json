@@ -1,0 +1,10 @@
+{
+  "id": "governor-contract-pilot-v1",
+  "scope": "Small synthetic reasoning pilot derived from governor contracts, not a product-quality benchmark.",
+  "prompt": "Solve four governor contract questions without tools, file reads, or edits. Return ONLY a JSON object with keys reservation_allowed (boolean), available_before_request (number), token_credits (number), release_authorized (boolean), validate_before_int (boolean). Q1: Task ceiling=5 credits, contingency=1, settled spend=1.5, active reservations=1. A NEW call requests 2 credits. Does it fit, and what capacity was available before the request? Q2: Total input=1200 tokens, of which cached=800; total output=200, of which reasoning=100. Per-million-token rates: uncached input=250 credits, cached=25, output=1250. Compute total credits. Q3: Two same-product release artifacts conflict: older campaign summary says authorized=true, current authoritative qualification says all seven local gates passed but releaseAuthorized=false. Is release authorized now? Q4: A numeric gate accepts external JSON numbers. Should finite/range/type validation happen before converting with int(), to handle NaN/Infinity and booleans correctly?",
+  "oracle": {"reservation_allowed": false, "available_before_request": 1.5, "token_credits": 0.37, "release_authorized": false, "validate_before_int": true},
+  "arms": ["astra_direct", "sol_direct", "astra_led_terra", "astra_evidence_demand"],
+  "grading": "Exact required fields/types; numeric tolerance 1e-9. Oracle fixed before calls. No model judge.",
+  "repetitions": 1,
+  "stop": "At most six agent calls total. No retry for wrong answers; missing telemetry remains unknown. No resets."
+}

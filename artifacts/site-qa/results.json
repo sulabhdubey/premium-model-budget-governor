@@ -1,0 +1,41 @@
+[
+  {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "dimensions": {
+      "width": 1440,
+      "scroll": 1440
+    },
+    "errors": [],
+    "controls_passed": true,
+    "hero_loaded": true
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "dimensions": {
+      "width": 390,
+      "scroll": 390
+    },
+    "errors": [],
+    "controls_passed": true,
+    "hero_loaded": true
+  },
+  {
+    "viewport": {
+      "width": 320,
+      "height": 740
+    },
+    "dimensions": {
+      "width": 320,
+      "scroll": 320
+    },
+    "errors": [],
+    "controls_passed": true,
+    "hero_loaded": true
+  }
+]

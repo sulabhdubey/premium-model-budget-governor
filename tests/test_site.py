@@ -23,8 +23,10 @@ def test_landing_page_uses_honest_install_and_product_copy() -> None:
 
     assert "pip install git+https://github.com/" in html
     assert "Use frontier models for judgment, not waste." in html
-    assert "Runs locally in your browser" in html
-    assert "76% avoided overhead" in html
+    assert "No model calls, account connection, or live billing" in html
+    assert "76% avoided overhead" not in html
+    assert "BENCHMARK_RESULTS.md" in html
+    assert 'id="host-context"' in html
     assert "Idea, research guidance &amp; product management: Sulabh Dubey" in html
     assert "Not an OpenAI product" in html
 
@@ -41,5 +43,5 @@ def test_package_version_matches_release() -> None:
     metadata = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     package = (ROOT / "src" / "premium_model_budget_governor" / "__init__.py").read_text(encoding="utf-8")
 
-    assert 'version = "0.1.1"' in metadata
-    assert '__version__ = "0.1.1"' in package
+    assert 'version = "0.2.0"' in metadata
+    assert '__version__ = "0.2.0"' in package

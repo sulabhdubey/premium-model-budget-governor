@@ -1,0 +1,267 @@
+{
+  "fixture_sha256": "3f70d35fc96f719b7bce56e81878dfbc860143fa572b9243a7fabdb412cff815",
+  "runs": [
+    {
+      "repeat": 0,
+      "arm": "astra_direct",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r0-astra_direct"
+      ],
+      "estimated_credits": 4.7155,
+      "input_tokens": 24269,
+      "cached_tokens": 7680,
+      "output_tokens": 301
+    },
+    {
+      "repeat": 0,
+      "arm": "sol_direct",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r0-sol_direct"
+      ],
+      "estimated_credits": 2.17102,
+      "input_tokens": 23376,
+      "cached_tokens": 3712,
+      "output_tokens": 335
+    },
+    {
+      "repeat": 0,
+      "arm": "astra_led",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r0-astra_led-plan",
+        "r0-astra_led-worker"
+      ],
+      "estimated_credits": 7.6720500000000005,
+      "input_tokens": 47841,
+      "cached_tokens": 0,
+      "output_tokens": 520
+    },
+    {
+      "repeat": 0,
+      "arm": "astra_demand",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r0-astra_demand-request",
+        "r0-astra_demand-answer"
+      ],
+      "estimated_credits": 5.6414,
+      "input_tokens": 48233,
+      "cached_tokens": 30336,
+      "output_tokens": 327
+    },
+    {
+      "repeat": 1,
+      "arm": "astra_demand",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r1-astra_demand-request",
+        "r1-astra_demand-answer"
+      ],
+      "estimated_credits": 10.8215,
+      "input_tokens": 48233,
+      "cached_tokens": 7680,
+      "output_tokens": 393
+    },
+    {
+      "repeat": 1,
+      "arm": "astra_led",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r1-astra_led-plan",
+        "r1-astra_led-worker"
+      ],
+      "estimated_credits": 4.841,
+      "input_tokens": 47844,
+      "cached_tokens": 12544,
+      "output_tokens": 573
+    },
+    {
+      "repeat": 1,
+      "arm": "sol_direct",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r1-sol_direct"
+      ],
+      "estimated_credits": 2.16902,
+      "input_tokens": 23376,
+      "cached_tokens": 3712,
+      "output_tokens": 331
+    },
+    {
+      "repeat": 1,
+      "arm": "astra_direct",
+      "grade": {
+        "passed": true,
+        "repair": {
+          "passed": true,
+          "status": "graded",
+          "checks_passed": 90,
+          "checks_total": 90
+        },
+        "contracts": {
+          "accounting": true,
+          "architecture": true,
+          "security": true,
+          "research": true
+        }
+      },
+      "calls": [
+        "r1-astra_direct"
+      ],
+      "estimated_credits": 1.0366,
+      "input_tokens": 24269,
+      "cached_tokens": 24064,
+      "output_tokens": 307
+    }
+  ],
+  "limitations": "Tiny fixed task suite, repeated twice. No broad optimality, visual capability, cross-repo implementation or weekly savings claim. Cache/order are recorded, not controlled.",
+  "cost_basis": "requested_model_standard_rate_projection",
+  "host": "Codex CLI, inherited config and rules, read-only, ephemeral, low reasoning",
+  "grader_corrections": [
+    {
+      "arm": "sol_direct",
+      "repeat": 1,
+      "reason": "Allow valid local assignment; original grader was too restrictive."
+    }
+  ],
+  "summary": [
+    {
+      "arm": "astra_demand",
+      "runs": 2,
+      "passed": 2,
+      "mean_estimated_credits": 8.23145,
+      "mean_input_tokens": 48233,
+      "min_estimated_credits": 5.6414,
+      "max_estimated_credits": 10.8215
+    },
+    {
+      "arm": "astra_direct",
+      "runs": 2,
+      "passed": 2,
+      "mean_estimated_credits": 2.8760499999999998,
+      "mean_input_tokens": 24269,
+      "min_estimated_credits": 1.0366,
+      "max_estimated_credits": 4.7155
+    },
+    {
+      "arm": "astra_led",
+      "runs": 2,
+      "passed": 2,
+      "mean_estimated_credits": 6.256525,
+      "mean_input_tokens": 47842.5,
+      "min_estimated_credits": 4.841,
+      "max_estimated_credits": 7.6720500000000005
+    },
+    {
+      "arm": "sol_direct",
+      "runs": 2,
+      "passed": 2,
+      "mean_estimated_credits": 2.17002,
+      "mean_input_tokens": 23376,
+      "min_estimated_credits": 2.16902,
+      "max_estimated_credits": 2.17102
+    }
+  ],
+  "total_model_calls": 12,
+  "total_projected_credits": 39.06809
+}

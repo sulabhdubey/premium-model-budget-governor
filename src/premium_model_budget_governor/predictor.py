@@ -29,7 +29,8 @@ def predict_benefit(task_shape: dict[str, object], *, ledger: Path | None = None
         recommendation = "shadow_mode_only"
     else:
         recommendation = "route_to_sol"
-    return {"astra_benefit_probability": probability, "recommendation": recommendation, "observed_rate_used": observed}
+    return {"astra_benefit_probability": None, "heuristic_score": probability,
+            "calibrated": False, "recommendation": recommendation, "observed_rate_used": observed}
 
 
 def _observed_rate(ledger: Path | None) -> float | None:
@@ -41,9 +42,11 @@ def _observed_rate(ledger: Path | None) -> float | None:
             row = json.loads(line)
         except json.JSONDecodeError:
             continue
-        outcome = str(row.get("outcome", "")).lower()
-        if "benefit" in outcome or "saved" in outcome or "unblocked" in outcome:
+        if not isinstance(row, dict):
+            continue
+        outcome = str(row.get("outcome", "")).lower().strip()
+        if outcome in {"benefit", "saved", "unblocked"}:
             values.append(1.0)
-        elif "waste" in outcome or "failed" in outcome or "not_needed" in outcome:
+        elif outcome in {"waste", "failed", "not_needed", "no benefit"}:
             values.append(0.0)
     return None if not values else round(mean(values), 3)

@@ -3,11 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Route broad AI work to efficient models and reserve frontier models for compact, scanned decisions.">
+    <meta name="description" content="Use Astra directly or in a measured hybrid workflow. Govern full-task costs, host context, and actual usage.">
     <meta name="theme-color" content="#ffffff">
     <title>Premium Model Budget Governor</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2226%22 fill=%22none%22 stroke=%22%230e7778%22 stroke-width=%226%22/><circle cx=%2232%22 cy=%2232%22 r=%228%22 fill=%22%23d89220%22/></svg>">
     <link rel="stylesheet" href="styles.css">
+    <script src="workflows.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -42,7 +43,7 @@
         <div class="hero-copy">
           <h1 id="hero-title">Premium Model<br>Budget Governor</h1>
           <p class="hero-statement">Use frontier models for judgment, not waste.</p>
-          <p class="hero-description">Route broad work to efficient models. Send premium models only compact, scanned decision packets. Keep the intelligence while governing the burn.</p>
+          <p class="hero-description">Keep Astra in the work. Budget the complete workflow, measure host context, and delegate only when the whole task benefits.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#demo">Try the live governor <span aria-hidden="true">→</span></a>
             <a class="button button-secondary" href="https://github.com/sulabhdubey/premium-model-budget-governor">View on GitHub</a>
@@ -66,28 +67,25 @@
             <p class="section-index">01 / Live demo</p>
             <h2 id="demo-title">Route a task before it spends.</h2>
           </div>
-          <p>Runs locally in your browser. No prompt or project data leaves this page.</p>
+          <p>Illustrative whole-workflow estimates. No model calls, account connection, or live billing.</p>
         </div>
 
         <div class="workbench page-shell">
           <form class="route-form" id="route-form">
             <div class="field-grid">
               <label>
-                <span>Task type</span>
-                <select id="task-type">
-                  <option value="repo_exploration">Repository exploration</option>
-                  <option value="implementation">Feature implementation</option>
-                  <option value="frontier_architecture">Frontier architecture</option>
-                  <option value="critical_security">Critical security review</option>
-                  <option value="final_release_review">Final release review</option>
+                <span>Workflow preference</span>
+                <select id="workflow-mode">
+                  <option value="astra_preferred">Astra preferred</option>
+                  <option value="economy">Lowest estimated cost</option>
                 </select>
               </label>
               <label>
-                <span>Requested model</span>
-                <select id="requested-model">
-                  <option value="gpt-6-astra">GPT-6 Astra</option>
-                  <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
-                  <option value="gpt-5.6-terra">GPT-5.6 Terra</option>
+                <span>Host input floor per call</span>
+                <select id="host-context">
+                  <option value="24000">24,000 tokens (illustrative CLI)</option>
+                  <option value="38000">38,000 tokens (illustrative desktop)</option>
+                  <option value="0">Unmeasured</option>
                 </select>
               </label>
             </div>
@@ -100,12 +98,12 @@
             <div class="range-scale" aria-hidden="true"><span>Emergency</span><span>Conserve</span><span>Normal</span></div>
 
             <label>
-              <span>Task description</span>
-              <textarea id="task-description" rows="5">Review a launch candidate after implementation and tests. Decide whether the evidence supports release or needs one focused patch.</textarea>
+              <span>Total task budget (estimated credits)</span>
+              <input id="task-budget" type="number" min="0" max="100" step="0.1" value="12" required>
             </label>
 
             <div class="option-row">
-              <label class="check-control"><input id="broad-context" type="checkbox" checked><span>Broad repository context</span></label>
+              <label class="check-control"><input id="evidence-ready" type="checkbox" checked><span>Required evidence prepared</span></label>
               <label class="check-control"><input id="explicit-approval" type="checkbox"><span>Explicit premium approval</span></label>
             </div>
 
@@ -119,27 +117,27 @@
             </div>
             <div class="result-head">
               <div>
-                <span class="result-label">Recommended model</span>
-                <strong id="recommended-model">GPT-5.6 Sol</strong>
+                <span class="result-label">Selected workflow</span>
+                <strong id="recommended-model">Astra direct</strong>
               </div>
               <div>
                 <span class="result-label">Decision</span>
-                <strong id="decision-label">Route to efficient model</strong>
+                <strong id="decision-label">Estimate pending</strong>
               </div>
             </div>
             <div class="result-why">
               <span class="result-label">Why</span>
-              <p id="decision-reason">Broad exploration is a low-leverage use of premium context. Compress the evidence first.</p>
+              <p id="decision-reason">Compare complete workflows including verification and contingency.</p>
             </div>
             <div class="decision-contract">
-              <div class="contract-line"><span>Premium turns allowed</span><strong id="turns-allowed">0</strong></div>
+              <div class="contract-line"><span>Astra stages planned</span><strong id="turns-allowed">0</strong></div>
               <div class="contract-line"><span>Context action</span><strong id="context-action">Compress</strong></div>
               <div class="contract-line"><span>Approval gate</span><strong id="approval-gate">Required</strong></div>
             </div>
             <div class="parity-meter">
-              <div class="meter-title"><span>Sol-parity ceiling</span><strong id="parity-value">40%</strong></div>
+              <div class="meter-title"><span>Total workflow estimate</span><strong id="parity-value">Pending</strong></div>
               <div class="meter-track"><span id="meter-fill"></span></div>
-              <p id="parity-note">Astra context should stay at or below 40% of the equivalent Sol workflow.</p>
+              <p id="parity-note">Includes a 0.5-credit contingency and verification. No cache savings assumed. Quality scores are illustrative, not measured predictions.</p>
             </div>
           </section>
         </div>
@@ -153,10 +151,10 @@
           </div>
         </div>
         <ol class="workflow-rail">
-          <li><span class="step-number">01</span><div><h3>Explore</h3><p>Efficient models read broadly, test ideas, edit files, and inspect logs.</p></div></li>
-          <li><span class="step-number">02</span><div><h3>Compress</h3><p>Rank evidence, scan secrets and injection, then score a bounded capsule.</p></div></li>
-          <li><span class="step-number">03</span><div><h3>Judge</h3><p>A premium model receives one exact decision question, not the whole repo.</p></div></li>
-          <li><span class="step-number">04</span><div><h3>Learn</h3><p>Prompt-free telemetry records whether premium judgment changed the outcome.</p></div></li>
+          <li><span class="step-number">01</span><div><h3>Measure</h3><p>Count host input as well as task context. Missing usage stays unknown.</p></div></li>
+          <li><span class="step-number">02</span><div><h3>Plan</h3><p>Compare direct Astra and complete hybrid workflows under one budget.</p></div></li>
+          <li><span class="step-number">03</span><div><h3>Execute</h3><p>Reserve a bounded call. Astra can investigate, originate, and solve.</p></div></li>
+          <li><span class="step-number">04</span><div><h3>Reconcile</h3><p>Record counters, verify outcomes, then decide whether another call helps.</p></div></li>
         </ol>
       </section>
 
@@ -191,19 +189,20 @@
         <div class="page-shell proof-layout">
           <div>
             <p class="section-index">04 / Proof</p>
-            <h2 id="proof-title">The best premium call is sometimes the one you withhold.</h2>
-            <p>Two sanitized local project tests at roughly 12% weekly capacity produced the same honest result: use Sol now, preserve Astra for an unresolved decision.</p>
+            <h2 id="proof-title">Astra direct deserves a fair comparison.</h2>
+            <p>Four workflows, two rounds, an executable bug repair, and four bounded contracts. All eight runs passed after correcting a grader defect. This is a small benchmark, not a universal savings guarantee.</p>
+            <a class="text-link" href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/docs/BENCHMARK_RESULTS.md">Read the results and limitations</a>
           </div>
           <div class="proof-records">
             <article>
-              <span>Architecture review</span>
-              <strong>0 Astra turns</strong>
-              <p>Existing invariants resolved the decision. The capsule was correctly withheld.</p>
+              <span>Repeated source-repair benchmark</span>
+              <strong>12 model calls</strong>
+              <p>All planning, worker, and evidence-request stages counted. Cached input recorded separately.</p>
             </article>
             <article>
-              <span>Release security review</span>
-              <strong>76% avoided overhead</strong>
-              <p>Shadow Mode after Sol would have cost more than Sol-only for the current evidence state.</p>
+              <span>Direct Astra host comparison</span>
+              <strong>37,051 → 23,924</strong>
+              <p>Input tokens on the same small task: desktop subagent versus CLI. Different hosts, one paired observation.</p>
             </article>
           </div>
         </div>
@@ -213,17 +212,17 @@
         <div class="section-heading compact-heading">
           <div>
             <p class="section-index">05 / Included</p>
-            <h2 id="inventory-title">A complete control layer.</h2>
+            <h2 id="inventory-title">A measured control layer.</h2>
           </div>
           <p>CLI, Python library, MCP server, and a ready Codex plugin.</p>
         </div>
         <ul class="inventory-list">
-          <li><span>01</span><div><strong>Deterministic router</strong><p>Allow, block, request approval, or route to a cheaper model.</p></div></li>
-          <li><span>02</span><div><strong>Sol-parity estimator</strong><p>Keep premium billable token volume inside a comparable budget.</p></div></li>
-          <li><span>03</span><div><strong>Context Poison Firewall</strong><p>Scan untrusted evidence for secrets and prompt-injection patterns.</p></div></li>
+          <li><span>01</span><div><strong>Astra-preferred planner</strong><p>Plan substantive Astra work without a mandatory Sol-first detour.</p></div></li>
+          <li><span>02</span><div><strong>Whole-task budget</strong><p>Include host overhead, workers, retries, verification, and contingency.</p></div></li>
+          <li><span>03</span><div><strong>Evidence safety checks</strong><p>Heuristic secret and injection checks. Not a malware or security guarantee.</p></div></li>
           <li><span>04</span><div><strong>Capsules and evidence graphs</strong><p>Give frontier models compact claims, files, tests, risks, and decisions.</p></div></li>
-          <li><span>05</span><div><strong>Shadow Mode and tournaments</strong><p>Use premium intelligence as the judge over efficient model work.</p></div></li>
-          <li><span>06</span><div><strong>Learning ledger</strong><p>Calibrate future routing from outcomes without storing raw prompts.</p></div></li>
+          <li><span>05</span><div><strong>Governed CLI execution</strong><p>Explicit read-only Codex calls with serial reservations and replay protection.</p></div></li>
+          <li><span>06</span><div><strong>Measured experiment ledger</strong><p>Compare matched outcomes without inventing missing costs or learned probabilities.</p></div></li>
         </ul>
       </section>
 

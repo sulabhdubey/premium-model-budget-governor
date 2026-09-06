@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Mapping
 
 from .cost import estimate_parity
+from .workflow import flag, number
 
 
 ASTRA_REASONS = {
@@ -28,15 +29,19 @@ LOW_LEVERAGE_TASKS = {
 def decide_model(payload: Mapping[str, object]) -> dict[str, object]:
     requested_model = str(payload.get("requested_model", "") or "")
     remaining = payload.get("remaining_limit_percent")
-    remaining_int = int(remaining) if isinstance(remaining, (int, float)) and not isinstance(remaining, bool) else None
     reasons = {str(item) for item in payload.get("reasons", [])} if isinstance(payload.get("reasons", []), list) else set()
-    explicit_approval = bool(payload.get("explicit_approval", False))
-    fast_mode = bool(payload.get("fast_mode", False))
+    explicit_approval = flag(payload, "explicit_approval")
+    fast_mode = flag(payload, "fast_mode")
     broad_context = bool(payload.get("broad_context", False))
     sensitive = bool(payload.get("suspected_sensitive_data", False))
     injection = bool(payload.get("prompt_injection_detected", False))
     capsule_quality = payload.get("capsule_quality_score")
-    quality = int(capsule_quality) if isinstance(capsule_quality, (int, float)) and not isinstance(capsule_quality, bool) else None
+    if remaining is not None and number(remaining, "remaining_limit_percent") > 100:
+        raise ValueError("remaining_limit_percent must be at most 100")
+    if capsule_quality is not None and number(capsule_quality, "capsule_quality_score") > 100:
+        raise ValueError("capsule_quality_score must be at most 100")
+    remaining_int = int(remaining) if remaining is not None else None
+    quality = int(capsule_quality) if capsule_quality is not None else None
     task_kind = str(payload.get("task_kind", "") or "").strip().lower()
 
     blocks: list[str] = []
@@ -47,9 +52,14 @@ def decide_model(payload: Mapping[str, object]) -> dict[str, object]:
             "recommended_model": requested_model or "gpt-5.6-sol",
             "blocks": blocks,
             "approval_reasons": asks,
+            "scope": "single_call; use plan to reserve Astra participation",
         }
     if broad_context:
         blocks.append("compress_context_before_astra")
+    if quality is None:
+        blocks.append("missing_capsule_quality")
+    if not isinstance(payload.get("sol_baseline_tokens"), Mapping) or not isinstance(payload.get("premium_plan_tokens"), Mapping):
+        blocks.append("missing_cost_estimates")
     if task_kind in LOW_LEVERAGE_TASKS and not reasons.intersection({"unsolved_after_sol", "critical_security"}):
         blocks.append("low_leverage_task_shape_route_to_sol")
     if sensitive:

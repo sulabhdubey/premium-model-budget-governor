@@ -1,0 +1,61 @@
+{
+  "baseline": "sol_direct",
+  "runs": [
+    {
+      "task_id": "governor-contract-pilot-v1",
+      "snapshot": "de99e6d026e7d3becc9581325c945f65f08cce75ba402f692cbb9a8711447dee",
+      "rubric": "exact-contract-v1",
+      "repeat": 0,
+      "arm": "astra_direct",
+      "passed": true,
+      "complete": true,
+      "receipt_source": "host",
+      "expected_calls": 1,
+      "calls": [
+        {
+          "call_id": "astra_direct",
+          "actual_model": "gpt-6-astra",
+          "usage": {
+            "input_tokens": 37051,
+            "cached_tokens": 0,
+            "output_tokens": 73
+          },
+          "credits": 9.354,
+          "cost_basis": "token_rate_estimate",
+          "rate_assumption": "configured standard rates; service tier not verified by importer",
+          "source": "codex_local_cumulative_snapshot",
+          "raw_prompts_stored": false,
+          "counter_fingerprint": "0910b7d57a794804dcfc6e03feddae6180f4ecbbf41087082221660320246c1c"
+        }
+      ]
+    },
+    {
+      "task_id": "governor-contract-pilot-v1",
+      "snapshot": "de99e6d026e7d3becc9581325c945f65f08cce75ba402f692cbb9a8711447dee",
+      "rubric": "exact-contract-v1",
+      "repeat": 0,
+      "arm": "sol_direct",
+      "passed": true,
+      "complete": true,
+      "receipt_source": "host",
+      "expected_calls": 1,
+      "calls": [
+        {
+          "call_id": "sol_direct",
+          "actual_model": "gpt-5.6-sol",
+          "usage": {
+            "input_tokens": 38823,
+            "cached_tokens": 0,
+            "output_tokens": 109
+          },
+          "credits": 3.9368,
+          "cost_basis": "token_rate_estimate",
+          "rate_assumption": "configured standard rates; service tier not verified by importer",
+          "source": "codex_local_cumulative_snapshot",
+          "raw_prompts_stored": false,
+          "counter_fingerprint": "1ae28bac7efee45d7d920998db7ac192f8ba45b8141905bc7e60907339c24b4e"
+        }
+      ]
+    }
+  ]
+}
