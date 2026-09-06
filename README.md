@@ -57,11 +57,12 @@ This project budgets substantive premium-model participation:
 
 ## Core Rule
 
-**v0.2 measured results:** four workflows, two rounds, 12 model calls. All eight
-workflows passed an executable telemetry repair and four bounded contracts after
-a documented grader correction. Astra-direct was the lowest-cost Astra route
-in this small suite; Sol was cheaper on average. Read the [full results and
-limitations](docs/BENCHMARK_RESULTS.md), including the earlier budget overrun.
+**Measured results:** the v0.2 repair benchmark favored direct Astra among Astra
+routes. The v0.3 24-question multimodal batch favored Astra planning plus Terra,
+after correcting a conflicting planning prompt. Sol remained cheaper in both.
+All final answers passed, but these small, cache-confounded pilots do not establish
+a universally optimal router. Read the [full results and limitations](docs/BENCHMARK_RESULTS.md),
+including invalid runs, corrections, and the earlier budget overrun.
 
 ### Astra-Preferred Workflow Planning
 
@@ -104,11 +105,18 @@ is not the enemy. Ungoverned context is.
 | Capsule quality score | Blocks thin, broad, truncated, or weak capsules |
 | Cheap Model Tournament | Cheap models compete; premium model judges finalists |
 | Distillation Ledger | Stores reusable doctrine without storing raw prompts |
-| Benefit Predictor | Learns which task shapes deserve premium review |
+| Benefit Predictor | Heuristic benefit signals; no fabricated learned probability |
+| Capability controls | Preserve required images/tools and respect project restrictions |
+| Expiring leases | Prevent late dispatch without refunding unknown spend |
+| Matched calibration | Report outcomes and uncertainty without automatic promotion |
+| Local dashboard | Export prompt-free budgets and reservations to standalone HTML |
 | MCP server | Exposes the governor as local tools for compatible agents |
 | Codex plugin | Repo includes a ready plugin bundle under `plugin/` |
 
 ![Hybrid flow](assets/flow.svg)
+
+See [capability controls, image input, calibration, and dashboard](docs/CAPABILITY_CONTROLS.md)
+for commands, input contracts, and exact enforcement limits.
 
 ## Install
 
@@ -121,18 +129,18 @@ python -m pip install -e ".[dev]"
 On Windows, if `pm-bg` is not on PATH in the current terminal, use:
 
 ```powershell
-python -m premium_model_budget_governor.cli route --input examples\route_packet.json
+python -m premium_model_budget_governor.cli plan --input examples\astra_preferred.json
 ```
 
 ## Try It In 60 Seconds
 
 ```bash
-pm-bg route --input examples/route_packet.json --plain
+pm-bg plan --input examples/astra_preferred.json
 ```
 
-Expected shape:
-
-![Demo output](assets/demo-output.svg)
+The example returns a complete Astra workflow, its roles, and the total estimated
+cost. It is illustrative and does not execute a model. Replace its estimates and
+approval state with the actual task inputs before using it for a real decision.
 
 Build a capsule:
 
@@ -195,12 +203,14 @@ plugin/
 
 Start with [docs/CODEX_SETUP.md](docs/CODEX_SETUP.md), then run the decision
 record template in [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) on a small task.
-The expected outcome for broad repo polish is usually Sol-first execution, with
-premium models reserved for a scanned capsule at the final decision point.
+Compare direct Astra with complete hybrids for the actual task. Astra can lead
+from the start; the governor must not silently replace requested participation.
 
 ## Real Local Proof Tests
 
-These were run on private local projects and sanitized for public sharing.
+These historical v0.1 policy checks were run on private local projects and
+sanitized for public sharing. They did not execute Astra and are not the current
+Astra-preferred policy or evidence of achieved savings.
 
 | Case | Result |
 | --- | --- |

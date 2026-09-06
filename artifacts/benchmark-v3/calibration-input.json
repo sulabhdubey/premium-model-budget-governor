@@ -1,0 +1,52 @@
+{
+  "pairs": [
+    {
+      "task_id": "v3-batch",
+      "family": "mixed_contract_batch",
+      "snapshot": "f25ef591cd4c19afe0abcf7e57cf4f243494c689bdfee61570251425634a0b44",
+      "rubric": "exact-v1",
+      "candidate": "astra_direct",
+      "baseline": "sol_direct",
+      "split": "calibration",
+      "cost_basis": "token_rate_estimate",
+      "matched": true,
+      "complete": true,
+      "candidate_pass": true,
+      "baseline_pass": true,
+      "candidate_credits": 6.62525,
+      "baseline_credits": 2.5318
+    },
+    {
+      "task_id": "v3-batch",
+      "family": "mixed_contract_batch",
+      "snapshot": "f25ef591cd4c19afe0abcf7e57cf4f243494c689bdfee61570251425634a0b44",
+      "rubric": "exact-v1",
+      "candidate": "astra_led",
+      "baseline": "sol_direct",
+      "split": "calibration",
+      "cost_basis": "token_rate_estimate",
+      "matched": true,
+      "complete": true,
+      "candidate_pass": true,
+      "baseline_pass": true,
+      "candidate_credits": 5.89051,
+      "baseline_credits": 2.5318
+    },
+    {
+      "task_id": "v3-batch",
+      "family": "mixed_contract_batch",
+      "snapshot": "f25ef591cd4c19afe0abcf7e57cf4f243494c689bdfee61570251425634a0b44",
+      "rubric": "exact-v1",
+      "candidate": "astra_shadow",
+      "baseline": "sol_direct",
+      "split": "calibration",
+      "cost_basis": "token_rate_estimate",
+      "matched": true,
+      "complete": true,
+      "candidate_pass": true,
+      "baseline_pass": true,
+      "candidate_credits": 8.940010000000001,
+      "baseline_credits": 2.5318
+    }
+  ]
+}

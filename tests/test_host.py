@@ -36,6 +36,29 @@ def test_command_keeps_config_rules_and_sandbox():
     assert "--ephemeral" in args
 
 
+def test_images_are_explicit_and_preserved(tmp_path):
+    path = tmp_path / "chart.png"
+    path.write_bytes(b"fixture")
+    args = codex_command("codex", tmp_path, "gpt-6-astra", "high", [path])
+    assert args[args.index("--image") + 1] == str(path.resolve())
+    with pytest.raises(FileNotFoundError):
+        codex_command("codex", tmp_path, "gpt-6-astra", "high", [tmp_path / "absent.png"])
+
+
+def test_ambiguous_io_failure_retains_reservation(tmp_path, monkeypatch):
+    import premium_model_budget_governor.host as host
+    from premium_model_budget_governor.leases import budget_action
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action": "open", "task_id": "t", "budget_credits": 100}, ledger)
+    monkeypatch.setattr(host.shutil, "which", lambda _: "codex")
+    def fail(*args, **kwargs):
+        raise OSError("pipe broke after spawn")
+    monkeypatch.setattr(host, "_run_process", fail)
+    result = host.execute_codex(prompt="test", root=tmp_path, model="gpt-6-astra", effort="low", ledger=ledger, task_id="t", call_id="x", estimated_credits=10)
+    assert result["reservation_retained"]
+    assert budget_action({"action": "status", "task_id": "t"}, ledger)["reserved_credits"] == 10
+
+
 def test_event_usage_counts_every_turn_not_last_only():
     events = [
         {"type": "item.completed", "item": {"type": "agent_message", "text": "answer"}},

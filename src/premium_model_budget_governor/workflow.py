@@ -23,6 +23,12 @@ def flag(packet: Mapping, name: str) -> bool:
     return value
 
 
+def string_list(value: object, name: str) -> list[str]:
+    if not isinstance(value, list) or any(not isinstance(v, str) or not v for v in value):
+        raise ValueError(f"{name} must be a list of non-empty strings")
+    return value
+
+
 def plan_workflow(packet: Mapping[str, object]) -> dict[str, object]:
     """Select caller-estimated complete workflows under an explicit task budget.
 
@@ -37,6 +43,12 @@ def plan_workflow(packet: Mapping[str, object]) -> dict[str, object]:
     reserve = number(packet.get("reserve_credits", 0), "reserve_credits")
     input_floor = _token(packet.get("minimum_input_tokens_per_call", 0), "minimum_input_tokens_per_call")
     require_calibration = flag(packet, "require_context_calibration")
+    hosts = packet.get("host_profiles", {})
+    project = packet.get("project_profile", {})
+    if not isinstance(hosts, Mapping) or not isinstance(project, Mapping):
+        raise ValueError("host_profiles and project_profile must be objects")
+    allowed_models = string_list(project.get("allowed_models", []), "allowed_models")
+    required_roles = string_list(project.get("required_roles", []), "required_roles")
     minimum = number(packet.get("minimum_quality_score", 0), "minimum_quality_score")
     if minimum > 1:
         raise ValueError("minimum_quality_score must be at most 1")
@@ -63,6 +75,7 @@ def plan_workflow(packet: Mapping[str, object]) -> dict[str, object]:
         if not isinstance(stages, list) or not stages:
             raise ValueError("each workflow requires stages")
         total = spent + reserve
+        minimum_cost = total
         premium_cost = 0.0
         premium_stages = []
         stage_rows = []
@@ -74,11 +87,38 @@ def plan_workflow(packet: Mapping[str, object]) -> dict[str, object]:
             if role not in {"prepare", "plan", "investigate", "implement", "review", "verify", "handoff", "retry"}:
                 raise ValueError("unsupported stage role")
             model = stage.get("model")
+            capabilities = string_list(stage.get("required_capabilities", []), "required_capabilities")
+            host = hosts.get(stage.get("host")) if isinstance(stage.get("host"), str) else None
+            if capabilities or stage.get("host") is not None:
+                if not isinstance(host, Mapping):
+                    blocks.append("missing_host_profile")
+                else:
+                    available = string_list(host.get("capabilities", []), "host capabilities")
+                    models = string_list(host.get("models", []), "host models")
+                    if set(capabilities) - set(available):
+                        blocks.append("required_capability_unavailable")
+                    if model not in models:
+                        blocks.append("model_unavailable_on_host")
+            if allowed_models and model not in allowed_models:
+                blocks.append("project_model_restriction")
             tokens = TokenPlan.from_mapping(stage["tokens"])
             # A host can inject far more context than the user's task prompt contains.
             effective = TokenPlan(max(tokens.input, input_floor - tokens.cached_input),
                                   tokens.cached_input, tokens.output)
             cost = model_credits(model, effective, fast_mode=flag(stage, "fast_mode"))
+            minimum_cost += cost
+            upper = stage.get("tokens_upper", stage["tokens"])
+            if not isinstance(upper, Mapping):
+                raise ValueError("tokens_upper must be an object")
+            upper_tokens = TokenPlan.from_mapping(upper)
+            upper_effective = TokenPlan(max(upper_tokens.input, input_floor - upper_tokens.cached_input), upper_tokens.cached_input, upper_tokens.output)
+            upper_cost = model_credits(model, upper_effective, fast_mode=flag(stage, "fast_mode"))
+            if upper_cost < cost:
+                raise ValueError("upper token estimate cannot cost less than base estimate")
+            attempts = _token(stage.get("max_attempts", 1), "max_attempts")
+            if not 1 <= attempts <= 16:
+                raise ValueError("max_attempts must be 1-16")
+            cost = upper_cost * attempts
             if cost <= 0:
                 raise ValueError("stage token estimate must have positive cost")
             total += cost
@@ -92,7 +132,11 @@ def plan_workflow(packet: Mapping[str, object]) -> dict[str, object]:
                 elif remaining is not None and remaining <= 15 and not approved:
                     blocks.append("emergency_requires_approval")
             stage_rows.append({"model": model, "role": role, "estimated_credits": round(cost, 6),
+                               "host": stage.get("host"), "required_capabilities": capabilities,
+                               "max_attempts": attempts,
                                "effective_input_tokens": effective.input + effective.cached_input})
+        if set(required_roles) - {s["role"] for s in stage_rows}:
+            blocks.append("project_required_role_missing")
         if require_calibration and input_floor == 0:
             blocks.append("measure_host_context_before_execution")
         if not flag(candidate, "complete_workflow"):
@@ -102,6 +146,7 @@ def plan_workflow(packet: Mapping[str, object]) -> dict[str, object]:
         if total > budget + 1e-9:
             blocks.append("whole_workflow_over_budget")
         evaluated.append({"id": name, "quality_score": quality,
+                          "estimated_min_credits": round(minimum_cost, 6),
                           "estimated_total_credits": round(total, 6),
                           "astra_credits": round(premium_cost, 6), "astra_roles": premium_stages,
                           "stages": stage_rows, "blocks": sorted(set(blocks))})

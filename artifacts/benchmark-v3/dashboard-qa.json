@@ -1,0 +1,23 @@
+[
+  {
+    "width": 1440,
+    "overflow": false,
+    "errors": [],
+    "rows": 1,
+    "keyboard_reachable": true
+  },
+  {
+    "width": 390,
+    "overflow": false,
+    "errors": [],
+    "rows": 1,
+    "keyboard_reachable": true
+  },
+  {
+    "width": 320,
+    "overflow": false,
+    "errors": [],
+    "rows": 1,
+    "keyboard_reachable": true
+  }
+]

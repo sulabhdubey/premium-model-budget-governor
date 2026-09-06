@@ -14,20 +14,20 @@ Windows PowerShell:
 
 ```powershell
 python -m pip install -e ".[dev,mcp]"
-python -m premium_model_budget_governor.cli route --input examples\route_packet.json --plain
+python -m premium_model_budget_governor.cli plan --input examples\astra_preferred.json
 ```
 
 ## 2. Run The First Decision
 
 ```bash
-pm-bg route --input examples/route_packet.json --plain
+pm-bg plan --input examples/astra_preferred.json
 ```
 
 The output should include:
 
-- a recommended model
-- allow/block/reroute decision
-- parity ceiling
+- a selected complete workflow and Astra's roles
+- planned or needs_replan decision
+- total estimated cost, including all stages and contingency
 - blocked reasons, if any
 
 ## 3. Build A Capsule
@@ -52,14 +52,18 @@ pm-bg score capsule.md
 
 ## 4. Use The Rule
 
-For broad exploration, docs, implementation, and logs, start with a cheaper
-model. Escalate only when all are true:
+Compare focused direct Astra with hybrid alternatives. Replace the example's
+illustrative costs with task-specific estimates and measured host input. Preserve
+required images, tools, and reasoning depth. Delegate only if the whole workflow
+benefits; no prior Sol failure is required. If Astra cannot fit, return
+needs_replan rather than silently completing on Sol. The older `route` command
+is a single-call gate, not the default whole-task policy.
 
-- the task reaches a decision point
-- evidence is bounded and scanned
-- the capsule is strong enough
-- premium billable tokens stay under the Sol-parity ceiling
-- there is a real reason premium judgment may change the outcome
+Before execution, open a task budget and reserve calls. See
+[governed execution](GOVERNED_EXECUTION.md) and
+[capability controls](CAPABILITY_CONTROLS.md) for actual images, project profiles,
+upper estimates, expiry, calibration, and dashboard commands. Planning alone
+does not switch the active chat model or consume a model call.
 
 ## 5. Verify The Repo
 
@@ -67,4 +71,3 @@ model. Escalate only when all are true:
 python -m pytest
 python evals/run_synthetic_eval.py
 ```
-

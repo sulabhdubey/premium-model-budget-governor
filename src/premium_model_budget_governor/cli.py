@@ -21,6 +21,8 @@ from .leases import budget_action
 from .experiments import compare_runs, import_codex_receipt
 from .evidence_demand import evidence_packet
 from .host import execute_codex
+from .calibration import calibrate
+from .dashboard import export_dashboard
 
 
 DEFAULT_LEDGER = Path.home() / ".pm-bg" / "ledger.jsonl"
@@ -39,7 +41,11 @@ def main(argv: list[str] | None = None) -> int:
     budget = sub.add_parser("budget", help="Reserve and reconcile a whole task budget")
     budget.add_argument("--input", required=True)
     budget.add_argument("--ledger", default=str(Path.home() / ".pm-bg" / "budget.sqlite3"))
+    dashboard = sub.add_parser("dashboard", help="Export a prompt-free read-only HTML ledger snapshot")
+    dashboard.add_argument("--ledger", required=True)
+    dashboard.add_argument("--output", required=True)
     for name, help_text in [("experiment", "Compare matched runs without inventing usage"),
+                            ("calibrate", "Report matched outcomes without automatic model promotion"),
                             ("evidence", "Select integrity-checked evidence without truncation")]:
         command = sub.add_parser(name, help=help_text)
         command.add_argument("--input", required=True)
@@ -138,6 +144,10 @@ def _load_json(path: str) -> dict[str, object]:
 
 
 def _dispatch(args: argparse.Namespace) -> object:
+    if args.cmd == "dashboard":
+        return export_dashboard(Path(args.ledger), Path(args.output))
+    if args.cmd == "calibrate":
+        return calibrate(_load_json(args.input))
     if args.cmd == "run":
         packet = _load_json(args.input)
         required = ("prompt", "root", "model", "task_id", "call_id", "estimated_credits")
@@ -145,11 +155,15 @@ def _dispatch(args: argparse.Namespace) -> object:
             raise ValueError("run requires prompt, root, model, task_id, call_id, estimated_credits")
         if any(not isinstance(packet[key], str) or not packet[key].strip() for key in required[:-1]):
             raise ValueError("run prompt, root, model, task_id and call_id must be non-empty strings")
+        images = packet.get("images", [])
+        if not isinstance(images, list) or any(not isinstance(p, str) or not p for p in images):
+            raise ValueError("images must be a list of explicit file paths")
         return execute_codex(prompt=packet["prompt"], root=Path(packet["root"]), model=packet["model"],
                              effort=packet.get("effort", "low"), ledger=Path(args.ledger),
                              task_id=packet["task_id"], call_id=packet["call_id"],
                              estimated_credits=packet["estimated_credits"],
-                             timeout_seconds=packet.get("timeout_seconds", 300))
+                             timeout_seconds=packet.get("timeout_seconds", 300),
+                             images=[Path(p) for p in images])
     if args.cmd == "receipt":
         return import_codex_receipt(Path(args.input), args.call_id)
     if args.cmd == "experiment":

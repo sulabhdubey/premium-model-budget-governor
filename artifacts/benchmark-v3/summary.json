@@ -1,0 +1,38 @@
+{
+  "astra_direct": {
+    "mean_credits": 6.62525,
+    "range_credits": [
+      6.62525,
+      6.62525
+    ],
+    "passed_runs": 2,
+    "runs": 2
+  },
+  "sol_direct": {
+    "mean_credits": 2.5318,
+    "range_credits": [
+      2.5253,
+      2.5383
+    ],
+    "passed_runs": 2,
+    "runs": 2
+  },
+  "astra_led": {
+    "mean_credits": 5.89051,
+    "range_credits": [
+      4.98113,
+      6.7998899999999995
+    ],
+    "passed_runs": 2,
+    "runs": 2
+  },
+  "astra_shadow": {
+    "mean_credits": 8.940010000000001,
+    "range_credits": [
+      8.77297,
+      9.107050000000001
+    ],
+    "passed_runs": 2,
+    "runs": 2
+  }
+}

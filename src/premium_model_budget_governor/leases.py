@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import sqlite3
+import time
 
 from .workflow import number
 from .cost import _token
@@ -31,6 +32,8 @@ def budget_action(packet: dict, ledger: Path) -> dict:
             db.execute("ALTER TABLE leases ADD COLUMN cost_basis TEXT NOT NULL DEFAULT 'caller_reported'")
         if "max_pending" not in {row[1] for row in db.execute("PRAGMA table_info(tasks)")}:
             db.execute("ALTER TABLE tasks ADD COLUMN max_pending INTEGER NOT NULL DEFAULT 1")
+        if "expires_at" not in {row[1] for row in db.execute("PRAGMA table_info(leases)")}:
+            db.execute("ALTER TABLE leases ADD COLUMN expires_at REAL")
         if action == "open":
             ceiling = number(packet.get("budget_credits"), "budget_credits")
             reserve = number(packet.get("reserve_credits", 0), "reserve_credits")
@@ -52,6 +55,9 @@ def budget_action(packet: dict, ledger: Path) -> dict:
                 raise ValueError("lease_id is required")
             existing = db.execute("SELECT model,estimate,actual,status,cost_basis FROM leases WHERE task=? AND id=?", (task, lease)).fetchone()
             if action == "reserve":
+                ttl = _token(packet.get("ttl_seconds", 900), "ttl_seconds")
+                if not 1 <= ttl <= 86400:
+                    raise ValueError("ttl_seconds must be 1-86400")
                 estimate = number(packet.get("estimated_credits"), "estimated_credits")
                 model = packet.get("model")
                 if estimate <= 0 or not isinstance(model, str) or not model:
@@ -66,7 +72,7 @@ def budget_action(packet: dict, ledger: Path) -> dict:
                     used = db.execute("SELECT COALESCE(SUM(CASE WHEN status='settled' THEN actual WHEN status='reserved' THEN estimate ELSE 0 END),0) FROM leases WHERE task=?", (task,)).fetchone()[0]
                     if used + estimate + limits[1] > limits[0] + 1e-9:
                         raise ValueError("whole task budget exhausted; call not reserved")
-                    db.execute("INSERT INTO leases (task,id,model,estimate,actual,status) VALUES (?,?,?,?,NULL,'reserved')", (task, lease, model, estimate))
+                    db.execute("INSERT INTO leases (task,id,model,estimate,actual,status,expires_at) VALUES (?,?,?,?,NULL,'reserved',?)", (task, lease, model, estimate, time.time() + ttl))
             else:
                 if existing is None:
                     raise ValueError("lease does not exist")
@@ -89,7 +95,7 @@ def budget_action(packet: dict, ledger: Path) -> dict:
                     if existing[3] == "settled" and (existing[:3:2] != (model, actual) or existing[4] != basis):
                         raise ValueError("settlement receipt conflicts with recorded spend")
                     db.execute("UPDATE leases SET model=?,actual=?,cost_basis=?,status='settled' WHERE task=? AND id=?", (model, actual, basis, task, lease))
-        rows = db.execute("SELECT id,model,estimate,actual,status,cost_basis FROM leases WHERE task=? ORDER BY id", (task,)).fetchall()
+        rows = db.execute("SELECT id,model,estimate,actual,status,cost_basis,expires_at FROM leases WHERE task=? ORDER BY id", (task,)).fetchall()
         spent = sum(row[3] for row in rows if row[4] == "settled")
         reserved = sum(row[2] for row in rows if row[4] == "reserved")
         return {"task_id": task, "budget_credits": limits[0], "spent_credits": spent,
@@ -99,4 +105,5 @@ def budget_action(packet: dict, ledger: Path) -> dict:
                 "over_budget": spent + reserved + limits[1] > limits[0] + 1e-9,
                 "astra_receipts": sum(row[1] == "gpt-6-astra" and row[4] == "settled" for row in rows),
                 "receipt_source": "caller_reported; host must supply trustworthy actual usage",
-                "leases": [dict(zip(("id", "model", "estimate", "actual", "status", "cost_basis"), row)) for row in rows]}
+                "leases": [{**dict(zip(("id", "model", "estimate", "actual", "status", "cost_basis", "expires_at"), row)),
+                            "expired": row[4] == "reserved" and row[6] is not None and row[6] <= time.time()} for row in rows]}

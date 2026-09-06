@@ -1,0 +1,183 @@
+{
+  "usage": {
+    "input_tokens": 25282,
+    "cached_tokens": 0,
+    "output_tokens": 118
+  },
+  "answer": "{\"steps\":[\"Read each question, identify its required response format, and separate supplied facts from assumptions.\",\"Evaluate architecture and bug scenarios against ownership, transaction, validation, and usage-accounting constraints.\",\"Resolve routine coding tasks with direct calculations while preserving stated semantics and unrelated edits.\",\"Assess research claims using evidence limits, chronology, pooled denominators, and untrusted-source handling.\",\"Check release and security scenarios for authorization, target restrictions, source authority, and unresolved usage.\",\"Inspect the attached chart\u2019s bars, numeric labels, and units directly; verify every response matches its required format.\"]}",
+  "completed_turns": 1,
+  "failed": false,
+  "requested_model": "gpt-6-astra",
+  "elapsed_seconds": 13.437,
+  "status": "completed",
+  "model_identity_source": "CLI requested model; provider identity not exposed in JSON events",
+  "host": "codex_cli_inherited_config_read_only",
+  "call_id": "r1-astra_led-v2-plan",
+  "estimated_credits": 6.468,
+  "cost_basis": "requested_model_standard_rate_projection",
+  "budget": {
+    "task_id": "v3",
+    "budget_credits": 200.0,
+    "spent_credits": 51.102000000000004,
+    "max_pending_leases": 1,
+    "reserved_credits": 0,
+    "contingency_credits": 25.0,
+    "available_credits": 123.898,
+    "over_budget": false,
+    "astra_receipts": 8,
+    "receipt_source": "caller_reported; host must supply trustworthy actual usage",
+    "leases": [
+      {
+        "id": "r0-astra_direct",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 6.62525,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738179.2282004,
+        "expired": false
+      },
+      {
+        "id": "r0-astra_led-plan",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 1.4634,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738208.835829,
+        "expired": false
+      },
+      {
+        "id": "r0-astra_led-v2-plan",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 4.735,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738496.2879584,
+        "expired": false
+      },
+      {
+        "id": "r0-astra_led-v2-worker",
+        "model": "gpt-5.6-terra",
+        "estimate": 20.0,
+        "actual": 0.24613,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738515.1845374,
+        "expired": false
+      },
+      {
+        "id": "r0-astra_led-worker",
+        "model": "gpt-5.6-terra",
+        "estimate": 20.0,
+        "actual": 0.28496,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738223.1123016,
+        "expired": false
+      },
+      {
+        "id": "r0-astra_shadow-draft",
+        "model": "gpt-5.6-sol",
+        "estimate": 20.0,
+        "actual": 2.19122,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738234.0237014,
+        "expired": false
+      },
+      {
+        "id": "r0-astra_shadow-judge",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 6.58175,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738245.6800194,
+        "expired": false
+      },
+      {
+        "id": "r0-sol_direct",
+        "model": "gpt-5.6-sol",
+        "estimate": 20.0,
+        "actual": 2.5383,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738195.4522536,
+        "expired": false
+      },
+      {
+        "id": "r1-astra_direct",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 6.62525,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738323.7683601,
+        "expired": false
+      },
+      {
+        "id": "r1-astra_led-plan",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 0.91495,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738287.0428894,
+        "expired": false
+      },
+      {
+        "id": "r1-astra_led-v2-plan",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 6.468,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738526.8950627,
+        "expired": false
+      },
+      {
+        "id": "r1-astra_led-worker",
+        "model": "gpt-5.6-terra",
+        "estimate": 20.0,
+        "actual": 0.79544,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738301.204039,
+        "expired": false
+      },
+      {
+        "id": "r1-astra_shadow-draft",
+        "model": "gpt-5.6-sol",
+        "estimate": 20.0,
+        "actual": 2.5253,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738260.5702708,
+        "expired": false
+      },
+      {
+        "id": "r1-astra_shadow-judge",
+        "model": "gpt-6-astra",
+        "estimate": 20.0,
+        "actual": 6.58175,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738272.3935292,
+        "expired": false
+      },
+      {
+        "id": "r1-sol_direct",
+        "model": "gpt-5.6-sol",
+        "estimate": 20.0,
+        "actual": 2.5253,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788738312.409742,
+        "expired": false
+      }
+    ]
+  },
+  "prompt_sha256": "b308219797a3eec6875a146a2814a9897d53ba382945e7288627e9d532678990"
+}
