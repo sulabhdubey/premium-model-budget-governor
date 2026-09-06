@@ -1,0 +1,14 @@
+{
+  "candidates": [
+    {
+      "id": "spark-plan",
+      "model": "gpt-5.3-codex-spark",
+      "answer": "Fast draft with TODOs."
+    },
+    {
+      "id": "sol-plan",
+      "model": "gpt-5.6-sol",
+      "answer": "Evidence, risk, tests, rollback, and security are covered before asking Astra to judge the final compact capsule."
+    }
+  ]
+}

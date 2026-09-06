@@ -1,0 +1,17 @@
+{
+  "requested_model": "gpt-6-astra",
+  "remaining_limit_percent": 22,
+  "reasons": [
+    "frontier_architecture"
+  ],
+  "explicit_approval": true,
+  "capsule_quality_score": 85,
+  "sol_baseline_tokens": {
+    "input": 100000,
+    "output": 10000
+  },
+  "premium_plan_tokens": {
+    "input": 35000,
+    "output": 3000
+  }
+}

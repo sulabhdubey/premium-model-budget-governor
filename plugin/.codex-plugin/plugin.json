@@ -1,0 +1,25 @@
+{
+  "name": "premium-model-budget-governor",
+  "version": "0.1.0",
+  "description": "A Codex plugin for premium-model budget routing, capsules, telemetry, and shadow review.",
+  "author": {
+    "name": "Sulabh Dubey"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Premium Model Budget Governor",
+    "shortDescription": "Use frontier models for judgment, not waste.",
+    "longDescription": "Adds a Codex skill for Sol-parity routing, Astra shadow review, evidence graph capsules, prompt-injection scanning, token telemetry, learned routing, and budget-aware premium model use.",
+    "developerName": "Sulabh Dubey",
+    "category": "Productivity",
+    "capabilities": [
+      "Premium model routing",
+      "Astra shadow review",
+      "Evidence graph capsules",
+      "Prompt-free telemetry",
+      "Prompt injection scanning"
+    ],
+    "brandColor": "#0F8B8D",
+    "defaultPrompt": "Use Premium Model Budget Governor to decide whether this task should spend a premium model call, route to a cheaper model, or create a compact capsule."
+  }
+}
