@@ -11,16 +11,17 @@ I want premium-model quality, but I do not want to spend premium budget on
 reading every file and repeating logs.
 ```
 
-2. Run the route command:
+2. Run the whole-workflow planner:
 
 ```bash
-pm-bg route --input examples/route_packet.json --plain
+pm-bg plan --input examples/astra_preferred.json
 ```
 
 3. Point out the decision:
 
 ```text
-The governor recommends a cheaper model first and explains why.
+The governor selects an Astra workflow that fits the example budget, including
+all stages. These are illustrative estimates, not executed calls.
 ```
 
 4. Build a tiny capsule:
@@ -33,7 +34,8 @@ pm-bg score capsule.md
 5. Show the principle:
 
 ```text
-The premium model should judge this capsule, not browse the entire repo.
+Give Astra the actual evidence it needs to plan, investigate, implement, or
+review. Do not add handoffs unless the complete workflow benefits.
 ```
 
 6. Run the eval:
@@ -60,7 +62,6 @@ Would premium judgment change the outcome:
 ## Honest Closing Line
 
 ```text
-This does not make premium tokens cheaper. It makes premium calls rarer,
-smaller, later, and easier to justify.
+This does not change premium token prices. It compares complete ways of using
+Astra, accounts for overhead, and makes budget and capability tradeoffs explicit.
 ```
-

@@ -16,7 +16,7 @@ python -m pip install -e ".[dev,mcp]"
 Run a routing decision:
 
 ```bash
-python -m premium_model_budget_governor.cli route --input examples/route_packet.json --plain
+python -m premium_model_budget_governor.cli plan --input examples/astra_preferred.json
 ```
 
 ## MCP Server
@@ -54,24 +54,22 @@ together.
 ## Recommended Codex Prompt
 
 ```text
-Use Premium Model Budget Governor first. Decide whether this task should run
-with a cheap model, Sol-first hybrid, or a premium capsule review. Do not spend
-a premium model turn unless the governor permits it and the evidence capsule is
-bounded, scanned, and under the Sol-parity ceiling.
+Use Premium Model Budget Governor's whole-workflow planner in Astra-preferred
+mode. Compare direct Astra, Astra-led execution, investigation, and review.
+Preserve required capabilities and count preparation, host context, workers,
+retries, and verification. If no Astra route fits, explain needs_replan rather
+than silently switching to Sol. Reserve each authorized call and reconcile usage.
 ```
 
 ## Expected Behavior
 
-Most tasks should not start on the premium model:
-
-- broad repo reading: cheaper model
-- routine edits: cheaper model
-- repeated test failures: cheaper model until evidence narrows
-- final architecture/security dispute: premium capsule may be justified
-- high budget emergency: explicit approval required
+- Direct Astra is eligible without a prior Sol failure.
+- Hybrid work must justify its full overhead, not just its premium leg.
+- Unavailable capabilities and incomplete budgets require replanning.
+- Unknown or emergency capacity requires explicit Astra approval.
+- Unknown spend stays reserved; a recommendation is not model execution.
 
 ## Current Limitation
 
 Codex must call the policy for enforcement. This package cannot physically stop
 manual model selection in a host UI that does not expose a pre-model hook.
-

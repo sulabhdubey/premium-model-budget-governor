@@ -4,6 +4,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "astra-leads-terra-builds",
       "quality_score": 0.8,
+      "estimated_min_credits": 4.13,
       "estimated_total_credits": 4.13,
       "astra_credits": 1.5,
       "astra_roles": [
@@ -14,24 +15,36 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-5.6-luna",
           "role": "prepare",
           "estimated_credits": 0.08,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 10000
         },
         {
           "model": "gpt-6-astra",
           "role": "plan",
           "estimated_credits": 1.5,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 3000
         },
         {
           "model": "gpt-5.6-terra",
           "role": "implement",
           "estimated_credits": 1.5,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 12000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 0.55,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 3000
         }
       ],
@@ -40,6 +53,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "astra-direct",
       "quality_score": 0.8,
+      "estimated_min_credits": 4.3,
       "estimated_total_credits": 4.3,
       "astra_credits": 3.25,
       "astra_roles": [
@@ -50,12 +64,18 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-6-astra",
           "role": "implement",
           "estimated_credits": 3.25,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 4000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 0.55,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 3000
         }
       ],
@@ -64,6 +84,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "sol-only",
       "quality_score": 0.8,
+      "estimated_min_credits": 4.55,
       "estimated_total_credits": 4.55,
       "astra_credits": 0.0,
       "astra_roles": [],
@@ -72,12 +93,18 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-5.6-sol",
           "role": "implement",
           "estimated_credits": 3.5,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 20000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 0.55,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 3000
         }
       ],
@@ -88,6 +115,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "astra-leads-terra-builds",
       "quality_score": 0.8,
+      "estimated_min_credits": 12.15,
       "estimated_total_credits": 12.15,
       "astra_credits": 6.75,
       "astra_roles": [
@@ -98,24 +126,36 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-5.6-luna",
           "role": "prepare",
           "estimated_credits": 0.15,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         },
         {
           "model": "gpt-6-astra",
           "role": "plan",
           "estimated_credits": 6.75,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         },
         {
           "model": "gpt-5.6-terra",
           "role": "implement",
           "estimated_credits": 2.1,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 2.65,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         }
       ],
@@ -124,6 +164,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "astra-direct",
       "quality_score": 0.8,
+      "estimated_min_credits": 11.4,
       "estimated_total_credits": 11.4,
       "astra_credits": 8.25,
       "astra_roles": [
@@ -134,12 +175,18 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-6-astra",
           "role": "implement",
           "estimated_credits": 8.25,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 2.65,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         }
       ],
@@ -148,6 +195,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "sol-only",
       "quality_score": 0.8,
+      "estimated_min_credits": 7.05,
       "estimated_total_credits": 7.05,
       "astra_credits": 0.0,
       "astra_roles": [],
@@ -156,12 +204,18 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-5.6-sol",
           "role": "implement",
           "estimated_credits": 3.9,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 2.65,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 24000
         }
       ],
@@ -172,6 +226,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "astra-leads-terra-builds",
       "quality_score": 0.8,
+      "estimated_min_credits": 17.82,
       "estimated_total_credits": 17.82,
       "astra_credits": 10.25,
       "astra_roles": [
@@ -182,24 +237,36 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-5.6-luna",
           "role": "prepare",
           "estimated_credits": 0.22,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         },
         {
           "model": "gpt-6-astra",
           "role": "plan",
           "estimated_credits": 10.25,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         },
         {
           "model": "gpt-5.6-terra",
           "role": "implement",
           "estimated_credits": 2.8,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 4.05,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         }
       ],
@@ -208,6 +275,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "astra-direct",
       "quality_score": 0.8,
+      "estimated_min_credits": 16.3,
       "estimated_total_credits": 16.3,
       "astra_credits": 11.75,
       "astra_roles": [
@@ -218,12 +286,18 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-6-astra",
           "role": "implement",
           "estimated_credits": 11.75,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 4.05,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         }
       ],
@@ -232,6 +306,7 @@ window.DEMO_WORKFLOWS = {
     {
       "id": "sol-only",
       "quality_score": 0.8,
+      "estimated_min_credits": 9.85,
       "estimated_total_credits": 9.85,
       "astra_credits": 0.0,
       "astra_roles": [],
@@ -240,12 +315,18 @@ window.DEMO_WORKFLOWS = {
           "model": "gpt-5.6-sol",
           "role": "implement",
           "estimated_credits": 5.3,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         },
         {
           "model": "gpt-5.6-sol",
           "role": "verify",
           "estimated_credits": 4.05,
+          "host": null,
+          "required_capabilities": [],
+          "max_attempts": 1,
           "effective_input_tokens": 38000
         }
       ],

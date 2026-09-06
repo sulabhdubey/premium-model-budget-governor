@@ -30,6 +30,10 @@ def test_mcp_server_routes_model_over_stdio():
                 assert "manage_task_budget" in tool_names
                 assert "compare_workflow_experiments" in tool_names
                 assert "select_requested_evidence" in tool_names
+                assert "calibrate_workflow_outcomes" in tool_names
+                calibration = await session.call_tool("calibrate_workflow_outcomes", {"packet": {"pairs": []}})
+                calibration_data = getattr(calibration, "structured_content", None) or getattr(calibration, "structuredContent")
+                assert calibration_data["automatic_promotion"] is False
                 evidence = await session.call_tool("select_requested_evidence", {
                     "packet": {"items": [], "requested_ids": ["missing"]}})
                 evidence_data = getattr(evidence, "structured_content", None) or getattr(evidence, "structuredContent")

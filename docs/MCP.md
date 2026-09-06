@@ -47,6 +47,11 @@ The same example is available at `examples/mcp-config.codex.json`.
 
 ## Tools
 
+- `plan_model_workflow`: default whole-task Astra-preferred planner with capability and budget checks.
+- `manage_task_budget`: reserve, settle, and reconcile local task leases.
+- `select_requested_evidence`: integrity, snapshot, expiry, and bounded evidence selection.
+- `compare_workflow_experiments`: compare complete matched receipts without inferring absent costs.
+- `calibrate_workflow_outcomes`: descriptive family/split outcomes; no automatic promotion.
 - `route_model`: allow, block, or route a requested premium model call.
 - `scan_untrusted_text`: scan webpage/tool/output text before it enters a
   capsule.
@@ -66,7 +71,8 @@ The same example is available at `examples/mcp-config.codex.json`.
 
 The repository includes `tests/test_mcp_runtime.py`. When the optional MCP extra
 is installed, this test launches the server over stdio, lists the available
-tools, and calls `route_model`.
+tools, and exercises routing, whole-workflow planning, evidence selection,
+experiment comparison, and calibration over a real MCP client session.
 
 ```bash
 python -m pip install -e ".[dev,mcp]"

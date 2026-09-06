@@ -26,6 +26,7 @@ from .workflow import plan_workflow
 from .leases import budget_action
 from .experiments import compare_runs
 from .evidence_demand import evidence_packet
+from .calibration import calibrate
 
 try:
     from mcp.server import MCPServer
@@ -36,6 +37,12 @@ except ImportError as exc:  # pragma: no cover - only exercised without optional
 
 
 mcp = MCPServer("Premium Model Budget Governor")
+
+
+@mcp.tool()
+def calibrate_workflow_outcomes(packet: dict[str, Any]) -> dict[str, Any]:
+    """Describe independent matched outcomes by family and split. Never auto-promotes a model."""
+    return calibrate(packet)
 
 
 @mcp.tool()

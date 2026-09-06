@@ -36,18 +36,30 @@ def _run_process(command: list[str], *, prompt: str, timeout: int):
 def _claim_dispatch(ledger: Path, task_id: str, call_id: str) -> None:
     with sqlite3.connect(ledger, timeout=15) as db:
         db.execute("CREATE TABLE IF NOT EXISTS dispatches (task TEXT NOT NULL, id TEXT NOT NULL, PRIMARY KEY(task,id))")
+        db.execute("BEGIN IMMEDIATE")
+        lease = db.execute("SELECT status,expires_at FROM leases WHERE task=? AND id=?", (task_id, call_id)).fetchone()
+        if lease is None or lease[0] != "reserved":
+            raise ValueError("a pending reservation is required")
+        if lease[1] is not None and lease[1] <= time.time():
+            raise ValueError("reservation expired; funds remain reserved pending reconciliation")
         try:
             db.execute("INSERT INTO dispatches VALUES (?,?)", (task_id, call_id))
         except sqlite3.IntegrityError as exc:
             raise ValueError("call ID was already dispatched; reconcile it instead of replaying") from exc
 
 
-def codex_command(executable: str, root: Path, model: str, effort: str) -> list[str]:
+def codex_command(executable: str, root: Path, model: str, effort: str, images: list[Path] | None = None) -> list[str]:
     if not isinstance(model, str) or not isinstance(effort, str) or model not in RATES or effort not in {"low", "medium", "high"}:
         raise ValueError("unsupported model or reasoning effort")
+    attachments = []
+    for path in images or []:
+        path = path.resolve(strict=True)
+        if not path.is_file() or path.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"} or path.stat().st_size > 20_000_000:
+            raise ValueError("images must be explicit PNG/JPEG/WebP files up to 20 MB")
+        attachments.extend(["--image", str(path)])
     return [executable, "-a", "never", "exec", "--sandbox", "read-only", "--ephemeral",
             "--json", "--color", "never", "--model", model, "-c", f'model_reasoning_effort="{effort}"',
-            "--cd", str(root.resolve()), "--skip-git-repo-check", "-"]
+            "--cd", str(root.resolve()), "--skip-git-repo-check", *attachments, "-"]
 
 
 def parse_events(stdout: str) -> dict:
@@ -78,7 +90,8 @@ def parse_events(stdout: str) -> dict:
 
 
 def execute_codex(*, prompt: str, root: Path, model: str, effort: str, ledger: Path,
-                  task_id: str, call_id: str, estimated_credits: float, timeout_seconds: int = 300) -> dict:
+                  task_id: str, call_id: str, estimated_credits: float, timeout_seconds: int = 300,
+                  images: list[Path] | None = None) -> dict:
     """Explicit execution API. Caller opens a task budget and authorizes each call.
 
     Answers are returned to the caller but not written to the ledger. Partial or
@@ -87,7 +100,7 @@ def execute_codex(*, prompt: str, root: Path, model: str, effort: str, ledger: P
     executable = shutil.which("codex.exe") or shutil.which("codex")
     if executable is None:
         raise ValueError("Codex CLI is not installed")
-    command = codex_command(executable, root, model, effort)
+    command = codex_command(executable, root, model, effort, images)
     if not root.is_dir() or not isinstance(prompt, str) or not prompt.strip():
         raise ValueError("existing root and non-empty prompt required")
     timeout = _token(timeout_seconds, "timeout_seconds")
@@ -100,8 +113,9 @@ def execute_codex(*, prompt: str, root: Path, model: str, effort: str, ledger: P
     try:
         completed = _run_process(command, prompt=prompt, timeout=timeout)
     except OSError:
-        budget_action({**base, "action": "cancel", "confirmed_not_executed": True}, ledger)
-        raise
+        # An I/O error may occur after spawn; it does not prove the call was free.
+        return {"status": "unknown_usage", "requested_model": model,
+                "reservation_retained": True, "error": "host I/O failure; reconcile before retry"}
     except subprocess.TimeoutExpired:
         return {"status": "unknown_usage", "requested_model": model,
                 "reservation_retained": True, "error": "timeout; reconcile before retry"}

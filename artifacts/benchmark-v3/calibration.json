@@ -1,0 +1,57 @@
+{
+  "groups": [
+    {
+      "family": "mixed_contract_batch",
+      "candidate": "astra_direct",
+      "baseline": "sol_direct",
+      "split": "calibration",
+      "cost_basis": "token_rate_estimate",
+      "independent_tasks": 1,
+      "quality_regressions": 0,
+      "observed_wins": 0,
+      "win_rate_interval_95": [
+        0,
+        0.7934567085261071
+      ],
+      "candidate_mean_credits": 6.62525,
+      "baseline_mean_credits": 2.5318,
+      "status": "insufficient_support"
+    },
+    {
+      "family": "mixed_contract_batch",
+      "candidate": "astra_led",
+      "baseline": "sol_direct",
+      "split": "calibration",
+      "cost_basis": "token_rate_estimate",
+      "independent_tasks": 1,
+      "quality_regressions": 0,
+      "observed_wins": 0,
+      "win_rate_interval_95": [
+        0,
+        0.7934567085261071
+      ],
+      "candidate_mean_credits": 5.89051,
+      "baseline_mean_credits": 2.5318,
+      "status": "insufficient_support"
+    },
+    {
+      "family": "mixed_contract_batch",
+      "candidate": "astra_shadow",
+      "baseline": "sol_direct",
+      "split": "calibration",
+      "cost_basis": "token_rate_estimate",
+      "independent_tasks": 1,
+      "quality_regressions": 0,
+      "observed_wins": 0,
+      "win_rate_interval_95": [
+        0,
+        0.7934567085261071
+      ],
+      "candidate_mean_credits": 8.940010000000001,
+      "baseline_mean_credits": 2.5318,
+      "status": "insufficient_support"
+    }
+  ],
+  "automatic_promotion": false,
+  "limitations": "Descriptive Wilson intervals assume independent representative tasks. Caller asserts matching and split integrity. No causal savings claim, capability guarantee, or weekly-limit prediction."
+}

@@ -1,0 +1,333 @@
+{
+  "runs": [
+    {
+      "repeat": 0,
+      "arm": "astra_direct",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r0-astra_direct"
+      ],
+      "estimated_credits": 6.62525,
+      "usage": {
+        "input_tokens": 25281,
+        "cached_tokens": 0,
+        "output_tokens": 244
+      }
+    },
+    {
+      "repeat": 0,
+      "arm": "sol_direct",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r0-sol_direct"
+      ],
+      "estimated_credits": 2.5383,
+      "usage": {
+        "input_tokens": 24388,
+        "cached_tokens": 0,
+        "output_tokens": 199
+      }
+    },
+    {
+      "repeat": 0,
+      "arm": "astra_led",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r0-astra_led-plan",
+        "r0-astra_led-worker"
+      ],
+      "estimated_credits": 1.74836,
+      "usage": {
+        "input_tokens": 49861,
+        "cached_tokens": 44928,
+        "output_tokens": 386
+      }
+    },
+    {
+      "repeat": 0,
+      "arm": "astra_shadow",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r0-astra_shadow-draft",
+        "r0-astra_shadow-judge"
+      ],
+      "estimated_credits": 8.77297,
+      "usage": {
+        "input_tokens": 49850,
+        "cached_tokens": 3712,
+        "output_tokens": 346
+      }
+    },
+    {
+      "repeat": 1,
+      "arm": "astra_shadow",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r1-astra_shadow-draft",
+        "r1-astra_shadow-judge"
+      ],
+      "estimated_credits": 9.107050000000001,
+      "usage": {
+        "input_tokens": 49850,
+        "cached_tokens": 0,
+        "output_tokens": 346
+      }
+    },
+    {
+      "repeat": 1,
+      "arm": "astra_led",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r1-astra_led-plan",
+        "r1-astra_led-worker"
+      ],
+      "estimated_credits": 1.71039,
+      "usage": {
+        "input_tokens": 49861,
+        "cached_tokens": 36096,
+        "output_tokens": 397
+      }
+    },
+    {
+      "repeat": 1,
+      "arm": "sol_direct",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r1-sol_direct"
+      ],
+      "estimated_credits": 2.5253,
+      "usage": {
+        "input_tokens": 24388,
+        "cached_tokens": 0,
+        "output_tokens": 173
+      }
+    },
+    {
+      "repeat": 1,
+      "arm": "astra_direct",
+      "grades": {
+        "A1": true,
+        "A2": true,
+        "A3": true,
+        "A4": true,
+        "B1": true,
+        "B2": true,
+        "B3": true,
+        "B4": true,
+        "C1": true,
+        "C2": true,
+        "C3": true,
+        "C4": true,
+        "R1": true,
+        "R2": true,
+        "R3": true,
+        "R4": true,
+        "V1": true,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "S1": true,
+        "S2": true,
+        "S3": true,
+        "S4": true
+      },
+      "passed": true,
+      "calls": [
+        "r1-astra_direct"
+      ],
+      "estimated_credits": 6.62525,
+      "usage": {
+        "input_tokens": 25281,
+        "cached_tokens": 0,
+        "output_tokens": 244
+      }
+    }
+  ],
+  "limitations": "Synthetic contract and visual-reading pilot, not enterprise task completion or subjective design assessment. Questions are batched; costs are per batch, not attributable to individual families. Two repeats are not independent tasks. Quality pass criteria were fixed before execution. No learned-policy promotion.",
+  "image_sha256": "c0d045525b8e390ca617858ccf82b5c001270c9b46e642671189f5b8c13acb0f",
+  "fixture_sha256": "f25ef591cd4c19afe0abcf7e57cf4f243494c689bdfee61570251425634a0b44",
+  "cost_basis": "requested_model_standard_rate_projection",
+  "automatic_promotion": false
+}

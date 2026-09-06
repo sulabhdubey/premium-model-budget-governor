@@ -1,6 +1,49 @@
 # Completed Comparisons: September 7, 2026
 
-## Outcome
+## v0.3 Multimodal Contract Pilot
+
+The next pilot used 24 fixed questions, four each on architecture, bugs, routine
+coding, research, visual reading, and release/security. Four questions required an
+attached rendered chart. All final responses passed the prewritten exact-answer
+oracle. **This is one batched synthetic workload, not 24 independent real tasks.**
+
+| Workflow | Final Answers Passed | Mean Projected Credits | Observed Range |
+| --- | ---: | ---: | ---: |
+| Astra direct | 48 / 48 | 6.62525 | 6.62525-6.62525 |
+| Sol direct | 48 / 48 | 2.53180 | 2.52530-2.53830 |
+| Astra plan + Terra execute, corrected prompt | 48 / 48 | 5.89051 | 4.98113-6.79989 |
+| Sol draft + Astra review | 48 / 48 | 8.94001 | 8.77297-9.10705 |
+
+Neither Astra workflow achieved Sol cost in the corrected comparison. Planning
+was cheaper on average than direct Astra here, unlike v0.2. Cache state and
+host-injected context varied; the study cannot isolate their causal contribution.
+The governor should compare complete workflows, not hard-code either winner.
+
+### Planning Prompt Defect
+
+The initial planning prompt conflicted with the embedded final-answer instruction.
+Astra returned final answers instead of a plan in both rounds. Those runs cost
+1.74836 and 1.71039 including Terra, but **are not valid planning-workflow evidence**.
+The conflicting instruction was removed, a 3-6-step JSON contract added, and only
+the four affected planning/worker calls were rerun under new receipt IDs.
+The corrected plans passed the role schema before workers were dispatched.
+
+All original results remain in `artifacts/benchmark-v3/results.json`; corrected
+results are in `results-planning-v2.json`. Reused baseline receipts were not rerun.
+The correction occurred later, so ordering/cache control is incomplete. Sixteen
+unique calls cost **51.43389 projected credits**, including invalid-role runs and
+their replacements. The corrected eight-workflow comparison alone costs 47.97514.
+No reset was redeemed. Reported credits use requested-model standard-rate
+projections, not provider bills or weekly allowance conversion.
+
+The calibration report treats the batch as one task with repeats aggregated.
+Every comparison remains `insufficient_support`; no held-out validation or policy
+promotion is claimed. Visual reading success is not subjective design-quality
+validation. Original fixtures, image, receipts, calibration, and dashboard QA are
+in [benchmark-v3](../artifacts/benchmark-v3/). Regenerate summaries without model
+calls using `python scripts/summarize_benchmark_v3.py`.
+
+## v0.2 Source-Repair Outcome
 
 Direct Astra is now a first-class workflow, not merely a final judge. In this
 bounded benchmark it had the lowest average projected cost of the three Astra

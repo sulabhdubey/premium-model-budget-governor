@@ -1,7 +1,25 @@
 # Astra Capability and Whole-Workflow Budget Plan
 
-Status: research-backed proposal, not implemented or measured Astra performance.
+Status: implementation and bounded live pilots delivered; broad validation remains open.
 Date: 2026-09-07. Audience: Sulabh Dubey and governor maintainers.
+
+## Delivery Status
+
+| Phase | Current state | Evidence or remaining boundary |
+| --- | --- | --- |
+| Accounting and truth fixes | Implemented | Strict counters, complete workflow costs, regression tests |
+| Workflow and capability profiles | Implemented for declared profiles | Project roles/models, required capabilities, upper estimates; profiles are not runtime attestation |
+| Evidence and reservations | Implemented | Hashes, snapshot/expiry, line ranges, serial leases, replay protection, unknown-spend retention |
+| Execution adapter | Implemented for opt-in read-only Codex CLI | Actual token events and explicit images; provider identity and desktop pre-model enforcement unavailable |
+| CLI/MCP/plugin/dashboard/demo | Implemented within documented surfaces | Shared planner, generated demo costs, MCP runtime tests, static local dashboard |
+| Comparative evaluation | Bounded pilots completed, broader gate open | Live executable repair and 24 batched contract/visual questions; not 24 independent enterprise tasks |
+| Learned routing | Conservative calibration report implemented | Automatic policy learning/promotion awaits independent held-out evidence |
+
+The original research and proposed gates below remain for traceability. They are
+not a claim that every gate passed. In particular, independent expert review,
+representative 24-task enterprise execution, audio/video capability testing,
+provider-attested model identity, and a desktop pre-model hook are not delivered.
+See [controls](CAPABILITY_CONTROLS.md) and [measured results](BENCHMARK_RESULTS.md).
 
 ## Decision
 
@@ -60,7 +78,12 @@ These sources establish useful mechanisms and limitations, not a tested optimal
 Astra/Sol allocation. Research stopped after covering routing, budget accounting,
 compression, adaptive compute, orchestration, evaluation bias, and provider costs.
 
-## Verified Current Gaps
+## Original Audit Gaps (Historical)
+
+These findings described the pre-workflow implementation. Most code defects below
+were corrected in v0.2; consult current tests rather than treating this list as
+current behavior. Doctrine is still not weight training, and MCP still does not
+execute models by itself.
 
 - policy.py returns allow_non_premium immediately for an already requested Sol
   call, without considering whether Astra could improve a stage of the task.

@@ -16,6 +16,12 @@ read-only work, `pm-bg run` executes a budgeted Codex CLI call with inherited
 configuration, rules, sandbox, and replay protection. Open the budget first.
 See docs/GOVERNED_EXECUTION.md. Keep desktop-only tools, edits, and untested
 multimodal work on an appropriate host; never silently remove needed capabilities.
+The CLI now supports explicit image attachments. Declare host capabilities and
+project restrictions in the workflow packet; preserve original images for visual
+work. Budget `tokens_upper` and `max_attempts` when uncertainty warrants it.
+Expired leases and ambiguous I/O keep funds reserved pending reconciliation.
+Use `pm-bg calibrate` for matched outcomes, not automatic learned promotion, and
+`pm-bg dashboard` for a prompt-free local snapshot. See docs/CAPABILITY_CONTROLS.md.
 
 Measure host input from an existing authorized receipt before spawning experiments.
 Use `pm-bg receipt` on one explicit single-model Codex rollout; never copy its raw
@@ -63,7 +69,7 @@ The legacy `route` command below gates one call only, not the whole workflow.
 If the package is installed, prefer:
 
 ```bash
-pm-bg route --input examples/route_packet.json
+pm-bg plan --input examples/astra_preferred.json
 pm-bg capsule --root . --goal "..." --decision "..." --include README.md --output capsule.md
 pm-bg score capsule.md
 pm-bg graph --root . --include README.md --query "routing budget" --capsule
