@@ -1,0 +1,105 @@
+{
+  "usage": {
+    "input_tokens": 24290,
+    "cached_tokens": 12544,
+    "output_tokens": 254
+  },
+  "answer": "{\"normalize_token_source\":\"def normalize_token(value):\\n    if isinstance(value, bool) or not isinstance(value, (int, float)):\\n        raise ValueError()\\n    if value < 0:\\n        raise ValueError()\\n    if isinstance(value, float) and (not isfinite(value) or value != int(value)):\\n        raise ValueError()\\n    return int(value)\",\"accounting\":{\"uncached_input\":900,\"output_billed\":250,\"credits\":0.5525,\"missing_usage\":\"unknown\"},\"architecture\":\"extend_existing_runtime\",\"security\":{\"release_authorized\":false,\"quarantine_instruction\":true,\"execute_external_instruction\":false},\"research\":{\"universal_savings_proven\":false,\"zero_consumption_proven\":false,\"next_study\":\"counterbalanced_matched_tasks\"}}",
+  "completed_turns": 1,
+  "failed": false,
+  "requested_model": "gpt-6-astra",
+  "elapsed_seconds": 16.339,
+  "status": "completed",
+  "model_identity_source": "CLI requested model; provider identity not exposed in JSON events",
+  "host": "codex_cli_inherited_config_read_only",
+  "call_id": "r1-astra_led-plan",
+  "estimated_credits": 3.5676,
+  "cost_basis": "requested_model_standard_rate_projection",
+  "budget": {
+    "task_id": "benchmark-v2",
+    "budget_credits": 250.0,
+    "spent_credits": 34.58907,
+    "max_pending_leases": 1,
+    "reserved_credits": 0,
+    "contingency_credits": 30.0,
+    "available_credits": 185.41093,
+    "over_budget": false,
+    "astra_receipts": 7,
+    "receipt_source": "caller_reported; host must supply trustworthy actual usage",
+    "leases": [
+      {
+        "id": "r0-astra_demand-answer",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 1.3454,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-astra_demand-request",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 4.296,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-astra_direct",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 4.7155,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-astra_led-plan",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 6.4225,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-astra_led-worker",
+        "model": "gpt-5.6-terra",
+        "estimate": 18.0,
+        "actual": 1.24955,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-sol_direct",
+        "model": "gpt-5.6-sol",
+        "estimate": 18.0,
+        "actual": 2.17102,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r1-astra_demand-answer",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 6.5255,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r1-astra_demand-request",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 4.296,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r1-astra_led-plan",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 3.5676,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      }
+    ]
+  },
+  "prompt_sha256": "feee7d1f712c106c6f50ae6551ff63976954b8a51e29bedd5d53c0e5e339642c"
+}

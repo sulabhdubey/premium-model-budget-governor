@@ -1,0 +1,39 @@
+{
+  "mode": "astra_preferred",
+  "budget_credits": 5,
+  "spent_credits": 0,
+  "reserve_credits": 0.5,
+  "remaining_limit_percent": 50,
+  "minimum_quality_score": 0.8,
+  "candidates": [
+    {
+      "id": "astra-leads-terra-builds",
+      "complete_workflow": true,
+      "quality_score": 0.8,
+      "stages": [
+        {"role": "prepare", "model": "gpt-5.6-luna", "tokens": {"input": 10000, "output": 1000}},
+        {"role": "plan", "model": "gpt-6-astra", "evidence_ready": true, "tokens": {"input": 3000, "output": 600}},
+        {"role": "implement", "model": "gpt-5.6-terra", "tokens": {"input": 12000, "output": 3000}},
+        {"role": "verify", "model": "gpt-5.6-sol", "tokens": {"input": 3000, "output": 500}}
+      ]
+    },
+    {
+      "id": "astra-direct",
+      "complete_workflow": true,
+      "quality_score": 0.8,
+      "stages": [
+        {"role": "implement", "model": "gpt-6-astra", "evidence_ready": true, "tokens": {"input": 4000, "output": 1800}},
+        {"role": "verify", "model": "gpt-5.6-sol", "tokens": {"input": 3000, "output": 500}}
+      ]
+    },
+    {
+      "id": "sol-only",
+      "complete_workflow": true,
+      "quality_score": 0.8,
+      "stages": [
+        {"role": "implement", "model": "gpt-5.6-sol", "tokens": {"input": 20000, "output": 3000}},
+        {"role": "verify", "model": "gpt-5.6-sol", "tokens": {"input": 3000, "output": 500}}
+      ]
+    }
+  ]
+}

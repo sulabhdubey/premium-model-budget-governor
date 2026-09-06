@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import sys
+import json
+from pathlib import Path
 
 import pytest
 
@@ -24,6 +26,24 @@ def test_mcp_server_routes_model_over_stdio():
                 tools = await session.list_tools()
                 tool_names = {tool.name for tool in tools.tools}
                 assert "route_model" in tool_names
+                assert "plan_model_workflow" in tool_names
+                assert "manage_task_budget" in tool_names
+                assert "compare_workflow_experiments" in tool_names
+                assert "select_requested_evidence" in tool_names
+                evidence = await session.call_tool("select_requested_evidence", {
+                    "packet": {"items": [], "requested_ids": ["missing"]}})
+                evidence_data = getattr(evidence, "structured_content", None) or getattr(evidence, "structuredContent")
+                assert evidence_data["decision"] == "blocked"
+                experiments = await session.call_tool("compare_workflow_experiments", {
+                    "packet": {"baseline": "sol", "runs": [{"task_id": "t", "snapshot": "s", "rubric": "r",
+                        "arm": "sol", "passed": True, "complete": False, "expected_calls": 1, "calls": []}]}})
+                experiments_data = getattr(experiments, "structured_content", None) or getattr(experiments, "structuredContent")
+                assert experiments_data["recommendation"] == "insufficient_evidence"
+                packet = json.loads((Path(__file__).parents[1] / "examples/astra_preferred.json").read_text())
+                planned = await session.call_tool("plan_model_workflow", {"packet": packet})
+                plan_data = getattr(planned, "structured_content", None) or getattr(planned, "structuredContent")
+                assert plan_data["astra_participation"] == "planned"
+                assert plan_data["selected"]["estimated_total_credits"] <= packet["budget_credits"]
                 result = await session.call_tool(
                     "route_model",
                     {

@@ -5,9 +5,10 @@
 Use frontier models for judgment, not waste.
 
 Premium Model Budget Governor helps Codex and agent users stop burning premium
-model budget on broad context, repeated logs, and routine implementation. It
-keeps cheaper models on exploration and execution, then sends premium models
-only compact, scanned, high-leverage decision packets.
+model budget on broad context, repeated logs, and unnecessary handoffs. Astra can
+plan, investigate, implement, or review directly. The governor compares complete
+workflows, reserves spend, and checks measured usage rather than simply moving
+everything to cheaper models.
 
 [![CI](https://github.com/sulabhdubey/premium-model-budget-governor/actions/workflows/ci.yml/badge.svg)](https://github.com/sulabhdubey/premium-model-budget-governor/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
@@ -45,16 +46,44 @@ Frontier models are excellent. They are also expensive when they read entire
 repos, long tool logs, repeated test output, and unranked evidence. Many users
 do not need less intelligence. They need better timing.
 
-This project turns premium models into scarce reviewers:
+This project budgets substantive premium-model participation:
 
-- cheaper models explore, edit, test, and summarize
+- compare direct Astra work with hybrid execution, including host overhead
 - the governor selects and scans evidence
 - a small capsule or evidence graph is built
-- the premium model approves, rejects, patches, ranks, or decides
-- execution returns to cheaper models
+- the premium model plans, investigates, implements, reviews, or decides
+- delegate only when the complete workflow benefits
 - prompt-free telemetry records whether the premium turn helped
 
 ## Core Rule
+
+**v0.2 measured results:** four workflows, two rounds, 12 model calls. All eight
+workflows passed an executable telemetry repair and four bounded contracts after
+a documented grader correction. Astra-direct was the lowest-cost Astra route
+in this small suite; Sol was cheaper on average. Read the [full results and
+limitations](docs/BENCHMARK_RESULTS.md), including the earlier budget overrun.
+
+### Astra-Preferred Workflow Planning
+
+For substantive Astra participation, start with the new whole-task planner:
+
+```sh
+pm-bg plan --input examples/astra_preferred.json
+```
+
+Astra may plan, investigate, implement directly, or review. The planner includes
+workers, preparation, verification, spent credits, and contingency in the budget.
+It reports unmet Astra participation instead of silently falling back to Sol.
+Persistent SQLite reservations coordinate cooperating hosts before spending.
+MCP tools: `plan_model_workflow` and `manage_task_budget`.
+
+See [Astra-preferred workflows](docs/ASTRA_PREFERRED.md) for the input contract,
+example, actual-usage reconciliation, and execution limitations. This plans model
+use; it does not switch Codex's active model or guarantee subscription savings.
+For explicitly authorized read-only execution, use [the governed CLI adapter](docs/GOVERNED_EXECUTION.md).
+
+The older single-call estimator below covers only the premium leg; it is not a
+whole-workflow savings claim. The website now illustrates the whole-workflow planner.
 
 ```text
 premium billable token volume <= 40% of the equivalent Sol workflow

@@ -1,0 +1,73 @@
+{
+  "usage": {
+    "input_tokens": 23966,
+    "cached_tokens": 7680,
+    "output_tokens": 26
+  },
+  "answer": "{\"requested_ids\":[\"telemetry_bug\",\"accounting_contract\",\"runtime_contract\",\"security_contract\",\"research_contract\"]}",
+  "completed_turns": 1,
+  "failed": false,
+  "requested_model": "gpt-6-astra",
+  "elapsed_seconds": 9.775,
+  "status": "completed",
+  "model_identity_source": "CLI requested model; provider identity not exposed in JSON events",
+  "host": "codex_cli_inherited_config_read_only",
+  "call_id": "r0-astra_demand-request",
+  "estimated_credits": 4.296,
+  "cost_basis": "requested_model_standard_rate_projection",
+  "budget": {
+    "task_id": "benchmark-v2",
+    "budget_credits": 250.0,
+    "spent_credits": 18.85457,
+    "max_pending_leases": 1,
+    "reserved_credits": 0,
+    "contingency_credits": 30.0,
+    "available_credits": 201.14543,
+    "over_budget": false,
+    "astra_receipts": 3,
+    "receipt_source": "caller_reported; host must supply trustworthy actual usage",
+    "leases": [
+      {
+        "id": "r0-astra_demand-request",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 4.296,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-astra_direct",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 4.7155,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-astra_led-plan",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 6.4225,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-astra_led-worker",
+        "model": "gpt-5.6-terra",
+        "estimate": 18.0,
+        "actual": 1.24955,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "r0-sol_direct",
+        "model": "gpt-5.6-sol",
+        "estimate": 18.0,
+        "actual": 2.17102,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      }
+    ]
+  },
+  "prompt_sha256": "9a940a92f763c820428b251eac0e34747e836d1c69fa33a46f7ab7a698c10970"
+}

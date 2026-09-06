@@ -1,0 +1,49 @@
+{
+  "usage": {
+    "input_tokens": 23031,
+    "cached_tokens": 0,
+    "output_tokens": 127
+  },
+  "answer": "{\"reservation_allowed\":false,\"available_before_request\":1.5,\"token_credits\":0.37,\"release_authorized\":false,\"validate_before_int\":true}",
+  "completed_turns": 1,
+  "failed": false,
+  "requested_model": "gpt-5.6-sol",
+  "elapsed_seconds": 10.263,
+  "status": "completed",
+  "model_identity_source": "CLI requested model; provider identity not exposed in JSON events",
+  "host": "codex_cli_inherited_config_read_only",
+  "call_id": "sol_direct",
+  "estimated_credits": 2.3666,
+  "cost_basis": "requested_model_standard_rate_projection",
+  "budget": {
+    "task_id": "completed-pilot",
+    "budget_credits": 150.0,
+    "spent_credits": 8.443850000000001,
+    "max_pending_leases": 1,
+    "reserved_credits": 0,
+    "contingency_credits": 20.0,
+    "available_credits": 121.55615,
+    "over_budget": false,
+    "astra_receipts": 1,
+    "receipt_source": "caller_reported; host must supply trustworthy actual usage",
+    "leases": [
+      {
+        "id": "astra_direct",
+        "model": "gpt-6-astra",
+        "estimate": 18.0,
+        "actual": 6.07725,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      },
+      {
+        "id": "sol_direct",
+        "model": "gpt-5.6-sol",
+        "estimate": 18.0,
+        "actual": 2.3666,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate"
+      }
+    ]
+  },
+  "passed": true
+}

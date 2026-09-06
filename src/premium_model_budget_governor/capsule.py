@@ -39,6 +39,8 @@ def score_capsule(text: str) -> dict[str, object]:
         score -= 10
         warnings.append("scope_too_broad")
     score = max(0, min(100, score))
+    if "capsule_truncated" in warnings or text.startswith("# Astra Capsule Blocked"):
+        score = min(score, 69)
     return {"score": score, "grade": "usable" if score >= 70 else "block", "warnings": warnings}
 
 
@@ -72,7 +74,10 @@ def build_capsule(
         scan = scan_file(path)
         if not scan["safe_to_include"]:
             return "# Astra Capsule Blocked\n\nUnsafe evidence was found before capsule creation.\n"
-        text = path.read_text(encoding="utf-8", errors="replace")[:5000]
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if len(text) > 5000:
+            sections.append("[CAPSULE TRUNCATED: file excerpt omits content after character 5000; supply focused evidence]")
+            text = text[:5000]
         numbered = "\n".join(f"{idx:04d}: {line}" for idx, line in enumerate(text.splitlines(), start=1))
         sections.extend(["", f"## File: {path.relative_to(root) if path.is_relative_to(root) else path}", "", "```text", numbered, "```"])
     capsule = "\n".join(sections).strip() + "\n"

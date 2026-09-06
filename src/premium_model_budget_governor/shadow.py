@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from .capsule import score_capsule
 from .policy import decide_model
+from .scanners import scan_text
 
 
 def build_shadow_packet(
@@ -12,6 +13,8 @@ def build_shadow_packet(
     evidence_summary: str,
     contradictions: list[str] | None = None,
     remaining_limit_percent: int | None = None,
+    explicit_approval: bool = False,
+    sol_baseline_tokens: dict | None = None,
 ) -> dict[str, object]:
     contradictions = contradictions or []
     capsule = "\n".join(
@@ -40,14 +43,19 @@ def build_shadow_packet(
         ]
     )
     quality = score_capsule(capsule)
+    if not scan_text("\n".join([draft_answer, evidence_summary, *contradictions]))["safe_to_include"]:
+        return {"capsule": "# Astra Shadow Review Blocked\nUnsafe evidence requires sanitization.",
+                "quality": {"score": 0, "grade": "block"},
+                "route": {"decision": "block_or_route_to_sol", "blocks": ["sanitize_evidence"],
+                          "recommended_model": "gpt-5.6-sol"}}
     route = decide_model(
         {
             "requested_model": "gpt-6-astra",
             "remaining_limit_percent": remaining_limit_percent,
             "reasons": ["final_release_review"],
-            "explicit_approval": remaining_limit_percent is not None and remaining_limit_percent > 15,
+            "explicit_approval": explicit_approval,
             "capsule_quality_score": quality["score"],
-            "sol_baseline_tokens": {"input": max(1, len(draft_answer) * 3), "output": 2000},
+            "sol_baseline_tokens": sol_baseline_tokens,
             "premium_plan_tokens": {"input": max(1, len(capsule) // 4), "output": 700},
         }
     )

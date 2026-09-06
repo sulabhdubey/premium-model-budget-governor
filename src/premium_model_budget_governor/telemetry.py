@@ -8,18 +8,25 @@ import json
 from pathlib import Path
 from typing import Mapping
 
-from .cost import RATES, model_credits
+from .cost import RATES, model_credits, _token
 
 
 def normalize_usage(payload: Mapping[str, object]) -> dict[str, object]:
     usage_obj = payload.get("usage", payload)
     usage = usage_obj if isinstance(usage_obj, Mapping) else {}
+    if not any(k in usage for k in ("input_tokens", "prompt_tokens")) or not any(k in usage for k in ("output_tokens", "completion_tokens")):
+        return {"record_type": "token_telemetry", "usage_status": "missing",
+                "recorded_at": datetime.now(timezone.utc).isoformat(),
+                "model": str(payload.get("model", "unknown")), "input_tokens": None,
+                "output_tokens": None, "estimated_credits": None, "raw_prompt_stored": False}
     details_obj = usage.get("input_tokens_details", {})
     details = details_obj if isinstance(details_obj, Mapping) else {}
     input_tokens = _num(usage.get("input_tokens", usage.get("prompt_tokens", 0)))
     output_tokens = _num(usage.get("output_tokens", usage.get("completion_tokens", 0)))
     cached_tokens = _num(details.get("cached_tokens", usage.get("cached_tokens", 0)))
     cache_write_tokens = _num(details.get("cache_write_tokens", usage.get("cache_write_tokens", 0)))
+    if cached_tokens + cache_write_tokens > input_tokens:
+        raise ValueError("cache subsets cannot exceed total input")
     model = str(payload.get("model", usage.get("model", "unknown")) or "unknown")
     ordinary_input = max(0, input_tokens - cached_tokens - cache_write_tokens)
     token_plan = {"input": ordinary_input + cache_write_tokens, "cached_input": cached_tokens, "output": output_tokens}
@@ -63,6 +70,4 @@ def append_usage(payload: Mapping[str, object], ledger: Path) -> dict[str, objec
 
 
 def _num(value: object) -> int:
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
-        return 0
-    return int(value)
+    return _token(value, "token count")

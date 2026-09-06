@@ -16,6 +16,11 @@ from .scanners import scan_file, scan_text
 from .shadow import build_shadow_packet
 from .telemetry import append_usage
 from .tournament import rank_candidates
+from .workflow import plan_workflow
+from .leases import budget_action
+from .experiments import compare_runs, import_codex_receipt
+from .evidence_demand import evidence_packet
+from .host import execute_codex
 
 
 DEFAULT_LEDGER = Path.home() / ".pm-bg" / "ledger.jsonl"
@@ -29,6 +34,21 @@ def main(argv: list[str] | None = None) -> int:
     route = sub.add_parser("route", help="Decide whether a requested model should be allowed")
     route.add_argument("--input", required=True)
     route.add_argument("--plain", action="store_true", help="Print a compact human-readable decision")
+    plan = sub.add_parser("plan", help="Reserve Astra within a complete workflow budget")
+    plan.add_argument("--input", required=True)
+    budget = sub.add_parser("budget", help="Reserve and reconcile a whole task budget")
+    budget.add_argument("--input", required=True)
+    budget.add_argument("--ledger", default=str(Path.home() / ".pm-bg" / "budget.sqlite3"))
+    for name, help_text in [("experiment", "Compare matched runs without inventing usage"),
+                            ("evidence", "Select integrity-checked evidence without truncation")]:
+        command = sub.add_parser(name, help=help_text)
+        command.add_argument("--input", required=True)
+    receipt = sub.add_parser("receipt", help="Import counters from one explicit single-model Codex rollout")
+    receipt.add_argument("--input", required=True)
+    receipt.add_argument("--call-id", required=True)
+    execute = sub.add_parser("run", help="Explicitly execute a governed read-only Codex CLI call")
+    execute.add_argument("--input", required=True)
+    execute.add_argument("--ledger", default=str(Path.home() / ".pm-bg" / "budget.sqlite3"))
 
     capsule = sub.add_parser("capsule", help="Build a safe premium-model capsule")
     capsule.add_argument("--root", default=".")
@@ -55,6 +75,8 @@ def main(argv: list[str] | None = None) -> int:
     shadow.add_argument("--draft", required=True)
     shadow.add_argument("--evidence", required=True)
     shadow.add_argument("--remaining", type=int)
+    shadow.add_argument("--explicit-approval", action="store_true")
+    shadow.add_argument("--baseline", help="JSON file with a matched Sol token estimate")
 
     tournament = sub.add_parser("tournament", help="Rank cheap-model candidate answers")
     tournament.add_argument("--input", required=True)
@@ -116,6 +138,28 @@ def _load_json(path: str) -> dict[str, object]:
 
 
 def _dispatch(args: argparse.Namespace) -> object:
+    if args.cmd == "run":
+        packet = _load_json(args.input)
+        required = ("prompt", "root", "model", "task_id", "call_id", "estimated_credits")
+        if any(key not in packet for key in required):
+            raise ValueError("run requires prompt, root, model, task_id, call_id, estimated_credits")
+        if any(not isinstance(packet[key], str) or not packet[key].strip() for key in required[:-1]):
+            raise ValueError("run prompt, root, model, task_id and call_id must be non-empty strings")
+        return execute_codex(prompt=packet["prompt"], root=Path(packet["root"]), model=packet["model"],
+                             effort=packet.get("effort", "low"), ledger=Path(args.ledger),
+                             task_id=packet["task_id"], call_id=packet["call_id"],
+                             estimated_credits=packet["estimated_credits"],
+                             timeout_seconds=packet.get("timeout_seconds", 300))
+    if args.cmd == "receipt":
+        return import_codex_receipt(Path(args.input), args.call_id)
+    if args.cmd == "experiment":
+        return compare_runs(_load_json(args.input))
+    if args.cmd == "evidence":
+        return evidence_packet(_load_json(args.input))
+    if args.cmd == "budget":
+        return budget_action(_load_json(args.input), Path(args.ledger))
+    if args.cmd == "plan":
+        return plan_workflow(_load_json(args.input))
     if args.cmd == "route":
         return decide_model(_load_json(args.input))
     if args.cmd == "capsule":
@@ -144,6 +188,8 @@ def _dispatch(args: argparse.Namespace) -> object:
             draft_answer=Path(args.draft).read_text(encoding="utf-8"),
             evidence_summary=Path(args.evidence).read_text(encoding="utf-8"),
             remaining_limit_percent=args.remaining,
+            explicit_approval=args.explicit_approval,
+            sol_baseline_tokens=_load_json(args.baseline) if args.baseline else None,
         )
     if args.cmd == "tournament":
         payload = _load_json(args.input)

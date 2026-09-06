@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Mapping
+from math import isfinite
 
 
 RATES = {
+    "gpt-5.6-terra": {"input": 50.0, "cached_input": 5.0, "output": 300.0},
+    "gpt-5.6-luna": {"input": 5.0, "cached_input": 0.5, "output": 30.0},
     "gpt-5.6-sol": {"input": 100.0, "cached_input": 10.0, "output": 500.0},
     "gpt-6-astra": {"input": 250.0, "cached_input": 25.0, "output": 1250.0},
 }
@@ -33,15 +36,19 @@ class TokenPlan:
 
 
 def _token(value: object, name: str) -> int:
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not isfinite(value) or value < 0 or int(value) != value:
         raise ValueError(f"{name} must be a non-negative number")
     return int(value)
 
 
 def model_credits(model: str, tokens: TokenPlan | Mapping[str, object], *, fast_mode: bool = False) -> float:
+    if fast_mode and model != "gpt-6-astra":
+        raise ValueError("Fast rate is only configured for Astra")
     if model not in RATES:
         raise ValueError(f"unsupported model: {model}")
     plan = tokens if isinstance(tokens, TokenPlan) else TokenPlan.from_mapping(tokens)
+    for name in ("input", "cached_input", "output"):
+        _token(getattr(plan, name), name)
     rates = RATES[model]
     credits = (
         plan.input * rates["input"]
@@ -65,6 +72,7 @@ def estimate_parity(
     premium_credits = model_credits(premium_model, premium, fast_mode=fast_mode)
     ceiling = int(sol.billable_volume * (0.4 / (2.5 if fast_mode else 1.0)))
     return {
+        "scope": "premium_leg_only; use plan for whole-workflow budgeting",
         "baseline_model": baseline_model,
         "premium_model": premium_model,
         "sol_baseline_credits": round(sol_credits, 6),
