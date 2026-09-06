@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import sys
 
-import anyio
 import pytest
 
 
 pytest.importorskip("mcp")
+anyio = pytest.importorskip("anyio")
 
 
 def test_mcp_server_routes_model_over_stdio():
