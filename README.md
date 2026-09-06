@@ -13,6 +13,8 @@ only compact, scanned, high-leverage decision packets.
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-0f8b8d)
 
+**[Try the interactive governor](https://sulabhdubey.github.io/premium-model-budget-governor/)** · [Install](#install) · [Connect the MCP server](docs/MCP.md)
+
 ## The Problem
 
 Frontier models are excellent. They are also expensive when they read entire
@@ -165,6 +167,7 @@ The repo includes public-facing visuals for launch posts and demo writeups:
 - [assets/flow.svg](assets/flow.svg)
 - [assets/demo-output.svg](assets/demo-output.svg)
 - [assets/social-card.svg](assets/social-card.svg)
+- [interactive landing and demo page](site/index.html)
 
 ## CLI Reference
 
@@ -210,6 +213,7 @@ See [docs/OPEN_CORE.md](docs/OPEN_CORE.md) for a cleaner free/pro boundary.
 - [Evals](docs/EVALS.md)
 - [Case studies](docs/CASE_STUDIES.md)
 - [Adoption guide](docs/ADOPTION_GUIDE.md)
+- [Landing page design research](docs/DESIGN_RESEARCH.md)
 - [Demo script](docs/DEMO_SCRIPT.md)
 - [FAQ](docs/FAQ.md)
 - [Open-core roadmap](docs/OPEN_CORE.md)
