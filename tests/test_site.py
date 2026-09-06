@@ -10,6 +10,7 @@ def test_landing_page_assets_and_core_sections_exist() -> None:
 
     assert 'id="demo"' in html
     assert 'id="proof"' in html
+    assert 'id="origin"' in html
     assert 'id="install"' in html
     assert "governor-aperture.png" in html
     assert (SITE / "assets" / "governor-aperture.png").stat().st_size > 100_000
@@ -24,6 +25,8 @@ def test_landing_page_uses_honest_install_and_product_copy() -> None:
     assert "Use frontier models for judgment, not waste." in html
     assert "Runs locally in your browser" in html
     assert "76% avoided overhead" in html
+    assert "Idea, research guidance &amp; product management: Sulabh Dubey" in html
+    assert "Not an OpenAI product" in html
 
 
 def test_pages_workflow_publishes_only_site_directory() -> None:

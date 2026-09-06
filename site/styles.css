@@ -54,7 +54,8 @@ img { display: block; max-width: 100%; }
 .hero-statement { margin: 30px 0 20px; max-width: 720px; font-size: 58px; line-height: 1.03; font-weight: 800; }
 .hero-description { max-width: 640px; margin: 0; color: var(--muted); font-size: 19px; line-height: 1.65; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-.hero-meta { margin: 18px 0 0; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+.hero-meta { margin: 18px 0 0; color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.7; }
+.hero-meta strong { color: var(--ink); }
 .hero-visual { position: relative; margin: 0; align-self: stretch; display: grid; align-content: center; overflow: hidden; }
 .hero-visual img { width: 120%; max-width: none; margin-left: -12%; filter: drop-shadow(0 18px 20px rgba(19,37,39,.12)); animation: governor-breathe 7s ease-in-out infinite; }
 .hero-visual figcaption { position: absolute; inset: auto 0 18% 0; display: grid; grid-template-columns: 1fr 1fr 1fr; color: var(--muted); font-family: var(--mono); font-size: 11px; }
@@ -114,6 +115,21 @@ input[type="range"] { width: 100%; height: 6px; accent-color: var(--teal); }
 .step-number { color: var(--teal); font-family: var(--mono); font-size: 12px; }
 .workflow-rail h3 { margin: 0 0 12px; font-family: var(--mono); font-size: 18px; }
 .workflow-rail p { margin: 0; color: var(--muted); }
+
+.origin-band { padding-block: 92px; background: var(--amber-soft); border-block: 1px solid #ead2a7; }
+.origin-layout { display: grid; grid-template-columns: 1.05fr .95fr; gap: 90px; }
+.origin-story h2 { margin: 10px 0 24px; max-width: 720px; font-size: 42px; line-height: 1.12; }
+.origin-story > p { max-width: 730px; color: #635945; font-size: 17px; }
+.origin-story blockquote { margin: 28px 0; padding: 6px 0 6px 24px; max-width: 720px; border-left: 4px solid var(--amber); font-size: 24px; line-height: 1.42; font-weight: 750; }
+.origin-story .origin-note { margin-top: 26px; font-family: var(--mono); font-size: 11px; }
+.credits { align-self: center; padding-left: 36px; border-left: 1px solid #d7be8e; }
+.credits h3 { margin: 0 0 24px; font-family: var(--mono); font-size: 20px; }
+.credits dl { margin: 0; }
+.credits dl > div { padding: 22px 0; border-top: 1px solid #d7be8e; }
+.credits dl > div:last-child { border-bottom: 1px solid #d7be8e; }
+.credits dt { font-family: var(--mono); font-size: 13px; font-weight: 800; }
+.credits dd { margin: 10px 0 0; color: #635945; }
+.credits > p { margin: 24px 0 0; color: #786d58; font-family: var(--mono); font-size: 11px; }
 
 .proof-band { padding-block: 88px; color: #eef7f5; background: #122224; }
 .proof-band .section-index { color: #82ceca; }
@@ -186,6 +202,8 @@ input[type="range"] { width: 100%; height: 6px; accent-color: var(--teal); }
   .route-form { border-right: 0; border-bottom: 1px solid var(--line); }
   .route-result { min-height: 520px; }
   .proof-layout { grid-template-columns: 1fr; gap: 52px; }
+  .origin-layout { grid-template-columns: 1fr; gap: 52px; }
+  .credits { padding-left: 0; border-left: 0; }
   .install-layout { grid-template-columns: 1fr; }
   .install-actions { grid-column: 1; }
   .site-footer { grid-template-columns: 1fr; padding-block: 34px; gap: 16px; }
@@ -204,7 +222,7 @@ input[type="range"] { width: 100%; height: 6px; accent-color: var(--teal); }
   .hero-actions { display: grid; }
   .hero-visual { min-height: 270px; }
   .hero-visual figcaption { display: none; }
-  .demo-band, .workflow, .inventory, .proof-band, .install-band { padding-block: 62px; }
+  .demo-band, .workflow, .origin-band, .inventory, .proof-band, .install-band { padding-block: 62px; }
   .section-heading h2, .install-layout h2 { font-size: 31px; }
   .field-grid, .result-head { grid-template-columns: 1fr; }
   .route-form, .route-result { padding: 24px 18px; }
@@ -215,6 +233,8 @@ input[type="range"] { width: 100%; height: 6px; accent-color: var(--teal); }
   .workflow-rail li + li { border-left: 0; border-top: 1px solid var(--line); }
   .inventory-list li:nth-child(odd), .inventory-list li:nth-child(even) { padding: 22px 0; border-left: 0; }
   .proof-layout h2 { font-size: 34px; }
+  .origin-story h2 { font-size: 34px; }
+  .origin-story blockquote { font-size: 21px; }
   .proof-records article { grid-template-columns: 1fr; }
   .proof-records p { grid-column: 1; }
   .command-block { align-items: stretch; flex-direction: column; padding: 18px; }
