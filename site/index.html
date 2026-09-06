@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Route broad AI work to efficient models and reserve frontier models for compact, scanned decisions.">
+    <meta name="theme-color" content="#ffffff">
+    <title>Premium Model Budget Governor</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2226%22 fill=%22none%22 stroke=%22%230e7778%22 stroke-width=%226%22/><circle cx=%2232%22 cy=%2232%22 r=%228%22 fill=%22%23d89220%22/></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#demo">Skip to live demo</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Premium Model Budget Governor home">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>Premium Model Budget Governor</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#how">How it works</a>
+        <a href="#demo">Live demo</a>
+        <a href="#proof">Proof</a>
+        <a href="#install">Install</a>
+      </nav>
+      <a class="button button-dark header-action" href="https://github.com/sulabhdubey/premium-model-budget-governor">View on GitHub</a>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="mobile-menu" id="mobile-menu" hidden>
+        <a href="#how">How it works</a>
+        <a href="#demo">Live demo</a>
+        <a href="#proof">Proof</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/sulabhdubey/premium-model-budget-governor">View on GitHub</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero page-shell" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">Premium Model<br>Budget Governor</h1>
+          <p class="hero-statement">Use frontier models for judgment, not waste.</p>
+          <p class="hero-description">Route broad work to efficient models. Send premium models only compact, scanned decision packets. Keep the intelligence while governing the burn.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#demo">Try the live governor <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="https://github.com/sulabhdubey/premium-model-budget-governor">View on GitHub</a>
+          </div>
+          <p class="hero-meta">Open source · Apache-2.0 · Local-first</p>
+        </div>
+        <figure class="hero-visual">
+          <img src="assets/governor-aperture.png" alt="Many evidence streams compressed through a precision governor into one focused decision signal" width="1672" height="941">
+          <figcaption>
+            <span>Broad evidence</span>
+            <span>Compress · scan · decide</span>
+            <span>Focused judgment</span>
+          </figcaption>
+        </figure>
+        <a class="continue-link" href="#demo">Explore the live demo <span aria-hidden="true">↓</span></a>
+      </section>
+
+      <section class="demo-band" id="demo" aria-labelledby="demo-title">
+        <div class="section-heading page-shell">
+          <div>
+            <p class="section-index">01 / Live demo</p>
+            <h2 id="demo-title">Route a task before it spends.</h2>
+          </div>
+          <p>Runs locally in your browser. No prompt or project data leaves this page.</p>
+        </div>
+
+        <div class="workbench page-shell">
+          <form class="route-form" id="route-form">
+            <div class="field-grid">
+              <label>
+                <span>Task type</span>
+                <select id="task-type">
+                  <option value="repo_exploration">Repository exploration</option>
+                  <option value="implementation">Feature implementation</option>
+                  <option value="frontier_architecture">Frontier architecture</option>
+                  <option value="critical_security">Critical security review</option>
+                  <option value="final_release_review">Final release review</option>
+                </select>
+              </label>
+              <label>
+                <span>Requested model</span>
+                <select id="requested-model">
+                  <option value="gpt-6-astra">GPT-6 Astra</option>
+                  <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
+                  <option value="gpt-5.6-terra">GPT-5.6 Terra</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="range-label" for="remaining-budget">
+              <span>Weekly capacity remaining</span>
+              <output id="budget-output" for="remaining-budget">22%</output>
+            </label>
+            <input id="remaining-budget" type="range" min="0" max="100" value="22">
+            <div class="range-scale" aria-hidden="true"><span>Emergency</span><span>Conserve</span><span>Normal</span></div>
+
+            <label>
+              <span>Task description</span>
+              <textarea id="task-description" rows="5">Review a launch candidate after implementation and tests. Decide whether the evidence supports release or needs one focused patch.</textarea>
+            </label>
+
+            <div class="option-row">
+              <label class="check-control"><input id="broad-context" type="checkbox" checked><span>Broad repository context</span></label>
+              <label class="check-control"><input id="explicit-approval" type="checkbox"><span>Explicit premium approval</span></label>
+            </div>
+
+            <button class="button button-primary run-button" type="submit">Run governor <span aria-hidden="true">→</span></button>
+          </form>
+
+          <section class="route-result" aria-live="polite" aria-atomic="true">
+            <div class="result-status">
+              <span class="status-dot"></span>
+              <span id="result-mode">Conserve mode</span>
+            </div>
+            <div class="result-head">
+              <div>
+                <span class="result-label">Recommended model</span>
+                <strong id="recommended-model">GPT-5.6 Sol</strong>
+              </div>
+              <div>
+                <span class="result-label">Decision</span>
+                <strong id="decision-label">Route to efficient model</strong>
+              </div>
+            </div>
+            <div class="result-why">
+              <span class="result-label">Why</span>
+              <p id="decision-reason">Broad exploration is a low-leverage use of premium context. Compress the evidence first.</p>
+            </div>
+            <div class="decision-contract">
+              <div class="contract-line"><span>Premium turns allowed</span><strong id="turns-allowed">0</strong></div>
+              <div class="contract-line"><span>Context action</span><strong id="context-action">Compress</strong></div>
+              <div class="contract-line"><span>Approval gate</span><strong id="approval-gate">Required</strong></div>
+            </div>
+            <div class="parity-meter">
+              <div class="meter-title"><span>Sol-parity ceiling</span><strong id="parity-value">40%</strong></div>
+              <div class="meter-track"><span id="meter-fill"></span></div>
+              <p id="parity-note">Astra context should stay at or below 40% of the equivalent Sol workflow.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="workflow page-shell" id="how" aria-labelledby="workflow-title">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="section-index">02 / How it works</p>
+            <h2 id="workflow-title">Four moves. One governed loop.</h2>
+          </div>
+        </div>
+        <ol class="workflow-rail">
+          <li><span class="step-number">01</span><div><h3>Explore</h3><p>Efficient models read broadly, test ideas, edit files, and inspect logs.</p></div></li>
+          <li><span class="step-number">02</span><div><h3>Compress</h3><p>Rank evidence, scan secrets and injection, then score a bounded capsule.</p></div></li>
+          <li><span class="step-number">03</span><div><h3>Judge</h3><p>A premium model receives one exact decision question, not the whole repo.</p></div></li>
+          <li><span class="step-number">04</span><div><h3>Learn</h3><p>Prompt-free telemetry records whether premium judgment changed the outcome.</p></div></li>
+        </ol>
+      </section>
+
+      <section class="proof-band" id="proof" aria-labelledby="proof-title">
+        <div class="page-shell proof-layout">
+          <div>
+            <p class="section-index">03 / Proof</p>
+            <h2 id="proof-title">The best premium call is sometimes the one you withhold.</h2>
+            <p>Two sanitized local project tests at roughly 12% weekly capacity produced the same honest result: use Sol now, preserve Astra for an unresolved decision.</p>
+          </div>
+          <div class="proof-records">
+            <article>
+              <span>Architecture review</span>
+              <strong>0 Astra turns</strong>
+              <p>Existing invariants resolved the decision. The capsule was correctly withheld.</p>
+            </article>
+            <article>
+              <span>Release security review</span>
+              <strong>76% avoided overhead</strong>
+              <p>Shadow Mode after Sol would have cost more than Sol-only for the current evidence state.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="inventory page-shell" aria-labelledby="inventory-title">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="section-index">04 / Included</p>
+            <h2 id="inventory-title">A complete control layer.</h2>
+          </div>
+          <p>CLI, Python library, MCP server, and a ready Codex plugin.</p>
+        </div>
+        <ul class="inventory-list">
+          <li><span>01</span><div><strong>Deterministic router</strong><p>Allow, block, request approval, or route to a cheaper model.</p></div></li>
+          <li><span>02</span><div><strong>Sol-parity estimator</strong><p>Keep premium billable token volume inside a comparable budget.</p></div></li>
+          <li><span>03</span><div><strong>Context Poison Firewall</strong><p>Scan untrusted evidence for secrets and prompt-injection patterns.</p></div></li>
+          <li><span>04</span><div><strong>Capsules and evidence graphs</strong><p>Give frontier models compact claims, files, tests, risks, and decisions.</p></div></li>
+          <li><span>05</span><div><strong>Shadow Mode and tournaments</strong><p>Use premium intelligence as the judge over efficient model work.</p></div></li>
+          <li><span>06</span><div><strong>Learning ledger</strong><p>Calibrate future routing from outcomes without storing raw prompts.</p></div></li>
+        </ul>
+      </section>
+
+      <section class="install-band" id="install" aria-labelledby="install-title">
+        <div class="page-shell install-layout">
+          <div>
+            <p class="section-index">05 / Install</p>
+            <h2 id="install-title">Add the governor in one minute.</h2>
+            <p>Python 3.10+ · Apache-2.0 · No required runtime dependencies</p>
+          </div>
+          <div class="command-block">
+            <code id="install-command">pip install git+https://github.com/sulabhdubey/premium-model-budget-governor.git</code>
+            <button id="copy-command" type="button" aria-label="Copy install command">Copy</button>
+            <span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
+          </div>
+          <div class="install-actions">
+            <a class="button button-primary" href="https://github.com/sulabhdubey/premium-model-budget-governor#install">Install from GitHub <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/docs/MCP.md">Connect the MCP server</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer page-shell">
+      <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span></span><span>Premium Model Budget Governor</span></a>
+      <p>Frontier judgment, governed.</p>
+      <nav aria-label="Footer navigation">
+        <a href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/LICENSE">Apache-2.0</a>
+        <a href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/SECURITY.md">Security</a>
+        <a href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/CONTRIBUTING.md">Contribute</a>
+      </nav>
+    </footer>
+  </body>
+</html>

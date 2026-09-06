@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 - 2026-09-07
+
+Launch experience release.
+
+- Added a responsive landing page with an interactive local routing demo.
+- Added an original generated governor-aperture hero visual.
+- Added GitHub Pages deployment automation.
+- Added direct demo links to project metadata and the README.
+
 ## 0.1.0 - 2026-09-06
 
 Initial public-ready release.
