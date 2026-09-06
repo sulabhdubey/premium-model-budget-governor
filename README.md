@@ -15,6 +15,30 @@ only compact, scanned, high-leverage decision packets.
 
 **[Try the interactive governor](https://sulabhdubey.github.io/premium-model-budget-governor/)** · [Install](#install) · [Connect the MCP server](docs/MCP.md)
 
+> **Idea, research guidance, and product management: Sulabh Dubey.**<br>
+> Research synthesis, design, engineering, testing, documentation, and release
+> execution: Codex by OpenAI.
+
+## Why This Exists
+
+This project began after a real Astra-heavy Codex workflow consumed one weekly
+allowance in roughly a day. After a reset, the next allowance was again down to
+16% by the following day and later reached 11% during this launch. Those are the
+creator's observed account-capacity readings, not a universal provider benchmark.
+
+The question was not how to stop using Astra. It was how to use as much of
+Astra's capability as possible while keeping workflow burn closer to Sol. This
+governor is the resulting hybrid control layer.
+
+**Sulabh Dubey** originated the idea and led the research direction, product
+requirements, priorities, edge cases, approvals, and real-project proof tests.
+**Codex by OpenAI** performed the research synthesis, architecture, engineering,
+security tooling, MCP/plugin implementation, evals, documentation, design,
+testing, and release execution under that direction.
+
+This is an independent open-source project, not an OpenAI product and not
+endorsed by OpenAI. See [Origin and credits](docs/ORIGIN_AND_CREDITS.md).
+
 ## The Problem
 
 Frontier models are excellent. They are also expensive when they read entire
@@ -214,6 +238,7 @@ See [docs/OPEN_CORE.md](docs/OPEN_CORE.md) for a cleaner free/pro boundary.
 - [Case studies](docs/CASE_STUDIES.md)
 - [Adoption guide](docs/ADOPTION_GUIDE.md)
 - [Landing page design research](docs/DESIGN_RESEARCH.md)
+- [Origin and credits](docs/ORIGIN_AND_CREDITS.md)
 - [Demo script](docs/DEMO_SCRIPT.md)
 - [FAQ](docs/FAQ.md)
 - [Open-core roadmap](docs/OPEN_CORE.md)
