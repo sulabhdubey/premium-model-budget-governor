@@ -16,3 +16,4 @@ Initial public-ready release.
 - Added benefit predictor.
 - Added Codex plugin bundle.
 - Added synthetic eval harness.
+- Added MCP stdio server and runtime integration test.
