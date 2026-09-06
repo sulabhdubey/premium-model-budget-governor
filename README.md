@@ -123,6 +123,9 @@ Example MCP config:
 See [docs/MCP.md](docs/MCP.md) and
 [examples/mcp-config.codex.json](examples/mcp-config.codex.json).
 
+The MCP server is covered by an integration test that launches the stdio server,
+lists tools, and calls `route_model`.
+
 ## Real Local Proof Tests
 
 These were run on private local projects and sanitized for public sharing.

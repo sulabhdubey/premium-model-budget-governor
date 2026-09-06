@@ -58,6 +58,17 @@ The same example is available at `examples/mcp-config.codex.json`.
 - `predict_astra_benefit`: estimate whether premium review is likely to help.
 - `normalize_token_telemetry`: normalize usage data without storing prompts.
 
+## Runtime Test
+
+The repository includes `tests/test_mcp_runtime.py`. When the optional MCP extra
+is installed, this test launches the server over stdio, lists the available
+tools, and calls `route_model`.
+
+```bash
+python -m pip install -e ".[dev,mcp]"
+python -m pytest tests/test_mcp_runtime.py
+```
+
 ## Safety Boundary
 
 The MCP server is local-first and does not call model providers. It reads files
