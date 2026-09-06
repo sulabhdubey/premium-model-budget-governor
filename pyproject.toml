@@ -37,6 +37,7 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+mcp = ["mcp[cli]>=2"]
 
 [project.scripts]
 pm-bg = "premium_model_budget_governor.cli:main"

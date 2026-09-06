@@ -6,6 +6,7 @@
     "name": "Sulabh Dubey"
   },
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Premium Model Budget Governor",
     "shortDescription": "Use frontier models for judgment, not waste.",

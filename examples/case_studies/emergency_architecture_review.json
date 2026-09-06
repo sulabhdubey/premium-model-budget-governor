@@ -1,0 +1,12 @@
+{
+  "case": "emergency_architecture_review",
+  "sanitized": true,
+  "remaining_limit_percent": 12,
+  "recommended_model": "gpt-5.6-sol",
+  "routing_decision": "sol_first_hybrid",
+  "premium_turns_spent": 0,
+  "secret_findings": 0,
+  "prompt_injection_findings": 0,
+  "reason": "Important architecture work, but no unresolved conflict or repeated Sol failure existed.",
+  "public_lesson": "Emergency budget should preserve premium review for real ambiguity, not ordinary architecture continuation."
+}
