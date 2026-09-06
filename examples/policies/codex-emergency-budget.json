@@ -1,0 +1,26 @@
+{
+  "name": "codex-emergency-budget",
+  "default_model": "gpt-5.6-sol",
+  "premium_model": "gpt-6-astra",
+  "emergency_remaining_percent": 20,
+  "premium_requires_explicit_approval_below_percent": 20,
+  "premium_billable_token_ceiling_ratio": 0.4,
+  "allow_premium_for": [
+    "final_architecture_contradiction",
+    "high_consequence_security_ambiguity",
+    "release_authority_dispute"
+  ],
+  "block_premium_for": [
+    "broad_repo_exploration",
+    "routine_docs_polish",
+    "repeated_log_reading",
+    "unranked_evidence_collection"
+  ],
+  "required_preflight": [
+    "bounded_evidence",
+    "secret_scan",
+    "prompt_injection_scan",
+    "capsule_quality_score"
+  ]
+}
+

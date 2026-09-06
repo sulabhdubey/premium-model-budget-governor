@@ -42,6 +42,12 @@ mcp = ["mcp[cli]>=2"]
 [project.scripts]
 pm-bg = "premium_model_budget_governor.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/sulabhdubey/premium-model-budget-governor"
+Repository = "https://github.com/sulabhdubey/premium-model-budget-governor"
+Issues = "https://github.com/sulabhdubey/premium-model-budget-governor/issues"
+Documentation = "https://github.com/sulabhdubey/premium-model-budget-governor/tree/main/docs"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]

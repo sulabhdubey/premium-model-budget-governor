@@ -126,6 +126,23 @@ See [docs/MCP.md](docs/MCP.md) and
 The MCP server is covered by an integration test that launches the stdio server,
 lists tools, and calls `route_model`.
 
+## For Codex Users
+
+Use the plugin bundle when you want Codex-facing instructions and MCP config in
+one place:
+
+```text
+plugin/
+  .codex-plugin/plugin.json
+  .mcp.json
+  skills/premium-model-budget-governor/SKILL.md
+```
+
+Start with [docs/CODEX_SETUP.md](docs/CODEX_SETUP.md), then run the decision
+record template in [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) on a small task.
+The expected outcome for broad repo polish is usually Sol-first execution, with
+premium models reserved for a scanned capsule at the final decision point.
+
 ## Real Local Proof Tests
 
 These were run on private local projects and sanitized for public sharing.
@@ -139,6 +156,15 @@ The lesson is important: the governor is not anti-premium-model. It is
 anti-waste. Sometimes the smartest premium call is the one you do not make.
 
 Full sanitized details: [docs/CASE_STUDIES.md](docs/CASE_STUDIES.md).
+
+## Launch Assets
+
+The repo includes public-facing visuals for launch posts and demo writeups:
+
+- [assets/hero.svg](assets/hero.svg)
+- [assets/flow.svg](assets/flow.svg)
+- [assets/demo-output.svg](assets/demo-output.svg)
+- [assets/social-card.svg](assets/social-card.svg)
 
 ## CLI Reference
 
@@ -173,12 +199,22 @@ capsules, CLI, tests, MCP, and the Codex plugin. A future paid Pro pack could
 add richer dashboards, team profiles, local memory integration, advanced eval
 reports, and one-click case-study generation without locking safety away.
 
+See [docs/OPEN_CORE.md](docs/OPEN_CORE.md) for a cleaner free/pro boundary.
+
 ## Docs
 
+- [Quickstart](docs/QUICKSTART.md)
+- [Codex setup](docs/CODEX_SETUP.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [MCP server](docs/MCP.md)
 - [Evals](docs/EVALS.md)
 - [Case studies](docs/CASE_STUDIES.md)
+- [Adoption guide](docs/ADOPTION_GUIDE.md)
+- [Demo script](docs/DEMO_SCRIPT.md)
+- [FAQ](docs/FAQ.md)
+- [Open-core roadmap](docs/OPEN_CORE.md)
+- [Outreach kit](docs/OUTREACH_KIT.md)
+- [Citation metadata](CITATION.cff)
 - [Launch plan](docs/LAUNCH_PLAN.md)
 - [Security policy](SECURITY.md)
 

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Premium Model Budget Governor social card</title>
+  <desc id="desc">A launch graphic for Premium Model Budget Governor showing cheap model exploration flowing into compact premium model judgment.</desc>
+  <rect width="1200" height="630" fill="#071013"/>
+  <rect x="64" y="64" width="1072" height="502" rx="18" fill="#0f1c20" stroke="#26434a" stroke-width="2"/>
+  <text x="98" y="146" fill="#f5f0e8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800">Premium Model</text>
+  <text x="98" y="212" fill="#f5f0e8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800">Budget Governor</text>
+  <text x="100" y="276" fill="#9fd8d2" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="29" font-weight="600">Use frontier models for judgment, not waste.</text>
+  <g transform="translate(100 344)">
+    <rect x="0" y="0" width="245" height="92" rx="12" fill="#152b30" stroke="#3d6970"/>
+    <text x="28" y="39" fill="#f5f0e8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">Explore</text>
+    <text x="28" y="70" fill="#a9b8ba" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18">cheap models</text>
+    <path d="M265 46h88" stroke="#9fd8d2" stroke-width="5" stroke-linecap="round"/>
+    <path d="M344 28l24 18-24 18" fill="none" stroke="#9fd8d2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="390" y="0" width="245" height="92" rx="12" fill="#1d312c" stroke="#63845f"/>
+    <text x="418" y="39" fill="#f5f0e8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">Compress</text>
+    <text x="418" y="70" fill="#b9c8b5" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18">scanned capsule</text>
+    <path d="M655 46h88" stroke="#d4b36a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M734 28l24 18-24 18" fill="none" stroke="#d4b36a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="780" y="0" width="245" height="92" rx="12" fill="#31281a" stroke="#806c40"/>
+    <text x="808" y="39" fill="#f5f0e8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">Judge</text>
+    <text x="808" y="70" fill="#d8c9a0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18">premium model</text>
+  </g>
+  <text x="100" y="510" fill="#d9e6e3" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">CLI + MCP + Codex plugin + capsules + prompt-free telemetry</text>
+  <text x="100" y="546" fill="#7f9598" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20">github.com/sulabhdubey/premium-model-budget-governor</text>
+</svg>
