@@ -6,10 +6,16 @@
     <meta name="description" content="Use Astra directly or in a measured hybrid workflow. Govern full-task costs, host context, and actual usage.">
     <meta name="theme-color" content="#ffffff">
     <title>Premium Model Budget Governor</title>
+    <meta property="og:title" content="Premium Model Budget Governor | Keep Astra in the work">
+    <meta property="og:description" content="Preview the workflow. Approve the estimate. Inspect the receipt. Explore the open-source public beta.">
+    <meta property="og:image" content="https://sulabhdubey.github.io/premium-model-budget-governor/assets/tour-poster.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://sulabhdubey.github.io/premium-model-budget-governor/">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2226%22 fill=%22none%22 stroke=%22%230e7778%22 stroke-width=%226%22/><circle cx=%2232%22 cy=%2232%22 r=%228%22 fill=%22%23d89220%22/></svg>">
     <link rel="stylesheet" href="styles.css">
     <script src="workflows.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="tour.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#demo">Skip to live demo</a>
@@ -20,7 +26,7 @@
         <span>Premium Model Budget Governor</span>
       </a>
       <nav aria-label="Primary navigation">
-        <a href="#how">How it works</a>
+        <a href="#tour">Product tour</a>
         <a href="#demo">Live demo</a>
         <a href="#proof">Proof</a>
         <a href="#install">Install</a>
@@ -30,7 +36,7 @@
         <span></span><span></span><span></span>
       </button>
       <div class="mobile-menu" id="mobile-menu" hidden>
-        <a href="#how">How it works</a>
+        <a href="#tour">Product tour</a>
         <a href="#demo">Live demo</a>
         <a href="#proof">Proof</a>
         <a href="#install">Install</a>
@@ -39,33 +45,58 @@
     </header>
 
     <main id="top">
-      <section class="hero page-shell" aria-labelledby="hero-title">
-        <div class="hero-copy">
+      <section class="hero" aria-labelledby="hero-title">
+        <img class="hero-backdrop" src="assets/governor-aperture.png" alt="" width="1672" height="941">
+        <div class="hero-copy page-shell">
+          <p class="hero-eyebrow">Open source / Public beta 0.4.0rc5</p>
           <h1 id="hero-title">Premium Model<br>Budget Governor</h1>
-          <p class="hero-statement">Use frontier models for judgment, not waste.</p>
-          <p class="hero-description">Keep Astra in the work. Budget the complete workflow, measure host context, and delegate only when the whole task benefits.</p>
+          <p class="hero-statement">Keep Astra in the work.<br>Keep the budget in view.</p>
+          <p class="hero-description">Preview the workflow. Approve the estimate. Inspect the receipt. A local workbench for deliberate premium-model use.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#demo">Try the live governor <span aria-hidden="true">→</span></a>
-            <a class="button button-secondary" href="https://github.com/sulabhdubey/premium-model-budget-governor">View on GitHub</a>
+            <a class="button button-primary" href="#tour">Explore the workbench <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#install">Get the beta</a>
           </div>
-          <p class="hero-meta"><strong>Idea, research guidance &amp; product management: Sulabh Dubey</strong><br>Research synthesis &amp; execution: Codex by OpenAI · Open source · Apache-2.0</p>
+          <p class="hero-meta">Direct Astra by default. Read-only execution. No guaranteed savings.</p>
         </div>
-        <figure class="hero-visual">
-          <img src="assets/governor-aperture.png" alt="Many evidence streams compressed through a precision governor into one focused decision signal" width="1672" height="941">
-          <figcaption>
-            <span>Broad evidence</span>
-            <span>Compress · scan · decide</span>
-            <span>Focused judgment</span>
-          </figcaption>
-        </figure>
-        <a class="continue-link" href="#demo">Explore the live demo <span aria-hidden="true">↓</span></a>
+      </section>
+
+      <section class="product-tour page-shell" id="tour" aria-labelledby="tour-title">
+        <div class="section-heading">
+          <div><p class="section-index">Inside the workbench</p><h2 id="tour-title">Your task. Your model. Your approval.</h2></div>
+          <p>Development captures, not a live session.<br>No model calls or account connection.</p>
+        </div>
+        <div class="tour-layout">
+          <div class="tour-story">
+            <div class="tour-tabs" role="tablist" aria-label="Workbench views" aria-orientation="vertical">
+              <button id="tour-tab-0" role="tab" type="button" aria-selected="true" aria-controls="tour-panel" data-tour="0"><span>01</span><strong>Astra, directly</strong></button>
+              <button id="tour-tab-1" role="tab" type="button" aria-selected="false" aria-controls="tour-panel" tabindex="-1" data-tour="1"><span>02</span><strong>Hybrids, explicitly</strong></button>
+              <button id="tour-tab-2" role="tab" type="button" aria-selected="false" aria-controls="tour-panel" tabindex="-1" data-tour="2"><span>03</span><strong>Context, deliberately</strong></button>
+            </div>
+            <p id="tour-description">Start with Astra. Review the selected evidence and estimated spend before authorizing a read-only task.</p>
+            <div class="tour-controls">
+              <button class="button button-secondary" id="tour-play" type="button" aria-pressed="false">Play tour</button>
+              <a class="text-link" href="#demo">Try the planner below</a>
+            </div>
+            <p class="tour-disclaimer">Captures show preview states, not proof of savings. Extra stages can cost more. Reduced skill discovery can omit useful guidance.</p>
+          </div>
+          <div class="tour-panel" id="tour-panel" role="tabpanel" tabindex="0" aria-labelledby="tour-tab-0">
+            <div class="tour-window-label"><span>LOCAL WORKBENCH</span><span id="tour-view-label">01 / Direct preview</span></div>
+            <a id="tour-full-image" href="assets/tour-direct-desktop.png" target="_blank" rel="noopener" aria-label="Open full Workbench capture">
+              <picture tabindex="0" aria-label="Scrollable Workbench capture">
+                <source id="tour-mobile" media="(max-width: 560px)" srcset="assets/tour-direct-mobile.png">
+                <img id="tour-image" src="assets/tour-direct-desktop.png" width="1440" height="1609" alt="Astra-preferred Workbench preview with task inputs and explicit approval, before execution" loading="lazy">
+              </picture>
+            </a>
+            <p class="tour-image-note">Example project / Preview only / Scroll capture or open full image</p>
+          </div>
+        </div>
       </section>
 
       <section class="demo-band" id="demo" aria-labelledby="demo-title">
         <div class="section-heading page-shell">
           <div>
             <p class="section-index">01 / Live demo</p>
-            <h2 id="demo-title">Route a task before it spends.</h2>
+            <h2 id="demo-title">What fits your task budget?</h2>
           </div>
           <p>Illustrative whole-workflow estimates. No model calls, account connection, or live billing.</p>
         </div>
@@ -162,9 +193,9 @@
         <div class="page-shell origin-layout">
           <div class="origin-story">
             <p class="section-index">03 / Origin</p>
-            <h2 id="origin-title">Built because two weekly limits vanished far too fast.</h2>
+            <h2 id="origin-title">One allowance gone.<br>The next already running low.</h2>
             <p>During Astra-heavy Codex work, one weekly allowance was consumed in roughly a day. After a reset, the replacement allowance was again down to 16% by the next day, and later reached 11% during this launch.</p>
-            <p>The problem was not Astra’s intelligence. It was paying frontier-model rates for broad exploration, repeated context, implementation, and logs. That experience created the governing question behind this project:</p>
+            <p>That experience raised a question about repeated context, oversized evidence, and unnecessary handoffs. The account readings alone could not isolate the cause. The goal became:</p>
             <blockquote>How can we use as much of Astra’s capability as possible while keeping workflow burn closer to Sol?</blockquote>
             <p class="origin-note">These are the creator’s observed account-capacity readings, not a universal provider benchmark.</p>
           </div>
@@ -231,7 +262,7 @@
         <div class="page-shell install-layout">
           <div>
             <p class="section-index">06 / Install</p>
-            <h2 id="install-title">Try the rc.5 prerelease.</h2>
+            <h2 id="install-title">Make your next task a measured one.</h2>
             <p>Python 3.10+ · Apache-2.0 · Direct-run workbench</p>
             <p>Download the <a href="https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/install_governor.py">installer</a> and <a href="https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/premium_model_budget_governor-0.4.0rc5-py3-none-any.whl">wheel</a> into one folder. Run the preview there; add <code>--yes</code> only after reviewing it.</p>
             <p>Initial setup uses a terminal. Optional MCP dependencies require a download. Tasks are read-only; direct Astra is the default and extra stages can cost more. Broad savings and unaided onboarding are not yet proven.</p>
@@ -247,11 +278,18 @@
           </div>
         </div>
       </section>
+      <section class="tester-band page-shell" aria-labelledby="tester-title">
+        <p class="section-index">Build the evidence with us</p>
+        <h2 id="tester-title">Useful feedback beats a perfect demo.</h2>
+        <p>Technical or nontechnical: try the setup, bring a small non-sensitive task, and tell us where it helps or gets in the way. Independent testing is welcome. No endorsement expected.</p>
+        <a class="button button-primary" href="https://github.com/sulabhdubey/premium-model-budget-governor/issues/new?template=onboarding_trial.md">Report your beta experience <span aria-hidden="true">→</span></a>
+        <p class="tour-disclaimer">Never share private prompts, project files, credentials, or local session links.</p>
+      </section>
     </main>
 
     <footer class="site-footer page-shell">
       <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span></span><span>Premium Model Budget Governor</span></a>
-      <p>Frontier judgment, governed.</p>
+      <p>Use frontier models for judgment, not waste.</p>
       <nav aria-label="Footer navigation">
         <a href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/LICENSE">Apache-2.0</a>
         <a href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/SECURITY.md">Security</a>

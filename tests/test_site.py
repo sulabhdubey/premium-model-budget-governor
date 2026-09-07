@@ -51,3 +51,21 @@ def test_package_version_matches_release() -> None:
     assert '__version__ = "0.4.0rc5"' in package
     plugin = json.loads((ROOT / "plugin/.codex-plugin/plugin.json").read_text(encoding="utf-8"))
     assert plugin["version"] == "0.4.0-rc.5"
+
+
+def test_product_tour_has_accessible_controls_and_real_assets() -> None:
+    html = (SITE / "index.html").read_text(encoding="utf-8")
+    assert 'id="tour"' in html
+    assert 'id="tour-play"' in html
+    assert 'role="tablist"' in html
+    assert 'aria-controls="tour-panel"' in html
+    assert 'id="tour-panel"' in html
+    assert 'Development captures' in html
+    for name in ("direct", "prepared", "focused"):
+        for size in ("desktop", "mobile"):
+            assert (SITE / "assets" / f"tour-{name}-{size}.png").is_file()
+    js = (SITE / "tour.js").read_text(encoding="utf-8")
+    assert "prefers-reduced-motion" in js
+    assert "visibilitychange" in js
+    assert "ArrowRight" in js
+    assert "clearInterval" in js
