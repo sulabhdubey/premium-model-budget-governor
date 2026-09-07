@@ -2,7 +2,7 @@
 
 # Premium Model Budget Governor
 
-**Keep Astra in the workflow. Make unnecessary spend visible.**
+**Astra does the work. You see the budget.**
 
 A local workbench, CLI, and MCP server for planning premium-model work,
 approving estimated spend, and inspecting usage afterward.
@@ -12,23 +12,36 @@ approving estimated spend, and inspecting usage afterward.
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10%2B-555555)
 
-**[Explore the demo](https://sulabhdubey.github.io/premium-model-budget-governor/)**
+**[Explore the product tour](https://sulabhdubey.github.io/premium-model-budget-governor/#tour)**
 &nbsp; / &nbsp; **[Install the beta](#install)**
 &nbsp; / &nbsp; **[Connect MCP](docs/MCP.md)**
 &nbsp; / &nbsp; **[Become a tester](#help-test-the-beta)**
 
 </div>
 
-![The local Workbench showing an Astra-preferred task preview before execution](artifacts/workbench-rc4-qa/1440.png)
+[![Premium Model Budget Governor: real Workbench previews with direct Astra, explicit hybrids, and opt-in focused discovery](site/assets/tour-poster.png)](https://sulabhdubey.github.io/premium-model-budget-governor/#tour)
 
-*Actual development Workbench capture, not a generated mockup. A preview does not start a model call.*
+<p align="center"><strong>Preview the workflow &nbsp; / &nbsp; Approve the estimate &nbsp; / &nbsp; Inspect the receipt</strong><br>
+<a href="https://sulabhdubey.github.io/premium-model-budget-governor/#tour">Open the interactive tour</a> · <a href="https://sulabhdubey.github.io/premium-model-budget-governor/#demo">Try the no-model planner</a></p>
+
+*Real development capture in a product-tour layout. Playback is optional on the
+website; no model runs in the tour or planner demo.*
 
 > **Public beta, not a stable release.** The downloadable version is `0.4.0rc5`.
 > Execution is currently read-only and requires your explicit approval.
 > This does not change the active model in existing Codex chats, make tokens
 > cheaper, or guarantee the same quality at lower cost.
 
-## Why This Exists
+**Built for:** Codex users who want Astra participation with explicit task
+budgets, and developers connecting governed tools through MCP.
+**Not a fit yet:** automatic control of every existing chat, write-enabled
+execution, or guaranteed weekly savings.
+
+**Idea, research guidance, and product management: Sulabh Dubey.**
+Research synthesis and build execution: Codex by OpenAI, under his direction.
+
+<details>
+<summary><strong>The origin: one weekly allowance gone, the next already running low</strong></summary>
 
 One weekly Codex allowance was consumed in roughly a day of Astra-heavy work.
 After a reset, only about 16% of the second allowance remained the following day.
@@ -46,6 +59,8 @@ must account for all their stages, not just their cheapest step.
 Research synthesis, design, engineering, testing, documentation, and release
 execution: Codex by OpenAI, under his direction.
 [Origin and credits](docs/ORIGIN_AND_CREDITS.md).
+
+</details>
 
 ## What You Can Do
 
@@ -189,6 +204,9 @@ into a blanket "same Astra quality for less" claim.
 
 ## Controls, Not Magic
 
+<details>
+<summary><strong>Inside the governor: budgets, evidence, receipts, and reviewed preferences</strong></summary>
+
 - **Whole-task budgets:** persistent reservations, expiring leases, and replay protection for cooperating runners.
 - **Evidence preparation:** explicit file selection, capsule scoring, and graph summaries; required evidence must not silently disappear.
 - **Usage recovery:** reconcile a recorded terminal receipt without rerunning a paid task; missing usage remains unknown.
@@ -197,6 +215,8 @@ into a blanket "same Astra quality for less" claim.
 
 See [capability controls](docs/CAPABILITY_CONTROLS.md), [architecture](docs/ARCHITECTURE.md),
 and [publication privacy](docs/PUBLICATION_PRIVACY.md) for the contracts.
+
+</details>
 
 ### Know The Boundaries
 
