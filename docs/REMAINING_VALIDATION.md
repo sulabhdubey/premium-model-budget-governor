@@ -59,11 +59,9 @@ as free or claim a worker receipt covers all account activity.
 
 ## Independent Project Trials
 
-- RTA-Net: freeze the current checkpoint/lease renewal question and authoritative
-  evidence, verify against the live checkout, and perform a read-only bounded
-  review without granting or extending runtime authority.
-- CircuitProof: freeze current release-authority evidence and review the missing
-  gate, without changing releaseAuthorized or treating local tests as launch consent.
+- Freeze each owner's approved private-project question and authoritative evidence,
+  verify against its live checkout, and perform a bounded read-only review without
+  altering permissions or operational state. Keep identities and findings private.
 - Preserve all existing edits. Public artifacts contain sanitized findings and
   hashes, not private source, personal paths or credentials. Owner-supplied earlier
   reports remain historical context, not new governor-executed trials.

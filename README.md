@@ -72,7 +72,7 @@ predefined checks in Codex review. This is execution evidence, not a matched
 savings comparison or independent human evaluation. [Full report](artifacts/approved-astra-ui-smoke-2026-09-07.md).
 
 **Expanded real pilot:** 39 worker calls, five task families across four workflows,
-plus a bounded joint RTA-Net/CircuitProof review and exploratory tests. Extra
+plus a bounded review across two private projects and exploratory tests. Extra
 handoffs usually cost more than direct Astra. An opt-in smaller skill catalog
 reduced mean estimated cost about 17% on one repeated visual task; useful guidance
 may be omitted, so inherited discovery stays the default. These are limited,
