@@ -827,3 +827,27 @@ are not complete. Read-only tasks are not substitutes for write/Desktop-only wor
 - Human participants are not available yet. Candidate recruitment is prepared;
   no onboarding outcome, independent audit, stable promotion or broad savings
   proof is invented. Draft PR/main-site promotion remain separate from rc.4.
+
+2026-09-07, publication privacy hardening and independent-validation preparation:
+
+- Removed remaining unnecessary private-project references from current tracked
+  documentation and the older live candidate release notes. Rewrote stale
+  Sol-first outreach copy to match the measured direct-Astra direction.
+- A private, verified Git bundle and historical inventory cover 16 reachable
+  snapshots and 11 uploaded assets. All snapshots contain at least one term from
+  the owner's private audit list. One candidate wheel contains a private-reference
+  match in README metadata. Generic-secret matches in two wheels were reviewed as
+  token-generation source code, not exposed credentials. No complete erasure claim.
+- Added bounded publication checks for text, decoded JSON and wheel/ZIP metadata;
+  reports omit matched content and names. Uninspected content requires manual
+  review. Fifteen new tests passed; full suite: 334 passed, one skip. CI also runs
+  public-text checks, without uploading the private terms list.
+- Current selected publication documents pass both public patterns and local
+  private-term checks. This is not a semantic confidentiality or malware guarantee.
+- Independent validation now has explicit task intake, blinded grading, scope,
+  consent, whole-workflow cost and failure-reporting instructions. No new worker
+  call, human session or independent result was fabricated to fill missing evidence.
+- History rewriting and affected binary withdrawal/replacement require the owner's
+  specific disposition after inventory. No force push, tag change or asset deletion
+  occurred in this hardening work. Stable promotion/site deployment and creator
+  contact remain on hold; volunteer availability and independent results remain open.

@@ -1,51 +1,19 @@
-# Launch Plan
+# Evidence-Gated Launch
 
-## Positioning
+The candidate is available for testing. Stable promotion is not authorized by
+green software tests alone. Follow [acceptance](ACCEPTANCE_AUDIT.md).
 
-Title: Premium Model Budget Governor
+1. Inspect source, package metadata, archives, release notes, screenshots and
+   public history for unnecessary private information. Keep audit terms and raw
+   records out of Git. Coordinate historical cleanup before rewriting refs.
+2. Recruit one technical and one nontechnical consenting volunteer. Use the
+   onboarding protocol, log interventions and keep private observations local.
+3. Obtain independent non-sensitive tasks and fixed criteria. Evaluate blinded
+   quality, full cost and cache effects, including unsuccessful runs.
+4. Fix observed blockers, qualify the exact artifact and verify the public journey.
+5. Promote only the supported scope, then prepare creator feedback outreach using
+   OUTREACH_KIT.md. Sending requires exact recipient/message approval.
 
-Tagline: Use frontier models for judgment, not waste.
-
-Audience:
-
-- Codex users with weekly usage limits
-- AI engineers building multi-model agent systems
-- developer-tool builders exploring model routing
-- teams that need explainable AI budget controls
-
-## Launch Checklist
-
-- README explains the problem in the first screen.
-- License is Apache-2.0.
-- `SECURITY.md`, `CONTRIBUTING.md`, and CI are present.
-- Tests pass locally and in GitHub Actions.
-- No personal ledger, prompt, credential, or private project data is committed.
-- First release is tagged `v0.1.0`.
-- Repository topics include `codex`, `ai-agents`, `llm-routing`,
-  `model-routing`, `prompt-caching`, `developer-tools`, and
-  `budget-governance`.
-
-## Suggested Announcement
-
-I built Premium Model Budget Governor after hitting a very real AI-dev problem:
-frontier models are excellent, but using them for every file read, log loop, and
-implementation step can burn a weekly budget shockingly fast.
-
-The project keeps premium models for decision points:
-
-- shadow review
-- architecture/security judgment
-- compact evidence capsules
-- cheap-model tournaments
-- prompt-free telemetry
-- learned routing
-
-Repo: <link>
-
-## Cross-Link
-
-Mention Rta-Smriti Brain as a related direction:
-
-> This pairs naturally with local project memory systems such as Rta-Smriti
-> Brain: memory decides what matters; the governor decides whether the premium
-> model should see it.
+No private-project cross-promotion, automatic creator contact, guaranteed savings,
+virality or original-quality equivalence claim. The current product executes
+read-only tasks, not every desktop interaction or write workflow.

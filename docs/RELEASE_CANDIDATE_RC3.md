@@ -33,7 +33,7 @@ are estimates. Weekly allowance attribution, serving-model attestation and hard
 in-flight spending enforcement are unavailable. Unknown spending is never free.
 
 Automated tests do not prove Astra-quality savings or unaided nontechnical use.
-Independent RTA-Net/CircuitProof experiments, broader matched tasks, volunteer
+Independent private-project experiments, broader matched tasks, volunteer
 onboarding, independent security review and remaining capability work stay open.
 The five authored starter tasks do not substitute for these gates.
 
