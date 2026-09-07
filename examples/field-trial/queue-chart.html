@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Queue fixture</title>
+<style>
+body{margin:0;padding:32px;width:800px;box-sizing:border-box;font:18px Arial;background:white;color:#24282a}h1{font-size:28px;margin:0 0 12px}p{line-height:1.5}.legend{display:flex;gap:24px;margin:24px 0}.key{display:inline-block;width:16px;height:16px;margin-right:8px}.ok{background:#91999e}.late{background:#b02f55}.row{display:grid;grid-template-columns:80px 1fr;gap:16px;margin:20px 0;align-items:center}.bars{display:flex;height:36px}.bar{display:flex;align-items:center;justify-content:center;color:white;min-width:32px}.note{border-top:1px solid #ccc;padding-top:20px;font-size:16px}
+</style><h1>Service queues</h1><p>Current snapshot, revision 8. Counts shown inside each segment.</p>
+<div class="legend"><span><i class="key ok"></i>Within target</span><span><i class="key late"></i>Overdue</span></div>
+<div class="row"><strong>North</strong><div class="bars"><span class="bar ok" style="width:400px">25</span><span class="bar late" style="width:48px">3</span></div></div>
+<div class="row"><strong>East</strong><div class="bars"><span class="bar ok" style="width:96px">6</span><span class="bar late" style="width:176px">11</span></div></div>
+<div class="row"><strong>West</strong><div class="bars"><span class="bar ok" style="width:192px">12</span><span class="bar late" style="width:96px">6</span></div></div>
+<div class="row"><strong>South</strong><div class="bars"><span class="bar ok" style="width:64px">4</span><span class="bar late" style="width:32px">2</span></div></div>
+<p class="note">Stale note from revision 7: North has the most overdue work.</p>
+</html>

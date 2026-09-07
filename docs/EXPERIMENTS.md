@@ -91,6 +91,28 @@ Raw sessions, private prompts, credentials, and SQLite ledgers must not be publi
 
 ## Next Experiment Protocol
 
+### Whole-Workflow Time And Comparable Units
+
+Each run may include `total_elapsed_seconds`: a finite nonnegative JSON number
+measured from the start of preparation to completion of final verification,
+including waits, handoffs and retries. Preregister whether installation/setup is
+inside the measurement window and apply the same boundary to all arms. Do not
+sum parallel call durations and label that wall time. Absent timing remains
+unknown. Incomplete workflows are not matched completion-time observations.
+
+`matched_time_pairs` and `mean_elapsed_difference_seconds` summarize only pairs
+with complete, supplied timing. Negative means the candidate was faster. Timing
+is explicitly caller-reported, not host-attested, and includes failed outcomes;
+always read it alongside the quality-regression count. A fast wrong answer is
+not an equivalent-quality productivity improvement.
+
+`cost_by_basis` separates `token_rate_estimate` and `host_billed` summaries.
+`mean_credit_difference` is null when the paired collection contains multiple
+bases, even if every individual pair uses matching units. This prevents an
+average that mixes projections with billed amounts. Unknown costs remain
+excluded rather than zero, and the pair counts reveal missing observations.
+Historical receipts without timing remain valid; they acquire no invented time.
+
 Start with existing telemetry, or one explicitly budgeted serial calibration call.
 Use the observed host context floor and cold-cache pricing for reservations.
 Do not warm a cache merely to make a benchmark look cheaper: include warm-up cost.

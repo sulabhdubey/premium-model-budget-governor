@@ -24,6 +24,7 @@ from .host import execute_codex
 from .calibration import calibrate
 from .dashboard import export_dashboard
 from .app_server import probe_app_server, execute_app_server
+from .doctor import diagnose, format_diagnosis
 
 
 DEFAULT_LEDGER = Path.home() / ".pm-bg" / "ledger.jsonl"
@@ -33,6 +34,19 @@ DEFAULT_DOCTRINE = Path.home() / ".pm-bg" / "doctrine.jsonl"
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="pm-bg", description="Govern premium model use with capsules, routing, and telemetry.")
     sub = parser.add_subparsers(dest="cmd", required=True)
+
+    doctor = sub.add_parser("doctor", help="Check setup without model calls or configuration changes")
+    doctor.add_argument("--json", action="store_true", help="Print sanitized structured diagnostics")
+    doctor.add_argument("--offline", action="store_true", help="Do not invoke Codex or check authentication")
+    serve = sub.add_parser("serve", help="Open the authenticated local task workbench")
+    serve.add_argument("--project", action="append", help="Explicit project directory; repeat for multiple projects")
+    serve.add_argument("--data", default=str(Path.home() / ".pm-bg" / "workbench"))
+    serve.add_argument("--port", type=int, default=0)
+    serve.add_argument("--no-browser", action="store_true")
+    serve.add_argument("--session-file", help="Optional private launch-link file; contains a local session secret")
+    policy = sub.add_parser("policy", help="Propose, explicitly activate, inspect or roll back empirical workflow preferences")
+    policy.add_argument("--input", required=True)
+    policy.add_argument("--store", default=str(Path.home() / ".pm-bg" / "workbench" / "policies.sqlite3"))
 
     route = sub.add_parser("route", help="Decide whether a requested model should be allowed")
     route.add_argument("--input", required=True)
@@ -111,12 +125,17 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(json.dumps({"ok": False, "error": str(exc)}))
         return 2
-    if args.cmd == "route" and getattr(args, "plain", False):
+    if args.cmd == "doctor" and not args.json:
+        print(format_diagnosis(result))
+    elif args.cmd == "route" and getattr(args, "plain", False):
         print(_plain_route(result))
     elif isinstance(result, str):
         print(result, end="" if result.endswith("\n") else "\n")
     else:
         print(json.dumps({"ok": True, "result": result}, indent=2, sort_keys=True))
+    if args.cmd == "doctor" and (result["offline_planning"] != "ready" or
+                                  result["model_execution"] == "needs_attention"):
+        return 1
     return 0
 
 
@@ -150,6 +169,34 @@ def _load_json(path: str) -> dict[str, object]:
 
 
 def _dispatch(args: argparse.Namespace) -> object:
+    if args.cmd == "policy":
+        from .reviewed_policy import PolicyStore
+        packet = _load_json(args.input)
+        store = PolicyStore(Path(args.store))
+        action = packet.get("action")
+        if action == "propose":
+            return store.propose(packet.get("scope"), packet.get("pairs"))
+        if action == "status":
+            return store.status(packet.get("scope"))
+        if action in {"activate", "rollback"} and "expected_active" not in packet:
+            raise ValueError("expected_active is required, including explicit null for no active policy")
+        if action == "activate":
+            return store.activate(packet.get("id"), approved=packet.get("approved"), expected_active=packet["expected_active"])
+        if action == "rollback":
+            if "target_id" not in packet:
+                raise ValueError("target_id is required; null restores default routing")
+            return store.rollback(packet.get("scope"), target_id=packet["target_id"],
+                                  approved=packet.get("approved"), expected_active=packet["expected_active"])
+        raise ValueError("policy action must be propose, status, activate or rollback")
+    if args.cmd == "serve":
+        from .local_server import serve
+        roots = [Path(p).resolve(strict=True) for p in (args.project or ["."])]
+        projects = {f"{i+1}. {root.name}": root for i, root in enumerate(roots)}
+        serve(projects, Path(args.data), port=args.port, open_browser=not args.no_browser,
+              session_file=Path(args.session_file) if args.session_file else None)
+        return {"status": "stopped"}
+    if args.cmd == "doctor":
+        return diagnose(offline=args.offline)
     if args.cmd == "host-probe":
         return probe_app_server(Path(args.root))
     if args.cmd == "app-run":

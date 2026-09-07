@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import signal
 import sqlite3
+from .database import connection
 import time
 
 from .cost import RATES, _token
@@ -34,7 +35,7 @@ def _run_process(command: list[str], *, prompt: str, timeout: int):
 
 
 def _claim_dispatch(ledger: Path, task_id: str, call_id: str) -> None:
-    with sqlite3.connect(ledger, timeout=15) as db:
+    with connection(ledger, timeout=15) as db:
         db.execute("CREATE TABLE IF NOT EXISTS dispatches (task TEXT NOT NULL, id TEXT NOT NULL, PRIMARY KEY(task,id))")
         db.execute("BEGIN IMMEDIATE")
         lease = db.execute("SELECT status,expires_at FROM leases WHERE task=? AND id=?", (task_id, call_id)).fetchone()

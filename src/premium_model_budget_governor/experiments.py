@@ -112,11 +112,15 @@ def compare_runs(packet: Mapping) -> dict:
             seen_calls.add(receipt["call_id"])
         expected = _token(row.get("expected_calls"), "expected_calls")
         complete = flag(row, "complete")
+        elapsed = row.get("total_elapsed_seconds")
+        if elapsed is not None:
+            elapsed = number(elapsed, "total_elapsed_seconds")
         bases = {c["cost_basis"] for c in receipts}
         cost_valid = (complete and row.get("receipt_source") == "host" and expected == len(receipts)
                       and expected > 0 and len(bases) == 1 and "unknown" not in bases)
         grouped[arm][key] = {"passed": passed, "credits": sum(c["credits"] for c in receipts) if cost_valid else None,
-                             "basis": next(iter(bases)) if cost_valid else "unknown"}
+                             "basis": next(iter(bases)) if cost_valid else "unknown",
+                             "elapsed": elapsed if complete else None}
     if baseline not in grouped:
         raise ValueError("baseline has no runs")
     comparisons = []
@@ -126,6 +130,12 @@ def compare_runs(packet: Mapping) -> dict:
         costs = [(a, b) for a, b in pairs if a["credits"] is not None and b["credits"] is not None
                  and a["basis"] == b["basis"]]
         differences = [b["credits"] - a["credits"] for a, b in costs]
+        cost_bases = sorted({a["basis"] for a, _ in costs})
+        cost_by_basis = {}
+        for basis in cost_bases:
+            values = [b["credits"] - a["credits"] for a, b in costs if a["basis"] == basis]
+            cost_by_basis[basis] = {"matched_pairs": len(values), "mean_credit_difference": mean(values)}
+        times = [(a, b) for a, b in pairs if a["elapsed"] is not None and b["elapsed"] is not None]
         comparisons.append({"arm": arm, "matched_quality_pairs": len(pairs), "matched_cost_pairs": len(costs),
             "distinct_tasks": len({k[0] for k in keys}),
             "unmatched_runs": len(grouped[arm]) - len(keys),
@@ -133,12 +143,17 @@ def compare_runs(packet: Mapping) -> dict:
             "arm_passes": sum(b["passed"] for _, b in pairs),
             "quality_regressions": sum(a["passed"] and not b["passed"] for a, b in pairs),
             "quality_improvements": sum(not a["passed"] and b["passed"] for a, b in pairs),
-            "mean_credit_difference": mean(differences) if differences else None,
-            "cost_bases": sorted({a["basis"] for a, _ in costs}),
+            "mean_credit_difference": mean(differences) if len(cost_bases) == 1 else None,
+            "cost_bases": cost_bases, "cost_by_basis": cost_by_basis,
+            "matched_time_pairs": len(times),
+            "mean_elapsed_difference_seconds": mean(b["elapsed"] - a["elapsed"] for a, b in times) if times else None,
+            "time_basis": "caller_reported_complete_workflow_wall_time",
             "interpretation": "descriptive_only; negative difference means lower cost, not equivalent quality"})
     return {"schema_version": 1, "baseline": baseline, "comparisons": comparisons,
             "recommendation": "insufficient_evidence", "automatic_promotion": False,
             "limitations": ["No universal winner or weekly-limit conversion is inferred.",
                             "Call completeness, model identity and grading are supplied by the host.",
+                            "Timing is caller-reported, includes failed outcomes, and does not establish equivalent quality.",
+                            "Different credit bases are reported separately, never averaged together.",
                             "Use preregistered held-out tasks and repeated trials before changing policy."],
             "raw_prompts_stored": False}
