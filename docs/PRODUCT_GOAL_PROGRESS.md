@@ -9,12 +9,12 @@ This file tracks the full pinned goal; passing a phase's tests does not complete
 | Phase | Required outcome | Evidence / current gap |
 | --- | --- | --- |
 | 1. Baseline | Claims mapped to implementation; supported journeys; quality, tokens, cost, time, setup baselines | PRODUCT_BASELINE.md maps the current surface. Missing human setup and representative task-latency measurements remain explicit. |
-| 2. Installation | Guided isolated install, compatibility/auth/MCP checks, recovery, reversible integrations, clean environment tests | Doctor and preview-first installer implemented. Latest dev2 wheel passed Windows and Ubuntu/WSL installed regression, MCP and removal. Published rc.3 has earlier remote CI evidence; new dev2 macOS/remote qualification remains open. GUI initial setup and human trials remain. |
+| 2. Installation | Guided isolated install, compatibility/auth/MCP checks, recovery, reversible integrations, clean environment tests | Doctor and preview-first installer implemented. Dev2 passed Windows/WSL local qualification and Windows/Linux/macOS CI installation at d27a319; optional MCP tested locally and in Linux CI. Native desktop selection, GUI initial setup and human trials remain. |
 | 3. Everyday interface | Plain-language task, project/evidence/images, Astra Preferred/Economy, preview/approval/execution/progress/receipt; responsive | Local HTTP/UI, file picker and stop/reconnect implemented. Live preview QA at 1440/390/320 passed; execution UI uses declared fixtures. Real-model full-flow and human validation remain. |
 | 4. Optimization | Direct/prepared/review workflows measured end-to-end; preserve capabilities; reviewed calibration and rollback | Reviewed policy proposal/approval/rollback and local prepared/review execution are implemented and tested with injected hosts. No real evidence set qualifies for activation. Representative matched comparisons and real multi-stage host validation remain open. |
 | 5. Controls | Actual usage ledger/UI; honest units; cancellation/crashes/timeouts/retries/concurrency/expiry/unknown usage; local app security | Receipt-journal recovery, unknown-spend retention, process ownership, HTTP boundaries and private launch files are tested. Missing terminal usage still requires reconciliation; independent security review remains. Native hooks stay supplementary. |
 | 6. Validation | Fresh bounded RTA-Net/CircuitProof tasks; coding/research/writing/visual/review comparisons; negative results; technical and nontechnical volunteers | Independent real tasks and human onboarding trials not completed. Synthetic cases cannot substitute. |
-| 7. Release | Accurate docs, screenshots, demo, license/security notices, release candidate then release, feedback/diagnostics/outreach materials | rc.3 is published as a prerelease. Local dev2 code, documentation and site changes are not published; its wheel passed Windows/WSL qualification. Stable release still waits for full acceptance evidence. |
+| 7. Release | Accurate docs, screenshots, demo, license/security notices, release candidate then release, feedback/diagnostics/outreach materials | rc.3 is published as a prerelease. Dev2 changes are on draft PR 1 at d27a319 with successful CI, not merged or released. Site is not deployed. Stable release still waits for full acceptance evidence. |
 
 ## Working Contract
 
@@ -678,11 +678,120 @@ No additional paid worker call was needed for baseline inspection.
   Do not launch the pending real run without approval or substitute another round
   of synthetic tests for the missing empirical evidence.
 
-Next: audit integrated stage boundaries and validate real workflows, preserving all
+2026-09-07, draft-PR integration and cross-platform CI:
+
+- Reviewed pending development changes and scanned 33 text files for credential
+  patterns (zero matches); public JSON reports had no checked local-user/session
+  patterns. This is a scoped check, not a secret-detection guarantee. Restored
+  screenshot path redaction after project-manager loading and reran browser QA.
+- Committed 66 files as d27a319b439b415b8def8dbec043f21e88cbf8b7 and pushed the
+  existing release/workbench-rc3 branch. PR 1 remains OPEN and draft at that SHA.
+  Main, published rc.3 assets and live Pages were not changed.
+- Push CI 34122808518 and PR CI 34122812185 both passed all seven jobs: Python
+  3.10-3.13 tests and isolated Windows/Linux/macOS installation. Exact run:
+  https://github.com/sulabhdubey/premium-model-budget-governor/actions/runs/34122808518
+- Downloaded sanitized reports into ignored build/ci-34122808518 and inspected
+  checks rather than relying only on badges. Core installed regression: Windows
+  304 passed/one skipped; Linux and macOS 303 passed/two skipped. Linux's separate
+  optional-MCP install initialized/listed/called stdio tools and uninstalled.
+- Remote Linux/macOS wheel hash:
+  7aca4f4c422c65b8fd62da16d353ba918a2e0d71059dd6dffa70900b0bb6c1e7.
+  Remote Windows wheel hash:
+  305c6f8c1e1722484a6d1f225292d2a8d08f3d9ff375eb8f999e8b7de9f36c5b.
+  They differ from the locally qualified wheel; do not claim byte-reproducible
+  cross-host builds. Existing Node 20 action-runtime warnings remain maintenance work.
+- Added a public PR checkpoint separating fixture/software checks from unverified
+  model benefits and human usability. No new release, merge, paid model worker or
+  reset. This evidence closes the new-code CI installation gap, not native dialog
+  interaction, real tasks, initial graphical setup or volunteer validation.
+- This progress note is newer than the pushed commit and remains local until the
+  next substantive integration; do not launch another CI run solely to log CI.
+
+2026-09-07, requirement-level acceptance audit:
+
+- Added ACCEPTANCE_AUDIT.md mapping the full seven-phase objective to current
+  implementation, direct evidence, unsupported capabilities and missing outcomes.
+  The prior turn made substantive progress by integrating dev2 and verifying CI.
+- Read-only local workbench aggregate query returned zero run rows. The authored
+  suite is still preregistered_not_executed; existing calibration audit remains
+  ineligible; onboarding protocol has no recorded volunteer sessions.
+- Distinguished the original guided-installation requirement from a speculative
+  requirement to build a particular graphical installer before observing users.
+  Human setup success remains required; no GUI implementation is accepted as a
+  substitute for evidence that people can complete the supported journey.
+- Next meaningful empirical action is the pending one-run approval, then bounded
+  matched comparisons and consenting volunteers. No new worker or reset started.
+  No package rebuild or repeated regression was needed for this documentation audit.
+- This is the first explicit external-evidence dependency audit after CI completion,
+  not a claim that the goal is complete or that every remaining engineering choice
+  is impossible. The full acceptance scope remains intact.
+
+2026-09-07, external-evidence dependency recheck (second consecutive audit):
+
+- Re-read the complete objective. The prior turn produced the acceptance audit;
+  this turn's read-only aggregate query still finds no local workbench runs.
+- No answer to the bounded real-run approval or participant request has arrived.
+  The evidence condition is unchanged. This is not a verified running-job wait:
+  no empirical worker has been started, and no participant session is live.
+- No further test rerun, rebuild, feature addition or publication was justified
+  by new evidence. Current work is at the empirical-validation dependency, with
+  the full goal incomplete. This recheck is no implementation progress, not a
+  new milestone. Keep the goal active until the required blocked audit threshold
+  or an actual owner response changes the next action.
+
+2026-09-07, third consecutive external-evidence audit:
+
+- The previous turn was no progress, not a live-job wait. Re-read the complete
+  objective and verified the same empty local workbench run aggregate again.
+  No bounded-run approval or consenting participant results have arrived.
+- The same empirical-validation dependency has now persisted across three
+  consecutive goal turns. Further unchanged software tests or speculative features
+  cannot provide the missing real outcomes. Marking the goal blocked, not complete.
+- Resume with the bounded real-run approval and/or participant availability, then
+  follow the acceptance audit. Preserve the full objective and all remaining
+  independent-project, matched-comparison, capability and release requirements.
+  Draft PR 1 and qualified development artifacts remain available; no paid worker,
+  reset, merge or new release was started during this recheck.
+
+Next: follow ACCEPTANCE_AUDIT.md's evidence sequence, preserving all
 accounting and evidence gates; also integrate candidate documentation;
 continue independent task and human validation without calling them complete.
-Run the bounded real
-UI task only once explicitly approved. Preserve the full phase register:
+The bounded real UI task was subsequently approved and completed once, as recorded
+below. Preserve the full phase register:
 capability-aware workflow comparisons, Linux/macOS installation execution,
 reviewed calibration/rollback, independent projects, human trials and release
 are not complete. Read-only tasks are not substitutes for write/Desktop-only work.
+
+2026-09-07, approved real Astra Workbench execution:
+
+- Owner approved one public-fixture read-only call, low reasoning, 15 estimated
+  credits, no reset. Actual browser registration/preview/approval/run completed;
+  no execution mock, retry, second arm or additional worker was used.
+- Host-configured gpt-6-astra completed in 21.263 seconds, reporting 24,076 input,
+  zero cached and 386 output tokens. Token-rate estimate: 6.5015 credits. One lease
+  settled; zero reserved; not over budget. Weekly task debit remains unavailable.
+- The 229-word response passed all seven fixed study-synthesis criteria in Codex
+  review. This is not independent human grading or evidence of comparative savings.
+- Sanitized report: artifacts/approved-astra-ui-smoke-2026-09-07.md. Raw local
+  result remains ignored. ACCEPTANCE_AUDIT.md now reflects one real execution.
+- This closes the single-run integration evidence gap only. Matched experiments,
+  real-project validation, human trials and full capability/release gates remain.
+  No policy promotion, commit, publication or further spending follows implicitly.
+
+2026-09-07, owner-directed end-to-end continuation:
+
+- Owner approved 150 estimated credits for broader matched experiments, separately
+  from the prior one-call smoke test. No reset is approved or used. A one-shot
+  real Workbench-service trial uses a shared 150-credit envelope, 15-credit
+  contingency, one pending lease, per-call receipts and no automatic retries.
+  Current results must be read from its terminal report, not inferred from launch.
+- Owner has no volunteers yet and requested recruitment through publication.
+  Added an opt-in onboarding issue template and candidate invitation. No participant
+  session, human validation or endorsement is claimed.
+- Prepared rc.4 metadata and pinned install instructions. The exact final wheel
+  6eacbd15685cd9bb0b84b441f447e8a3dd6dff17b1c805853c05513b0420784f
+  passed installed regression (304 passed, one skip), real optional MCP and owned
+  uninstall on Windows and Ubuntu/WSL. Stale version assertions were corrected.
+- Remaining empirical, capability, human and final promotion gates are explicit
+  in REMAINING_VALIDATION.md. Native/Desktop-only support is not manufactured by
+  relaxing read-only safety, and weekly attribution is not invented from tokens.

@@ -191,6 +191,15 @@ report so stale diagnostic data cannot be downloaded as a new result.
   Subsequent experiment-reporting and launch-registration fixes are covered by
   checkout tests, not that historical wheel hash; rebuild before release.
 
+Later qualification supersedes that historical package baseline: the dev2 wheel
+passed 304 tests with one platform-specific skip on Windows and Ubuntu/WSL,
+including optional MCP and removal. See [rc.4 candidate notes](RELEASE_CANDIDATE_RC4.md)
+for candidate-specific evidence rather than transferring an older wheel hash.
+One approved real UI-to-Astra public text task completed with settled usage;
+[its report](../artifacts/approved-astra-ui-smoke-2026-09-07.md) records actual
+host counters, estimated credits and Codex-only grading. Multi-stage real calls,
+human onboarding and comparative savings are still unproven.
+
 Evidence: [browser reports](../artifacts/workbench-qa/), `tests/test_local_server.py`,
 `tests/test_workbench.py`. The complete goal, including real tasks and human trials,
 remains tracked in [PRODUCT_GOAL_PROGRESS.md](PRODUCT_GOAL_PROGRESS.md).

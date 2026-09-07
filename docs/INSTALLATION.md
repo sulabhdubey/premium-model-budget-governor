@@ -14,18 +14,18 @@ report applies to its recorded wheel hash, not every later checkout edit.
 
 ## Preview, Then Install
 
-For the published **rc.3 prerelease**, download both
-[install_governor.py](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.3/install_governor.py)
-and the [rc.3 wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.3/premium_model_budget_governor-0.4.0rc3-py3-none-any.whl).
+For the **rc.4 testing prerelease**, download both
+[install_governor.py](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.4/install_governor.py)
+and the [rc.4 wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.4/premium_model_budget_governor-0.4.0rc4-py3-none-any.whl).
 Open a terminal in their folder:
 
 ```sh
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc3-py3-none-any.whl
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc3-py3-none-any.whl --yes
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl --yes
 ```
 
-This release has the direct-run workbench, not the newer local multi-stage or
-native folder-chooser changes. It is a prerelease, not a completed stable product.
+This candidate includes direct and explicit multi-stage workflows plus an
+experimental native folder chooser. It is not a completed stable product.
 
 For an explicitly selected development source checkout instead:
 
