@@ -41,6 +41,6 @@ The visual fixture is `queue-chart.png`, generated from `queue-chart.html` by
 one stale note, requiring the model to prioritize the actual plotted state.
 The image is a rendered chart, not a screenshot of a real company's operations.
 
-Private Project A and Private Project B validation remains a separate gate using fresh bounded
+Independent private-project validation remains a separate gate using fresh bounded
 repository snapshots, project authority rules and owner-approved tasks. This
 starter suite must not be represented as completing that gate or human trials.

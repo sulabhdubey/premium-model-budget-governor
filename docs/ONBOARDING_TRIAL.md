@@ -1,6 +1,9 @@
 # Human Onboarding Trial
 
 Status: protocol ready; no volunteer sessions recorded.
+Independent task comparisons use [INDEPENDENT_VALIDATION.md](INDEPENDENT_VALIDATION.md).
+Publication follows [PUBLICATION_PRIVACY.md](PUBLICATION_PRIVACY.md); no participant
+identity, private response or recording belongs in the public Git repository.
 Purpose: test whether people can install, complete a task, and understand the result
 without confusing estimated credits with weekly allowance or believing all chats
 are automatically governed.
