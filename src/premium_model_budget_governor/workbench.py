@@ -22,6 +22,7 @@ from .scanners import scan_text
 from .workflow import number, plan_workflow, string_list
 from .reviewed_policy import PolicyStore, fingerprint
 from .input_errors import InputIssue
+from .context_profile import context_profile_config
 
 
 class Workbench:
@@ -263,6 +264,13 @@ class Workbench:
         effort = request.get("effort", "low")
         if not isinstance(effort, str):
             raise ValueError("effort must be a host-supported option")
+        profile = request.get("context_profile", "inherit")
+        try:
+            context_profile_config(profile, model="gpt-6-astra", effort=effort)
+            if profile != "inherit" and (mode != "astra_preferred" or strategy != "direct"):
+                raise ValueError("focused catalog requires direct Astra")
+        except ValueError:
+            raise InputIssue("profile_invalid") from None
         try:
             budget = number(request.get("budget_credits"), "budget_credits")
         except ValueError:
@@ -336,12 +344,14 @@ class Workbench:
         scope = {"project": fingerprint(os.path.normcase(str(root))), "family": family, "mode": mode,
                  "host_profile": fingerprint({"adapter": "codex-app-server", "models": host["models"],
                                               "effort": effort, "strategy": strategy, "capabilities": sorted(capabilities),
+                                              "context_profile": profile,
                                               "context_allowance": allowance, "output_allowance": output, "rates": RATES})}
         plan = self.policies.apply(plan, scope)
         # The planner's conditional approval permits a preview, not execution authorization.
         identifier = secrets.token_hex(16)
         preview = {"id": identifier, "expires_at": time.time() + 600, "project": project,
                    "strategy": strategy,
+                   "context_profile": profile,
                    "policy_scope": scope,
                    "plan": plan, "requires_approval": True, "effort": effort,
                    "capabilities": capabilities, "estimate_basis": "provisional_allowances_not_measured",
@@ -354,6 +364,8 @@ class Workbench:
                                 "The filesystem sandbox does not revoke inherited connector permissions.",
                                 "Image signatures and text patterns do not establish malware or injection safety.",
                                 "Task quality is unmeasured. Extra stages can cost more than a direct Astra run.",
+                                ("Experimental reduced skill discovery: useful guidance may be omitted from the catalog. Tools and safety rules are not disabled. No savings are assumed in this estimate."
+                                 if profile == "focused_catalog" else "Skill discovery uses inherited host configuration."),
                                 ("Reviewed preference applied for this project and host profile; savings and quality are not guaranteed."
                                  if plan["policy_application"]["status"] == "applied" else
                                  "No reviewed preference applied; the default planner remains in control.")]}
@@ -410,6 +422,7 @@ class Workbench:
             return self._execute_multi(identifier, saved, cancel_event)
         stage = selected["stages"][0]
         packet = {"root": saved["root"], "prompt": saved["prompt"], "model": stage["model"],
+                  "context_profile": preview["context_profile"],
                   "effort": preview["effort"], "task_id": identifier, "call_id": identifier,
                   "estimated_credits": stage["estimated_credits"], "explicit_approval": True,
                   "images": [v["path"] for v in saved["images"]], "timeout_seconds": 300}
@@ -455,6 +468,7 @@ class Workbench:
             accounting = None
             result = {"status": "unknown_usage"}
         receipt = {"id": identifier, "status": result["status"], "requested_model": stage["model"],
+                   "context_profile": preview["context_profile"],
                    "stop_requested": result.get("stop_requested") is True,
                    "host_configured_model": result.get("host_configured_model"),
                    "usage": result.get("usage"), "estimated_credits": result.get("estimated_credits"),

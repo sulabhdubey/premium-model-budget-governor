@@ -53,6 +53,38 @@ def test_reserves_before_turn_and_settles_usage(tmp_path, monkeypatch):
         app.execute_app_server(packet(tmp_path), ledger)
 
 
+@pytest.mark.parametrize("profile", ["inherit", "focused_catalog"])
+def test_context_profile_is_scoped_and_explicit(tmp_path, monkeypatch, profile):
+    observed = []
+    class Client(FakeClient):
+        def request(self, method, params):
+            if method == "thread/start":
+                observed.append(params)
+            return super().request(method, params)
+    monkeypatch.setattr(app, "AppServer", Client)
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action":"open", "task_id":"t", "budget_credits":10}, ledger)
+    result = app.execute_app_server({**packet(tmp_path), "context_profile":profile}, ledger)
+    assert result["context_profile"] == profile
+    if profile == "focused_catalog":
+        assert observed[0]["config"] == {"skills.max_context_tokens":1024}
+    else:
+        assert "config" not in observed[0]
+    assert observed[0]["sandbox"] == "read-only"
+    assert observed[0]["approvalPolicy"] == "never"
+
+
+@pytest.mark.parametrize("changes", [
+    {"context_profile":None}, {"context_profile":True}, {"context_profile":{}},
+    {"context_profile":"unknown"}, {"context_profile":"focused_catalog", "model":"gpt-5.6-sol"},
+    {"context_profile":"focused_catalog", "effort":"high"},
+])
+def test_invalid_context_profile_stops_before_host(tmp_path, monkeypatch, changes):
+    monkeypatch.setattr(app, "AppServer", lambda *args, **kwargs: pytest.fail("host must not start"))
+    with pytest.raises(ValueError, match="context profile"):
+        app.execute_app_server({**packet(tmp_path), **changes}, tmp_path / "unused.sqlite3")
+
+
 def test_insufficient_budget_never_starts_thread(tmp_path, monkeypatch):
     monkeypatch.setattr(app,"AppServer",FakeClient)
     monkeypatch.setattr(FakeClient,"methods",[])

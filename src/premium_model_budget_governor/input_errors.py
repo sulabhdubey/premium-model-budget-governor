@@ -9,6 +9,7 @@ ISSUES = {
     "images_invalid": ("images", "Image selection failed. Choose PNG, JPEG or WebP files inside this project, within the documented size limits."),
     "context_invalid": ("context", "Enter a whole-number context allowance between 1000 and 500000 tokens."),
     "output_invalid": ("output", "Enter a whole-number output allowance between 100 and 32000 tokens."),
+    "profile_invalid": ("context-profile", "Select an inherited context profile, or use focused catalog with Direct, Astra Preferred and Low reasoning."),
     "host_unavailable": ("effort", "Requested model, effort or image capability is unavailable. Check setup and select compatible options; nothing was downgraded."),
 }
 

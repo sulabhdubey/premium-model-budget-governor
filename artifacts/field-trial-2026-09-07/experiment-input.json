@@ -1,0 +1,507 @@
+{
+  "baseline": "astra_direct",
+  "runs": [
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "astra_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "183f65bbedfae7095e102ebbc319aad2d8dd9a2d593581f392c2af6be5e835b2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "0ab2e758fcf746ffb5a2f0b63cc7d66f",
+          "actual_model": "gpt-6-astra",
+          "credits": 7.03475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23619,
+            "cached_tokens": 0,
+            "output_tokens": 904
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 41.896
+    },
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "sol_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "183f65bbedfae7095e102ebbc319aad2d8dd9a2d593581f392c2af6be5e835b2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "06d9a1fc5978cd701f228b8278166b27",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 3.33648,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48170,
+            "cached_tokens": 22528,
+            "output_tokens": 1094
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 46.235
+    },
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "prepared",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "183f65bbedfae7095e102ebbc319aad2d8dd9a2d593581f392c2af6be5e835b2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "5e828a68d53fd57a7b63c67301635b4c-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 10.03796,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 259621,
+            "cached_tokens": 196096,
+            "output_tokens": 3449
+          }
+        },
+        {
+          "call_id": "5e828a68d53fd57a7b63c67301635b4c-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 11.01155,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 110306,
+            "cached_tokens": 79872,
+            "output_tokens": 1125
+          }
+        }
+      ],
+      "expected_calls": 2,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 210.533
+    },
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "review",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "183f65bbedfae7095e102ebbc319aad2d8dd9a2d593581f392c2af6be5e835b2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "aa06828d400a2ddacd064982680c6383-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.38992,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22735,
+            "cached_tokens": 3712,
+            "output_tokens": 901
+          }
+        },
+        {
+          "call_id": "aa06828d400a2ddacd064982680c6383-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 9.5392,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 77065,
+            "cached_tokens": 50048,
+            "output_tokens": 1227
+          }
+        }
+      ],
+      "expected_calls": 2,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 92.719
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "sol_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "6e87e032f6df20aa2dcfad40b14fffbe2ae0933b19c7a823ed912196c570ce1f",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "2a78779478e7d2c4a03bef4375a4ca3e",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 3.19924,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48863,
+            "cached_tokens": 22784,
+            "output_tokens": 727
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 35.337
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "prepared",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "6e87e032f6df20aa2dcfad40b14fffbe2ae0933b19c7a823ed912196c570ce1f",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "4e227cfd4b4498a060b2408ccbf35863-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.86816,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48888,
+            "cached_tokens": 26496,
+            "output_tokens": 728
+          }
+        },
+        {
+          "call_id": "4e227cfd4b4498a060b2408ccbf35863-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.51475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24214,
+            "cached_tokens": 0,
+            "output_tokens": 369
+          }
+        }
+      ],
+      "expected_calls": 2,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 55.393
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "review",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "6e87e032f6df20aa2dcfad40b14fffbe2ae0933b19c7a823ed912196c570ce1f",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "c0e74b409ed036fd3b416138e5970a6c-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.22792,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22935,
+            "cached_tokens": 3712,
+            "output_tokens": 537
+          }
+        },
+        {
+          "call_id": "c0e74b409ed036fd3b416138e5970a6c-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.5445,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24183,
+            "cached_tokens": 0,
+            "output_tokens": 399
+          }
+        }
+      ],
+      "expected_calls": 2,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 46.766
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "astra_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "6e87e032f6df20aa2dcfad40b14fffbe2ae0933b19c7a823ed912196c570ce1f",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "79e6e9eaee9f606c5dcf529ae3cddaa6",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.40475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23819,
+            "cached_tokens": 0,
+            "output_tokens": 360
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 22.876
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "prepared",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "01b0e3b2a0dcc177ecd905110914e7f226dd828e043d91d4e405d31ec83b4af2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "96d656124593ac6d2e1c3888ab1eed60-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.20722,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22908,
+            "cached_tokens": 3712,
+            "output_tokens": 501
+          }
+        },
+        {
+          "call_id": "96d656124593ac6d2e1c3888ab1eed60-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.38475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24234,
+            "cached_tokens": 0,
+            "output_tokens": 261
+          }
+        }
+      ],
+      "expected_calls": 2,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 39.721
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "review",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "01b0e3b2a0dcc177ecd905110914e7f226dd828e043d91d4e405d31ec83b4af2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "982420aefd2a32b814f4e85f0229bc0e-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.4159,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22899,
+            "cached_tokens": 0,
+            "output_tokens": 252
+          }
+        },
+        {
+          "call_id": "982420aefd2a32b814f4e85f0229bc0e-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.3065,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24026,
+            "cached_tokens": 0,
+            "output_tokens": 240
+          }
+        }
+      ],
+      "expected_calls": 2,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 32.329
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "astra_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "01b0e3b2a0dcc177ecd905110914e7f226dd828e043d91d4e405d31ec83b4af2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "33998824d152ad97832c25a64c0d8485",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.20575,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23783,
+            "cached_tokens": 0,
+            "output_tokens": 208
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 13.727
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "sol_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "01b0e3b2a0dcc177ecd905110914e7f226dd828e043d91d4e405d31ec83b4af2",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "210e5731bbe0211509ce09c49bdd300f",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.414,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22890,
+            "cached_tokens": 0,
+            "output_tokens": 250
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 16.296
+    },
+    {
+      "task_id": "release-authority-review",
+      "arm": "review",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "11a2bbb766783a3aefb076fdb9622d3fd13ca6738ce5b0c57615263d0244266b",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "2bf4ba41d2c140ed61122eee171a87ea-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 3.12096,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48595,
+            "cached_tokens": 22656,
+            "output_tokens": 601
+          }
+        },
+        {
+          "call_id": "2bf4ba41d2c140ed61122eee171a87ea-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.2375,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23930,
+            "cached_tokens": 0,
+            "output_tokens": 204
+          }
+        }
+      ],
+      "expected_calls": 2,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 45.929
+    },
+    {
+      "task_id": "release-authority-review",
+      "arm": "astra_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "11a2bbb766783a3aefb076fdb9622d3fd13ca6738ce5b0c57615263d0244266b",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "903a569255e7adbc3918b0041f9510e4",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.0815,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23676,
+            "cached_tokens": 0,
+            "output_tokens": 130
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 13.629
+    },
+    {
+      "task_id": "release-authority-review",
+      "arm": "sol_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "11a2bbb766783a3aefb076fdb9622d3fd13ca6738ce5b0c57615263d0244266b",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "e9d4b62d49d7463a836f3526ab5d1a3d",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.3523,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22783,
+            "cached_tokens": 0,
+            "output_tokens": 148
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 12.325
+    },
+    {
+      "task_id": "visual-queue-priority",
+      "arm": "astra_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "a0e27bb5d377ea4064988a8cdc568da45e2691aa20657beae05fe08d846e1c9c",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "973c27f33543bc9373f2848a286a393a",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.17625,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24140,
+            "cached_tokens": 0,
+            "output_tokens": 113
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 15.174
+    },
+    {
+      "task_id": "visual-queue-priority",
+      "arm": "sol_direct",
+      "snapshot": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+      "rubric": "a0e27bb5d377ea4064988a8cdc568da45e2691aa20657beae05fe08d846e1c9c",
+      "repeat": 0,
+      "passed": true,
+      "calls": [
+        {
+          "call_id": "6010231996e5f9cdf13fa4516fca310d",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.04372,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23248,
+            "cached_tokens": 3712,
+            "output_tokens": 106
+          }
+        }
+      ],
+      "expected_calls": 1,
+      "complete": true,
+      "receipt_source": "host",
+      "total_elapsed_seconds": 11.821
+    }
+  ]
+}

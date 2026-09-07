@@ -10,11 +10,11 @@ This file tracks the full pinned goal; passing a phase's tests does not complete
 | --- | --- | --- |
 | 1. Baseline | Claims mapped to implementation; supported journeys; quality, tokens, cost, time, setup baselines | PRODUCT_BASELINE.md maps the current surface. Missing human setup and representative task-latency measurements remain explicit. |
 | 2. Installation | Guided isolated install, compatibility/auth/MCP checks, recovery, reversible integrations, clean environment tests | Doctor and preview-first installer implemented. Dev2 passed Windows/WSL local qualification and Windows/Linux/macOS CI installation at d27a319; optional MCP tested locally and in Linux CI. Native desktop selection, GUI initial setup and human trials remain. |
-| 3. Everyday interface | Plain-language task, project/evidence/images, Astra Preferred/Economy, preview/approval/execution/progress/receipt; responsive | Local HTTP/UI, file picker and stop/reconnect implemented. Live preview QA at 1440/390/320 passed; execution UI uses declared fixtures. Real-model full-flow and human validation remain. |
-| 4. Optimization | Direct/prepared/review workflows measured end-to-end; preserve capabilities; reviewed calibration and rollback | Reviewed policy proposal/approval/rollback and local prepared/review execution are implemented and tested with injected hosts. No real evidence set qualifies for activation. Representative matched comparisons and real multi-stage host validation remain open. |
+| 3. Everyday interface | Plain-language task, project/evidence/images, Astra Preferred/Economy, preview/approval/execution/progress/receipt; responsive | One real approved Astra UI run passed. Live preview QA at 1440/390/320 includes opt-in focused catalog; failure/multi-stage UI uses declared fixtures. Human and native-dialog operation remain unverified. |
+| 4. Optimization | Direct/prepared/review workflows measured end-to-end; preserve capabilities; reviewed calibration and rollback | Five-family/four-arm real pilot completed; direct Astra default retained. Smaller catalog showed a narrow one-task reduction and ships opt-in, with guidance-loss warning. Independent holdout and broad capability validation remain; no policy promoted. |
 | 5. Controls | Actual usage ledger/UI; honest units; cancellation/crashes/timeouts/retries/concurrency/expiry/unknown usage; local app security | Receipt-journal recovery, unknown-spend retention, process ownership, HTTP boundaries and private launch files are tested. Missing terminal usage still requires reconciliation; independent security review remains. Native hooks stay supplementary. |
-| 6. Validation | Fresh bounded Private Project A/Private Project B tasks; coding/research/writing/visual/review comparisons; negative results; technical and nontechnical volunteers | Independent real tasks and human onboarding trials not completed. Synthetic cases cannot substitute. |
-| 7. Release | Accurate docs, screenshots, demo, license/security notices, release candidate then release, feedback/diagnostics/outreach materials | rc.3 is published as a prerelease. Dev2 changes are on draft PR 1 at d27a319 with successful CI, not merged or released. Site is not deployed. Stable release still waits for full acceptance evidence. |
+| 6. Validation | Fresh bounded Private Project A/Private Project B tasks; coding/research/writing/visual/review comparisons; negative results; technical and nontechnical volunteers | Five public fixture families and one fresh combined two-project read-only review completed. Negative findings published. Not independent matched project benchmarks; no human participants yet. |
+| 7. Release | Accurate docs, screenshots, demo, license/security notices, release candidate then release, feedback/diagnostics/outreach materials | rc.3 is published. rc.4 qualification/publication is tracked in RELEASE_CANDIDATE_RC4.md; draft PR 1 and main-site promotion are distinct. Stable acceptance still requires missing human and broader evidence. |
 
 ## Working Contract
 
@@ -795,3 +795,35 @@ are not complete. Read-only tasks are not substitutes for write/Desktop-only wor
 - Remaining empirical, capability, human and final promotion gates are explicit
   in REMAINING_VALIDATION.md. Native/Desktop-only support is not manufactured by
   relaxing read-only safety, and weekly attribution is not invented from tokens.
+
+2026-09-07, expanded pilot and focused-catalog qualification:
+
+- Further owner approval funded a separately bounded 100-credit extension. Final
+  totals are 129.77603 + 66.17815 = 195.95418 estimated worker credits, 39 calls,
+  27 workflows, zero outstanding reservations, model retries or resets. The
+  earlier 6.5015 UI smoke and parent-chat engineering/grading are separate.
+- All five public task families now have four workflow arms, with complete stage
+  counters and Codex-graded fixed criteria. One fresh combined read-only Private Project A
+  and Private Project B review passed scoped criteria with unchanged source hashes.
+  Neither authored fixtures nor this one project call establish independent
+  representative quality. FIELD_TRIAL_2026_09_07.md includes negative findings.
+- A shorter Sol preparation prompt reduced its stage cost but raised the complete
+  workflow cost; it was not adopted. Direct Astra remains the default.
+- A four-call ABBA visual probe reduced average input about 17.9% and estimated
+  credits about 17.3% with no cached tokens and the same correct answers. The
+  narrow per-thread catalog cap is opt-in, direct Astra/low only. It may omit
+  skill guidance; no global config, tools or safety settings were disabled.
+- Fifteen new tests first failed, then passed with the implementation. Updated
+  live-preview browser QA passed at 1440/390/320, including incompatible profiles,
+  stale approval and legacy-server rejection; model execution in that QA was
+  mocked. The paid catalog probe used the experimental adapter, not the UI.
+- Final wheel 658065b66e8b7ed3937c7ae6d5b6b661acb962c2a7d4264c2fb16ce09df58428
+  passed 319 installed tests with one skip on both Windows and Ubuntu/WSL,
+  real MCP initialize/list/call and owned uninstall. This supersedes the earlier
+  rc.4 wheel; release assets include the installer, plugin dotfiles and checksums.
+- Public text scans found zero secrets or private paths. One narrative release-note
+  sentence triggered the heuristic tool-coercion scanner; it was reviewed as a
+  benign description, not an instruction. No scanner was disabled or weakened.
+- Human participants are not available yet. Candidate recruitment is prepared;
+  no onboarding outcome, independent audit, stable promotion or broad savings
+  proof is invented. Draft PR/main-site promotion remain separate from rc.4.

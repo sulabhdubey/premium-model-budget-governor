@@ -17,6 +17,7 @@ from .host import _claim_dispatch
 from .receipt_journal import record_terminal
 from .leases import budget_action
 from . import __version__
+from .context_profile import context_profile_config
 
 
 class ExecutionCancelled(Exception):
@@ -207,6 +208,8 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
     model, effort = packet["model"], packet.get("effort", "low")
     if model not in RATES or not isinstance(effort, str):
         raise ValueError("unsupported model or effort")
+    profile = packet.get("context_profile", "inherit")
+    overrides = context_profile_config(profile, model=model, effort=effort)
     root = Path(packet["root"]).resolve(strict=True)
     timeout = _token(packet.get("timeout_seconds", 300), "timeout_seconds")
     if not 1 <= timeout <= 1800:
@@ -233,8 +236,11 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
         _claim_dispatch(ledger, packet["task_id"], packet["call_id"])
         started = time.monotonic()
         try:
-            thread = client.request("thread/start", {"cwd": str(root), "model": model,
-                "approvalPolicy": "never", "sandbox": "read-only", "ephemeral": True, "serviceTier": "default"})
+            start_params = {"cwd": str(root), "model": model,
+                "approvalPolicy": "never", "sandbox": "read-only", "ephemeral": True, "serviceTier": "default"}
+            if overrides:
+                start_params["config"] = overrides
+            thread = client.request("thread/start", start_params)
             if thread.get("model") != model:
                 raise ValueError("host model configuration differs from requested model")
             thread_id = thread["thread"]["id"]
@@ -268,6 +274,7 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
                     status = budget_action({**base, "action": "settle", "actual_model": model,
                         "actual_credits": credits, "cost_basis": "token_rate_estimate"}, ledger)
                     return {"status": "completed", "requested_model": model, "host_configured_model": thread["model"],
+                            "context_profile": profile,
                             "model_identity_source": "App Server configuration, not provider attestation",
                             "call_id": packet["call_id"], "usage": usage, "answer": answer,
                             "estimated_credits": credits, "cost_basis": "token_rate_estimate",
