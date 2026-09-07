@@ -9,12 +9,12 @@ This file tracks the full pinned goal; passing a phase's tests does not complete
 | Phase | Required outcome | Evidence / current gap |
 | --- | --- | --- |
 | 1. Baseline | Claims mapped to implementation; supported journeys; quality, tokens, cost, time, setup baselines | PRODUCT_BASELINE.md maps the current surface. Missing human setup and representative task-latency measurements remain explicit. |
-| 2. Installation | Guided isolated install, compatibility/auth/MCP checks, recovery, reversible integrations, clean environment tests | Doctor and preview-first installer implemented. Windows and Ubuntu/WSL installed-wheel regression, MCP and removal passed. macOS and remote CI remain unverified. GUI initial setup and human trials remain. |
+| 2. Installation | Guided isolated install, compatibility/auth/MCP checks, recovery, reversible integrations, clean environment tests | Doctor and preview-first installer implemented. Latest dev2 wheel passed Windows and Ubuntu/WSL installed regression, MCP and removal. Published rc.3 has earlier remote CI evidence; new dev2 macOS/remote qualification remains open. GUI initial setup and human trials remain. |
 | 3. Everyday interface | Plain-language task, project/evidence/images, Astra Preferred/Economy, preview/approval/execution/progress/receipt; responsive | Local HTTP/UI, file picker and stop/reconnect implemented. Live preview QA at 1440/390/320 passed; execution UI uses declared fixtures. Real-model full-flow and human validation remain. |
-| 4. Optimization | Direct/prepared/review workflows measured end-to-end; preserve capabilities; reviewed calibration and rollback | Reviewed policy proposal/approval/rollback is implemented and tested. No real evidence set qualifies for activation. Representative matched comparisons and prepared/review workbench execution remain open. |
+| 4. Optimization | Direct/prepared/review workflows measured end-to-end; preserve capabilities; reviewed calibration and rollback | Reviewed policy proposal/approval/rollback and local prepared/review execution are implemented and tested with injected hosts. No real evidence set qualifies for activation. Representative matched comparisons and real multi-stage host validation remain open. |
 | 5. Controls | Actual usage ledger/UI; honest units; cancellation/crashes/timeouts/retries/concurrency/expiry/unknown usage; local app security | Receipt-journal recovery, unknown-spend retention, process ownership, HTTP boundaries and private launch files are tested. Missing terminal usage still requires reconciliation; independent security review remains. Native hooks stay supplementary. |
 | 6. Validation | Fresh bounded RTA-Net/CircuitProof tasks; coding/research/writing/visual/review comparisons; negative results; technical and nontechnical volunteers | Independent real tasks and human onboarding trials not completed. Synthetic cases cannot substitute. |
-| 7. Release | Accurate docs, screenshots, demo, license/security notices, release candidate then release, feedback/diagnostics/outreach materials | rc.2 is the baseline, not completion of this new product goal. New product release waits for its acceptance evidence. |
+| 7. Release | Accurate docs, screenshots, demo, license/security notices, release candidate then release, feedback/diagnostics/outreach materials | rc.3 is published as a prerelease. Local dev2 code, documentation and site changes are not published; its wheel passed Windows/WSL qualification. Stable release still waits for full acceptance evidence. |
 
 ## Working Contract
 
@@ -441,7 +441,245 @@ No additional paid worker call was needed for baseline inspection.
   resets or server restart. Remote CI and candidate publication are next release
   steps; the full seven-phase goal and its external validation gates remain open.
 
-Next: candidate public-file review, remote CI and prerelease publication;
+2026-09-07, public candidate and remote qualification:
+
+- Committed the reviewed candidate as efd3bcbdbb2ebe762c1259d4142e3aeeca251cbb
+  on release/workbench-rc3 and pushed it. Opened draft integration PR #1; main
+  and stable release were not changed by this branch publication.
+- Push CI 34116571722 and PR CI 34116635180 both completed successfully.
+  All Python 3.10-3.13 jobs passed. Remote installed-wheel core regression passed
+  on Windows (268 passed, one skipped) and Linux/macOS (267 passed, two skipped).
+  Linux also passed optional MCP installation/runtime verification. Downloaded
+  sanitized reports were inspected, not inferred from a green job badge alone.
+- Published v0.4.0-rc.3 at the exact tested commit as a prerelease, not latest
+  stable. Wheel, installer and plugin archive digests match their local files.
+  Public URL: https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.3
+- GitHub Actions emitted Node 20 action-runtime deprecation notices but jobs
+  passed. These are maintenance follow-ups, not failed application tests.
+- Independent real tasks, human onboarding, capability integration and full
+  stable-release acceptance remain open. No model calls or resets were used.
+- This status update is newer than the immutable candidate tag. Current local
+  documentation edits need their own follow-up commit; do not replace assets
+  merely to alter release-status prose inside the wheel metadata.
+
+2026-09-07, serial workflow execution core (not yet UI-integrated):
+
+- Added an internal one-to-three-stage runner for server-held packets, with
+  one task/root, unique call IDs, explicit approval, full estimate admission and
+  serial ledger/receipt verification. It retains original image inputs across
+  stages and stops for empty, oversized or flagged handoffs rather than truncating.
+- Completed stage costs persist on cancellation or a need to replan after an
+  overrun. Unknown usage stops dispatch and has a null total, separately from
+  known completed costs. The core does not claim cross-process ownership or
+  crash persistence; those remain required Workbench integration responsibilities.
+- Eleven focused injected-executor tests passed. A large parametrized fixture
+  initially produced Windows test-environment errors; short explicit test IDs
+  fixed the harness issue. Final full regression: 279 passed, one skipped in
+  16.82 seconds. No actual model stages ran.
+- Not exposed through UI/MCP/CLI and not published: next integrate stored plans,
+  persisted stage identities, stage-aware reconciliation, capability/evidence
+  checks, approval/progress/receipts and browser tests. Do not advertise prepared
+  workflows as ready merely because this internal core passes tests.
+- Published rc.3 assets and tag remain unchanged; current work is local and
+  uncommitted. No paid model calls, resets or development-server restart.
+
+2026-09-07, multi-stage workbench integration (local, not in rc.3):
+
+- Added explicit direct/prepared/review strategies to stored previews. Direct
+  remains default; prepared and review use Sol then Astra, preserve original
+  evidence/images and require host support on both stages. No automatic learned
+  strategy promotion or savings inference.
+- Integrated serial execution under existing atomic workbench admission, with
+  durable planned/started stage IDs, per-stage host receipts, cancellation,
+  remaining-budget checks and stage-aware terminal-journal reconciliation.
+  Missing started-stage receipts retain unknown usage; no recovery reruns work.
+- Added UI workflow choice, per-stage cost preview, started-stage progress and
+  per-model receipts. Browser tests exercise live two-stage planning but intercept
+  execution explicitly; no real multi-stage model result is claimed.
+- Bounded serialized UTF-8 handoffs at 64 KB, with an additional conservative
+  65,000 final-stage input allowance. Original data is preserved or rejected,
+  never silently truncated; the allowance is not a provider cap.
+- Full regression: 286 passed, one skipped in 16.98 seconds. Browser QA passed
+  at 1440/390/320 with no page/console errors or overflow. The prepared mobile
+  preview was visually inspected. Live execution still awaits bounded approval.
+- Verified idle development server refreshed as PID 14704; revalidate before
+  reuse. No paid calls, resets, commits or publication; rc.3 assets are unchanged.
+- Further crash-boundary and multi-stage recovery auditing, empirical strategy
+  comparisons, human usability and new package qualification remain required.
+
+2026-09-07, multi-stage interruption verification (local, not in rc.3):
+
+- Confirmed the cancellation boundary fix: a host-reported pre-dispatch stop
+  becomes known cancellation only when lease and spending state are unchanged.
+  Prior completed costs remain recorded; an unexpected lease retains unknown usage.
+- Verified durable not_dispatched stage status for confirmed cancellation.
+  Added real subprocess exits at first and second stages, both before terminal
+  usage and after terminal usage but before settlement. The fixtures claim dispatch
+  before exiting, release the OS runtime lock through process death, and recover
+  under a new owner. Missing usage retains reservations; journaled usage settles
+  without replay, including when later stages were only planned.
+- Focused runner/workbench tests: 26 passed in 1.64 seconds. Full regression:
+  294 passed, one skipped in 19.20 seconds. git diff --check passed with existing
+  line-ending warnings. Removed an unused test import.
+- Corrected outdated service documentation that described local multi-stage UI
+  integration as absent. Published rc.3 remains direct-only and unchanged.
+- No real model calls, resets, publication, server restart or new browser run.
+  The four subprocess fixtures test simulated-host crash/accounting behavior,
+  not provider execution, model quality, savings or human usability.
+- Next: qualify the new package and real workflows after bounded approval;
+  remaining interruption windows, image staging cleanup, broader comparisons,
+  human onboarding and complete release acceptance remain open.
+
+2026-09-07, development-wheel qualification:
+
+- Advanced local package/source to 0.4.0rc4.dev1 and plugin to
+  0.4.0-rc.4.dev.1; updated version assertions. Published rc.3 was not changed.
+- Initial no-build-isolation attempt failed because the base Python had no
+  Hatchling backend. Normal isolated pip wheel building succeeded without a
+  global backend installation. Local wheel SHA-256:
+  57143221d32c9c906ed3133de4e46281ff8cb3b20add39424cbaf1ac2137dea0.
+- Tested that identical wheel outside checkout imports in disposable Windows
+  Python 3.13.7 and Ubuntu/WSL Python 3.12.3 environments. Each passed 294 tests
+  with one skip, actual MCP stdio initialize/list/call, packaged UI hash/auth
+  checks, offline planning/diagnostics, preview-only installation and clean uninstall.
+  Reports: artifacts/onboarding/windows-rc4-dev1-regression.json and
+  artifacts/onboarding/linux-wsl-rc4-dev1-regression.json. Total qualification
+  elapsed time was 73.804 seconds and 28.949 seconds respectively.
+- Updated checkout README to distinguish published rc.3 direct execution from
+  local multi-stage development and to link current package evidence. This prose
+  edit occurred after the tested wheel was built: its embedded README metadata
+  still has older preview text. Rebuild with aligned documentation and qualify
+  the final bytes before publication; this wheel is an internal test artifact.
+- No model calls, resets, host configuration edits, server restart, commit or
+  publication. These results do not establish macOS behavior for the new code,
+  real multi-stage benefit, human usability or stable-release readiness.
+- Next: finish release-document alignment, real workflow/participant gates,
+  and remaining user-experience gaps. Do not repeat synthetic qualification as
+  a substitute for the outstanding empirical and human evidence.
+
+2026-09-07, understandable complete and partial receipts:
+
+- A rendered regression reproduced completed multi-stage headline input tokens
+  displaying Unknown instead of the recorded total of 2000. The display now sums
+  stage counters only when every participating counter is a nonnegative safe integer.
+  Missing cached counts remain Unknown rather than being invented as zero.
+- Incomplete usage explicitly labels recorded totals as Known, keeps overall
+  projected credits Unknown, and separates known projected costs from reservations.
+  No accounting records, settlements or provider cost calculations were changed.
+- Browser fixtures verify complete, partial, missing-counter and empty unknown
+  receipts at 1440/390/320. Execution was intercepted; direct renderer variants
+  did not submit additional jobs. Full browser QA passed with no page/console
+  errors or horizontal overflow. Results now explicitly name this coverage.
+- Mobile screenshot inspection caught a separate short-status wrapping defect;
+  the completed label no longer splits across three lines. Added a rendered
+  single-line assertion for this short status, then reran QA and inspected the
+  final partial-receipt mobile screenshot.
+- Python regression: 294 passed, one skipped in 19.33 seconds. Browser validation
+  used the existing Playwright harness because the Browser plugin/skill was not
+  listed; the separate CUA capability was not used. Existing server PID 14704 was
+  verified; static assets were reread without restarting it.
+- Local frontend changes are newer than the qualified dev1 wheel. Do not treat
+  its installation reports as evidence for these new asset bytes. No model calls,
+  resets, publication or server configuration changes. Human receipt comprehension
+  and real model benefits remain unverified.
+
+2026-09-07, optional folder chooser with separate access approval:
+
+- Added an optional Tk folder dialog in a child main thread/process, avoiding
+  Tk interaction from HTTP worker threads. One chooser per server, 90-second
+  subprocess timeout, bounded parsed output, and generic unavailable/canceled
+  responses. Selecting a path neither registers it nor executes any model.
+- Authenticated same-origin POST requires exactly open:true. Tests cover absent
+  auth, wrong origin, absent/extra fields and numeric truthy input. UI selection
+  clears previous consent; registration retains existing explicit approval/path
+  checks. Cancellation and unavailable desktop/Tk preserve manual path entry.
+- Seven initial process-contract tests failed before implementation. All now
+  pass. Fixed a test-helper unpacking mistake in the HTTP test, not a product
+  defect. Full regression: 302 passed, one skipped in 19.28 seconds.
+- Browser QA passed at 1440/390/320 with selected/canceled/unavailable response
+  fixtures, consent reset, no model dispatch, no page/console errors or overflow.
+  Native-dialog response was intercepted, not actual desktop selection. Public
+  chooser screenshots omit local project paths.
+- Verified PID 14704 identity and empty authenticated job list before refreshing
+  the server to PID 20148. Verified the current chooser endpoint rejects open:false
+  with HTTP 400 without opening a dialog. Reran browser QA against the refreshed
+  server. Revalidate its identity/jobs before any future restart.
+- Not packaged or published. Actual native desktop selection, platform support,
+  initial graphical installation, real-task comparisons and human trials remain
+  open. Abrupt server exit may leave an OS dialog requiring manual close; the
+  parent-side timeout is not a crash-proof OS window lifecycle guarantee.
+
+2026-09-07, release-specific installation instructions:
+
+- Verified live GitHub release v0.4.0-rc.3 remains a published prerelease, with
+  the exact standalone installer, wheel and plugin assets. GitHub asset digests
+  still match the recorded release hashes; no upload or mutation was performed.
+- Corrected README and installation instructions to use explicit rc.3 asset
+  downloads with --wheel, rather than implying default-branch code contains
+  unpublished features. Pinned the source example to the rc.3 tag and separated
+  developer checkout behavior. Removal instructions now match standalone versus
+  source installer locations.
+- Removed MCP instructions assuming package-index publication. Optional MCP uses
+  the verified wheel and isolated installer; client configuration must point at
+  that runtime's absolute Python path, not an unrelated bare-python installation.
+- Updated installation evidence to distinguish rc.3 (268 passing tests), the
+  older dev1 wheel (294), and subsequent unqualified asset changes. Kept native
+  desktop, macOS development and human onboarding gaps explicit.
+- Added regression checks executing documented core/MCP preview command arguments
+  with a never-installed fixture wheel. Both return successfully and create no
+  runtime. Full regression: 304 passed, one skipped in 19.40 seconds.
+- No paid calls, resets, server changes, commit or publication. Public landing
+  installation copy still needs alignment and visual verification before release;
+  new final package bytes still require qualification. Documentation correctness
+  does not establish actual model savings or human setup success.
+
+2026-09-07, landing-page release alignment:
+
+- Replaced the unpinned package install command and unmeasured one-minute setup
+  promise with the published rc.3 installer/wheel download links and a preview-only
+  command. The page now states terminal prerequisites, optional MCP downloads,
+  direct-run scope, unpublished multi-stage work and unproven onboarding/savings.
+- Installation CTA points to exact rc.3 release notes/assets and versioned source,
+  rather than implying that default-branch source contains local development work.
+- The new release-copy assertion failed before the edit. Full Python regression
+  then passed: 304 passed, one skipped in 19.61 seconds.
+- Browser QA at 1440/390/320 passed demo interactions, responsive bounds, loaded
+  hero asset, version-specific copied command and simulated clipboard rejection.
+  No page/console errors. Screenshots revealed sticky-header occlusion on mobile;
+  added section scroll margin and verified native scrollIntoView keeps the heading
+  below the header. Prevented the short --yes option splitting across lines.
+- Final browser rerun and mobile screenshot inspection passed. Site QA uses local
+  file navigation, not a deployment or package installation. Clipboard behavior is
+  explicitly stubbed; no claim about every browser's permissions is made.
+- No model calls, resets, server restart, commit or deployment. Published site
+  remains unchanged until a deliberate release integration. Final package bytes,
+  native dialog use, independent real tasks and human trials remain open.
+
+2026-09-07, consolidated dev2 package qualification:
+
+- Created 0.4.0rc4.dev2 (plugin 0.4.0-rc.4.dev.2) with current receipt UI,
+  optional chooser, serial workflow execution and aligned embedded README.
+  Manifest inspection confirmed required modules, current version, release-pinned
+  installation prose and no unexpected wheel paths.
+- Wheel SHA-256: aa238b973a8aeae4e09c14c58a965d03c522ea974bacd2da8b168a74f95645ae.
+  Identical bytes passed isolated Windows/Python 3.13.7 and Ubuntu/WSL/Python
+  3.12.3 qualification: 304 tests passed, one skipped on each; actual MCP stdio
+  initialize/list/call, packaged UI hashes/auth checks and clean uninstall passed.
+  Reports: artifacts/onboarding/windows-rc4-dev2-regression.json (71.93 seconds)
+  and artifacts/onboarding/linux-wsl-rc4-dev2-regression.json (27.552 seconds).
+- git diff --check passed with existing line-ending warnings. No published asset
+  was replaced, and no live site/server/configuration was changed this turn.
+- Requested one explicitly bounded real read-only Astra workbench run using public
+  inputs, low reasoning, 15 estimated credits and no reset. No response was received
+  during this turn; no additional model worker was started. This does not mean the
+  active Codex conversation is free: it continues consuming host account capacity.
+- Real task quality/cost, human onboarding, native dialog selection, new macOS
+  qualification, initial graphical setup and full release acceptance remain open.
+  Do not launch the pending real run without approval or substitute another round
+  of synthetic tests for the missing empirical evidence.
+
+Next: audit integrated stage boundaries and validate real workflows, preserving all
+accounting and evidence gates; also integrate candidate documentation;
 continue independent task and human validation without calling them complete.
 Run the bounded real
 UI task only once explicitly approved. Preserve the full phase register:

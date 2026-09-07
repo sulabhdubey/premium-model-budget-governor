@@ -157,6 +157,9 @@ input[type="range"] { width: 100%; height: 6px; accent-color: var(--teal); }
 .install-layout { display: grid; grid-template-columns: 1fr 1.25fr; gap: 26px 70px; align-items: end; }
 .install-layout h2 { margin: 8px 0 12px; font-size: 38px; line-height: 1.15; }
 .install-layout p { margin: 0; color: #715f42; }
+.install-layout p + p { margin-top: 12px; }
+.install-layout p code { white-space: nowrap; }
+section[id] { scroll-margin-top: 84px; }
 .command-block { min-height: 68px; padding: 0 12px 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; color: #ecf7f5; background: var(--ink); border-radius: 5px; overflow: hidden; }
 .command-block code { min-width: 0; font-family: var(--mono); font-size: 14px; overflow-wrap: anywhere; }
 .command-block button { min-width: 68px; height: 40px; color: #dce9e6; background: #263235; border: 1px solid #465457; border-radius: 4px; font-family: var(--mono); font-size: 11px; cursor: pointer; }

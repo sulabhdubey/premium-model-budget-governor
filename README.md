@@ -16,8 +16,10 @@ everything to cheaper models.
 
 **[Try the illustrative demo](https://sulabhdubey.github.io/premium-model-budget-governor/)** · [Install](#install) · [Connect the MCP server](docs/MCP.md)
 
-> **Unreleased workbench preview:** the local interface described below is not
-> included in the published v0.4.0-rc.2 asset. It is undergoing qualification.
+> **Development build:** published v0.4.0-rc.3 includes the direct-run workbench.
+> This checkout is 0.4.0rc4.dev2, adding explicit two-stage workflows, clearer
+> usage receipts and an experimental folder chooser. It is not
+> published or approved as a stable release.
 > No universal savings or automatic control of existing Codex chats is claimed.
 
 ## Start With The Workbench
@@ -47,17 +49,22 @@ selection, approval, stop/reconnect and receipt inspection do not require JSON.
 Python/Codex installation and initial launch still require technical setup.
 
 **Current limits:** execution is read-only; inherited connector permissions are
-not revoked. The UI currently executes direct workflows, while prepared/review
-workflows remain separate planner/CLI paths. Estimates are not billing caps;
+not revoked. Direct is the default. This development UI also offers preparation
+with Sol followed by Astra, or a Sol draft followed by Astra review. Both retain
+original evidence and require compatible capabilities; extra stages can cost more.
+Published rc.3 does not include these multi-stage UI paths. Estimates are not billing caps;
 unknown usage can block further runs. Human onboarding and broad real-task savings
 are not yet proven. See [the workbench guide](docs/WORKBENCH.md),
 [installation](docs/INSTALLATION.md), and [full progress](docs/PRODUCT_GOAL_PROGRESS.md).
 
-**Package evidence:** the same local wheel passed installed-package regression
-on [Windows](artifacts/onboarding/windows-preview-lifecycle-regression.json) and
-[Ubuntu/WSL](artifacts/onboarding/linux-wsl-preview-lifecycle-regression.json): 254 passed,
+**Earlier development package evidence:** the same 0.4.0rc4.dev1 wheel passed installed-package regression
+on [Windows](artifacts/onboarding/windows-rc4-dev1-regression.json) and
+[Ubuntu/WSL](artifacts/onboarding/linux-wsl-rc4-dev1-regression.json): 294 passed,
 one platform-specific skip each, with MCP stdio checks and clean uninstall.
 These tests do not establish Astra-quality savings or macOS support.
+They do not qualify the newer dev2 changes. See the
+[progress record](docs/PRODUCT_GOAL_PROGRESS.md) for subsequent qualification;
+native dialog selection and human onboarding remain unverified.
 
 > **Idea, research guidance, and product management: Sulabh Dubey.**<br>
 > Research synthesis, design, engineering, testing, documentation, and release
@@ -173,14 +180,18 @@ remains open.
 
 ## Install
 
-For an isolated installation with a preview and removal path:
+For the **published rc.3 prerelease** (direct-run workbench), download the
+[installer](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.3/install_governor.py)
+and [wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.3/premium_model_budget_governor-0.4.0rc3-py3-none-any.whl)
+into the same folder. From that folder, preview and then approve installation:
 
 ```bash
-python scripts/install_governor.py install
-python scripts/install_governor.py install --yes
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc3-py3-none-any.whl
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc3-py3-none-any.whl --yes
 ```
 
-Run these from a downloaded or cloned checkout. See [guided installation and
+This does not include the local multi-stage or folder-chooser development changes.
+See [guided installation and
 recovery](docs/INSTALLATION.md). The script prints the installed command location;
 run it with `doctor` to check setup without a model call. It leaves Codex settings
 and existing Python environments untouched.
@@ -188,10 +199,14 @@ and existing Python environments untouched.
 For development in an environment you manage yourself:
 
 ```bash
-git clone https://github.com/sulabhdubey/premium-model-budget-governor.git
+git clone --branch v0.4.0-rc.3 https://github.com/sulabhdubey/premium-model-budget-governor.git
 cd premium-model-budget-governor
 python -m pip install -e ".[dev]"
 ```
+
+This command pins the published source. Unpublished changes described above
+require the explicitly supplied development checkout; they are not available
+merely by cloning the default branch.
 
 On Windows, if `pm-bg` is not on PATH in the current terminal, use:
 

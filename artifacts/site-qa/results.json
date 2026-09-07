@@ -10,7 +10,9 @@
     },
     "errors": [],
     "controls_passed": true,
-    "hero_loaded": true
+    "hero_loaded": true,
+    "release_specific_install_preview": true,
+    "simulated_clipboard_success_and_failure": true
   },
   {
     "viewport": {
@@ -23,7 +25,9 @@
     },
     "errors": [],
     "controls_passed": true,
-    "hero_loaded": true
+    "hero_loaded": true,
+    "release_specific_install_preview": true,
+    "simulated_clipboard_success_and_failure": true
   },
   {
     "viewport": {
@@ -36,6 +40,8 @@
     },
     "errors": [],
     "controls_passed": true,
-    "hero_loaded": true
+    "hero_loaded": true,
+    "release_specific_install_preview": true,
+    "simulated_clipboard_success_and_failure": true
   }
 ]

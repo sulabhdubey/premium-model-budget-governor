@@ -17,7 +17,10 @@
     "simulated_receipt_recovery": true,
     "diagnostic_download_allowlist_and_failure_reset": true,
     "simulated_receipt_stop_reconnect_and_stale_preview_tested": true,
-    "model_turns_started": 0
+    "model_turns_started": 0,
+    "simulated_multistage_complete_partial_and_missing_counters": true,
+    "mobile_short_status_wrap_checked": true,
+    "simulated_folder_choice_consent_cancel_and_fallback": true
   },
   {
     "width": 390,
@@ -37,7 +40,10 @@
     "simulated_receipt_recovery": true,
     "diagnostic_download_allowlist_and_failure_reset": true,
     "simulated_receipt_stop_reconnect_and_stale_preview_tested": false,
-    "model_turns_started": 0
+    "model_turns_started": 0,
+    "simulated_multistage_complete_partial_and_missing_counters": true,
+    "mobile_short_status_wrap_checked": true,
+    "simulated_folder_choice_consent_cancel_and_fallback": true
   },
   {
     "width": 320,
@@ -57,6 +63,9 @@
     "simulated_receipt_recovery": true,
     "diagnostic_download_allowlist_and_failure_reset": true,
     "simulated_receipt_stop_reconnect_and_stale_preview_tested": false,
-    "model_turns_started": 0
+    "model_turns_started": 0,
+    "simulated_multistage_complete_partial_and_missing_counters": true,
+    "mobile_short_status_wrap_checked": true,
+    "simulated_folder_choice_consent_cancel_and_fallback": true
   }
 ]

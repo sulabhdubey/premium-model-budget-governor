@@ -11,6 +11,7 @@ import secrets
 from threading import Lock, Event, BoundedSemaphore
 
 from .doctor import diagnose
+from .folder_picker import FolderPicker
 from .input_errors import InputIssue, ISSUES
 from .private_file import write_private, remove_if_unchanged
 
@@ -64,7 +65,10 @@ class Jobs:
 
     def get(self, identifier):
         with self.lock:
-            return deepcopy(self.rows.get(identifier))
+            row = deepcopy(self.rows.get(identifier))
+        if row and row["status"] in {"running","stop_requested"} and hasattr(self.app,"stage_progress"):
+            row["stage_progress"] = self.app.stage_progress(identifier)
+        return row
 
     def list(self):
         with self.lock:
@@ -93,6 +97,7 @@ class LocalServer(ThreadingHTTPServer):
         self.app = app
         self.token = secrets.token_urlsafe(32)
         self.jobs = Jobs(app)
+        self.folder_picker = FolderPicker()
         self.connection_slots = BoundedSemaphore(16)
         super().__init__(("127.0.0.1", port), Handler)
         self.origin = f"http://127.0.0.1:{self.server_port}"
@@ -217,7 +222,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not self._authorize():
             return
-        if self.path not in {"/api/preview", "/api/preview/discard", "/api/execute", "/api/doctor", "/api/cancel", "/api/files", "/api/reconcile", "/api/host-options", "/api/projects/add", "/api/projects/remove"}:
+        if self.path not in {"/api/preview", "/api/preview/discard", "/api/execute", "/api/doctor", "/api/cancel", "/api/files", "/api/reconcile", "/api/host-options", "/api/projects/add", "/api/projects/remove", "/api/projects/choose"}:
             self._reply(404, error="Not found.")
             return
         if self.headers.get_content_type() != "application/json":
@@ -256,6 +261,10 @@ class Handler(BaseHTTPRequestHandler):
                 self._reply(200, self.server.app.host_options(packet.get("project")))
             elif self.path == "/api/projects/add":
                 self._reply(200, self.server.app.register_project(packet.get("path"), approved=packet.get("approved")))
+            elif self.path == "/api/projects/choose":
+                if packet != {"open": True} or packet.get("open") is not True:
+                    raise ValueError("explicit dialog request required")
+                self._reply(200, self.server.folder_picker.choose())
             elif self.path == "/api/projects/remove":
                 self._reply(200, self.server.app.remove_project(packet.get("id"), approved=packet.get("approved")))
             elif self.path == "/api/files":

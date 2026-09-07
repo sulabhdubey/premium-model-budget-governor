@@ -230,17 +230,19 @@
         <div class="page-shell install-layout">
           <div>
             <p class="section-index">06 / Install</p>
-            <h2 id="install-title">Add the governor in one minute.</h2>
-            <p>Python 3.10+ · Apache-2.0 · No required runtime dependencies</p>
+            <h2 id="install-title">Try the rc.3 prerelease.</h2>
+            <p>Python 3.10+ · Apache-2.0 · Direct-run workbench</p>
+            <p>Download the <a href="https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.3/install_governor.py">installer</a> and <a href="https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.3/premium_model_budget_governor-0.4.0rc3-py3-none-any.whl">wheel</a> into one folder. Run the preview there; add <code>--yes</code> only after reviewing it.</p>
+            <p>Initial setup uses a terminal. Optional MCP dependencies require a download. Multi-stage workbench changes remain unpublished; savings and unaided onboarding are not yet proven.</p>
           </div>
           <div class="command-block">
-            <code id="install-command">pip install git+https://github.com/sulabhdubey/premium-model-budget-governor.git</code>
+            <code id="install-command">python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc3-py3-none-any.whl</code>
             <button id="copy-command" type="button" aria-label="Copy install command">Copy</button>
             <span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
           </div>
           <div class="install-actions">
-            <a class="button button-primary" href="https://github.com/sulabhdubey/premium-model-budget-governor#install">Install from GitHub <span aria-hidden="true">→</span></a>
-            <a class="text-link" href="https://github.com/sulabhdubey/premium-model-budget-governor/blob/main/docs/MCP.md">Connect the MCP server</a>
+            <a class="button button-primary" href="https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.3">Release notes and downloads <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="https://github.com/sulabhdubey/premium-model-budget-governor/tree/v0.4.0-rc.3">Browse released source</a>
           </div>
         </div>
       </section>

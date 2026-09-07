@@ -93,6 +93,22 @@ $("manage-projects").addEventListener("click", async () => {
 });
 $("close-projects").addEventListener("click", () => $("projects-dialog").close());
 $("new-project-path").addEventListener("input", () => { $("project-consent").checked = false; });
+$("choose-project").addEventListener("click", async () => {
+  const original = $("new-project-path").value;
+  $("choose-project").disabled = true; $("project-consent").checked = false;
+  $("project-message").textContent = "Choose a folder on this computer. No project access has been granted.";
+  try {
+    const result = await api("/api/projects/choose", {open:true});
+    if (result.status === "selected") {
+      if (!$("projects-dialog").open || $("new-project-path").value !== original) return;
+      $("new-project-path").value = result.path; $("project-consent").checked = false;
+      $("project-message").textContent = "Folder selected. Review and approve access before adding it.";
+    } else {
+      $("project-message").textContent = result.status === "canceled" ? "Selection canceled. Nothing added." : result.status === "busy" ? "A folder chooser is already open on this computer." : "Folder chooser unavailable. Enter the absolute folder path instead.";
+    }
+  } catch (error) { $("project-message").textContent = "Folder chooser unavailable. Enter the absolute folder path instead."; }
+  finally { $("choose-project").disabled = false; }
+});
 $("project-form").addEventListener("submit", async event => {
   event.preventDefault();
   if (!$("project-consent").checked) return;
@@ -111,8 +127,9 @@ function renderEfforts() {
   const select = $("effort"), previous = select.value || "low";
   const astraOnly = document.querySelector('input[name="mode"]:checked').value === "astra_preferred";
   const images = lines($("images").value).length > 0;
-  const models = hostModels.filter(row => (!astraOnly || row.model === "gpt-6-astra") && (!images || row.input_modalities.includes("image")));
-  const values = [...new Set(models.flatMap(row => row.reasoning_efforts))];
+  const multi = $("strategy").value !== "direct";
+  const models = hostModels.filter(row => (multi || !astraOnly || row.model === "gpt-6-astra") && (!images || row.input_modalities.includes("image")));
+  const values = multi ? (models.length === 2 ? models[0].reasoning_efforts.filter(value=>models[1].reasoning_efforts.includes(value)) : []) : [...new Set(models.flatMap(row => row.reasoning_efforts))];
   select.replaceChildren(...values.map(value => {
     const option = document.createElement("option"); option.value = value;
     option.textContent = value.replaceAll("_", " ").replace(/^./, s => s.toUpperCase());
@@ -142,6 +159,7 @@ async function refreshHostOptions() {
 $("project").addEventListener("change", () => { $("evidence").value = ""; $("images").value = ""; refreshHostOptions(); });
 document.querySelectorAll('input[name="mode"]').forEach(input => input.addEventListener("change", renderEfforts));
 $("images").addEventListener("input", renderEfforts);
+$("strategy").addEventListener("change", renderEfforts);
 $("effort").addEventListener("change", renderEfforts);
 $("approval").addEventListener("change", () => { $("run").disabled = !preview || !$("approval").checked || running; });
 $("task-form").addEventListener("submit", async event => {
@@ -150,11 +168,14 @@ $("task-form").addEventListener("submit", async event => {
   try {
     await previewCleanup;
     if (requestedRevision !== revision) return;
-    const row = await api("/api/preview", {project:$("project").value, task:$("task").value, family:$("family").value, mode:document.querySelector('input[name="mode"]:checked').value, budget_credits:Number($("budget").value), effort:$("effort").value, evidence:lines($("evidence").value), images:lines($("images").value), context_allowance_tokens:Number($("context").value), output_allowance_tokens:Number($("output").value)});
+    const row = await api("/api/preview", {project:$("project").value, task:$("task").value, family:$("family").value, strategy:$("strategy").value, mode:document.querySelector('input[name="mode"]:checked').value, budget_credits:Number($("budget").value), effort:$("effort").value, evidence:lines($("evidence").value), images:lines($("images").value), context_allowance_tokens:Number($("context").value), output_allowance_tokens:Number($("output").value)});
     if (requestedRevision !== revision) { discardPreview(row.id); notice("Task changed while previewing. Review the updated task again."); return; }
     if (!row.plan.selected) { discardPreview(row.id); $("plan-status").textContent="Needs a new plan: requested participation does not fit this budget."; notice("No run started. Review the budget and allowances."); return; }
     preview = row; $("preview").hidden = false; $("plan-status").textContent = "Ready for your approval";
-    $("model").textContent = row.plan.selected.stages[0].model;
+    $("model").textContent = row.plan.selected.stages.map(stage=>stage.model).join(" then ");
+    let breakdown = $("stage-breakdown");
+    if (!breakdown) { breakdown = document.createElement("ol"); breakdown.id = "stage-breakdown"; $("model").after(breakdown); }
+    breakdown.replaceChildren(...row.plan.selected.stages.map(stage=>{const li=document.createElement("li");li.textContent=`${stage.role}: ${stage.model}, ${money(stage.estimated_credits)} projected credits`;return li;}));
     const ceiling=row.plan.budget_credits, reserve=row.plan.reserve_credits, work=row.plan.selected.estimated_total_credits-reserve;
     $("work-cost").textContent=money(work); $("reserve-cost").textContent=money(reserve); $("ceiling").textContent=money(ceiling);
     const canvas=$("cost-chart"), context=canvas.getContext("2d"); context.clearRect(0,0,800,40); context.fillStyle="#edf0f1";context.fillRect(0,0,800,40);context.fillStyle="#176747";context.fillRect(0,0,800*work/ceiling,40);context.fillStyle="#aeb7bc";context.fillRect(800*work/ceiling,0,800*reserve/ceiling,40);
@@ -164,8 +185,27 @@ $("task-form").addEventListener("submit", async event => {
 });
 function showReceipt(row) {
   $("receipt").replaceChildren(); $("receipt").hidden=false;
-  const usage=row.usage || {};
-  for(const [name,value] of [["Input tokens",usage.input_tokens],["Cached tokens",usage.cached_tokens],["Output tokens",usage.output_tokens],["Projected credits",money(row.estimated_credits)],["Still reserved",money(row.budget?.reserved_credits)],["Weekly remaining","Unavailable"]]) {const item=document.createElement("div"), dt=document.createElement("dt"), dd=document.createElement("dd");dt.textContent=name;dd.textContent=value ?? "Unknown";item.append(dt,dd);$("receipt").append(item);}
+  const stages = row.stages || [], usage = {...(row.usage || {})};
+  if (!row.usage && stages.length) {
+    for (const key of ["input_tokens", "cached_tokens", "output_tokens"]) {
+      const counts = stages.map(stage => stage.usage?.[key]);
+      const total = counts.reduce((sum, value) => sum + value, 0);
+      if (counts.every(value => Number.isSafeInteger(value) && value >= 0) && Number.isSafeInteger(total)) usage[key] = total;
+    }
+  }
+  const partial = row.status === "unknown_usage" || row.cost_complete === false;
+  const fields = [[partial ? "Known input tokens" : "Input tokens",usage.input_tokens],[partial ? "Known cached tokens" : "Cached tokens",usage.cached_tokens],[partial ? "Known output tokens" : "Output tokens",usage.output_tokens],["Projected credits",partial ? "Unknown" : money(row.estimated_credits)],["Still reserved",money(row.budget?.reserved_credits)],["Weekly remaining","Unavailable"]];
+  if (partial) {
+    fields.push(["Known projected credits",money(row.known_estimated_credits)]);
+    fields.push(["Accounting status","Incomplete. Additional usage may be unrecorded; reservations remain until reconciliation."]);
+  }
+  for(const [name,value] of fields) {const item=document.createElement("div"), dt=document.createElement("dt"), dd=document.createElement("dd");dt.textContent=name;dd.textContent=value ?? "Unknown";item.append(dt,dd);$("receipt").append(item);}
+  for (const [index, stage] of (row.stages || []).entries()) {
+    const item=document.createElement("div"), dt=document.createElement("dt"), dd=document.createElement("dd");
+    item.className="stage-receipt"; dt.textContent=`Stage ${index+1}: ${stage.actual_model}`;
+    dd.textContent=`Input ${stage.usage?.input_tokens ?? "Unknown"}; cached ${stage.usage?.cached_tokens ?? "Unknown"}; output ${stage.usage?.output_tokens ?? "Unknown"}; projected credits ${money(stage.credits)}`;
+    item.append(dt,dd); $("receipt").append(item);
+  }
 }
 async function watchTask(id) {
   if (watching) return;
@@ -176,6 +216,7 @@ async function watchTask(id) {
     while (true) {
       const job = await api(`/api/jobs/${id}`);
       $("run-status").textContent = job.status.replaceAll("_", " ");
+      if (job.stage_progress?.total) $("run-status").textContent += `: ${job.stage_progress.started} of ${job.stage_progress.total} stages started`;
       if (!["queued", "running", "stop_requested"].includes(job.status)) {
         if (job.result) {
           $("answer").textContent = job.result.answer || "No answer available; inspect the usage state before retrying.";

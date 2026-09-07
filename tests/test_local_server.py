@@ -81,6 +81,20 @@ def local():
         thread.join(3)
 
 
+def test_folder_chooser_requires_auth_origin_and_explicit_action(local, monkeypatch):
+    server, app = local
+    calls = []
+    monkeypatch.setattr(server.folder_picker, "choose", lambda: calls.append(True) or {"status":"canceled"})
+    assert call(server, "/api/projects/choose", method="POST", payload={"open":True}, authenticated=False)[0] == 401
+    assert call(server, "/api/projects/choose", method="POST", payload={"open":True}, headers={"Origin":"https://example.invalid"})[0] == 403
+    for packet in ({}, {"open":1}, {"open":True,"path":"ignored"}):
+        assert call(server, "/api/projects/choose", method="POST", payload=packet)[0] == 400
+    assert calls == []
+    status, _, body = call(server, "/api/projects/choose", method="POST", payload={"open":True})
+    assert status == 200 and json.loads(body)["result"] == {"status":"canceled"}
+    assert calls == [True] and app.calls == 0
+
+
 def call(server, path, *, method="GET", payload=None, authenticated=True, headers=None):
     connection = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=3)
     values = {"Authorization": "Bearer " + server.token} if authenticated else {}
