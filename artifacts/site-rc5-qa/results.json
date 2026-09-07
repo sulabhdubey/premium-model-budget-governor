@@ -1,0 +1,29 @@
+[
+  {
+    "width": 1440,
+    "horizontal_overflow": false,
+    "page_errors": [],
+    "rc5_install_links": true,
+    "proof_anchor_clear_of_header": true,
+    "proof_capture": "isolated section; sticky header hidden for capture only",
+    "model_calls": 0
+  },
+  {
+    "width": 390,
+    "horizontal_overflow": false,
+    "page_errors": [],
+    "rc5_install_links": true,
+    "proof_anchor_clear_of_header": true,
+    "proof_capture": "isolated section; sticky header hidden for capture only",
+    "model_calls": 0
+  },
+  {
+    "width": 320,
+    "horizontal_overflow": false,
+    "page_errors": [],
+    "rc5_install_links": true,
+    "proof_anchor_clear_of_header": true,
+    "proof_capture": "isolated section; sticky header hidden for capture only",
+    "model_calls": 0
+  }
+]

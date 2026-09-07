@@ -851,3 +851,22 @@ are not complete. Read-only tasks are not substitutes for write/Desktop-only wor
   specific disposition after inventory. No force push, tag change or asset deletion
   occurred in this hardening work. Stable promotion/site deployment and creator
   contact remain on hold; volunteer availability and independent results remain open.
+
+2026-09-07, approved history cleanup and rc.5 qualification:
+
+- Owner explicitly approved backed-up history and affected-release cleanup. A
+  separate mirror was rewritten and checked before an atomic, exact-lease update
+  of two public branches and eight tags. The original checkout was preserved and
+  ordinary pushes disabled there to prevent recontamination. A fresh sanitized
+  working checkout is now authoritative for new changes.
+- The old draft PR was closed. Seven mutable release descriptions were updated;
+  the affected rc.4 wheel and its checksum manifest were withdrawn. Cached/PR refs
+  and external copies require GitHub/collaborator handling; no total-erasure claim.
+- The separately versioned rc.5 wheel passed 334 installed tests with one skip on
+  Windows and Ubuntu/WSL, real MCP initialization/tool call and owned uninstall.
+  Its private-term package scan has no matches; the retained generic-token finding
+  was reviewed as random-token generation code, not a credential literal.
+- Candidate page installation/proof copy was corrected and browser-checked at
+  1440/390/320 widths with no overflow or page errors. Human onboarding and
+  independent quality equivalence remain unproven. No further paid worker or reset
+  was used for this cleanup. Candidate publication is distinct from stable acceptance.

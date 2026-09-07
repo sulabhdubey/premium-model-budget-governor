@@ -46,8 +46,11 @@ cannot be recalled. Never claim total erasure merely because a force push passed
 
 ## Current Boundary
 
-Current reporting has been anonymized. A private historical inventory and verified
-backup exist. Historical cleanup and affected-package replacement are separate,
-pending coordinated action. No full-history removal or secret compromise is
-inferred from a pattern match. Stable promotion and broad outreach remain on hold
-until the privacy disposition is recorded.
+Current reporting has been anonymized. Following explicit owner approval, two
+branches and eight tags were rewritten from a verified private backup. Rewritten
+snapshots passed the supplied private-term check. The affected rc.4 wheel and
+its checksum manifest were withdrawn; rc.5 is the separately versioned successor.
+The old PR was closed, not erased. GitHub-managed cached/PR references and copies
+in other people's clones remain outside this local cleanup's verified scope.
+No total erasure or secret compromise is inferred from a pattern match. Stable
+promotion and broad outreach remain gated by the acceptance register.

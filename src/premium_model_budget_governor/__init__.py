@@ -5,4 +5,4 @@ from .policy import decide_model
 
 __all__ = ["decide_model", "estimate_parity", "model_credits"]
 
-__version__ = "0.4.0rc4"
+__version__ = "0.4.0rc5"

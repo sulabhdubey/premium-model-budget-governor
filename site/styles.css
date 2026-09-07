@@ -42,7 +42,7 @@ img { display: block; max-width: 100%; }
 .button:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(14,119,120,.28); outline-offset: 3px; }
 .button-primary { color: white; background: var(--teal); border-color: var(--teal); }
 .button-primary:hover { background: var(--teal-dark); }
-.proof-band .text-link { color: #7cdddd; }
+.proof-band .text-link { display: inline-block; margin-right: 16px; margin-bottom: 8px; color: #7cdddd; }
 .button-secondary { color: var(--ink); background: white; border-color: var(--line-strong); }
 .button-secondary:hover { border-color: var(--ink); }
 .button-dark { color: white; background: var(--ink); }

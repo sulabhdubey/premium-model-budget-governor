@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "blocked",
+  "publication_authorized": false,
+  "files_checked": 45,
+  "input_sha256": {
+    "file-0": "a5bec67c17517f0a6d344a202530309e56e55c476809086d462724dad7880064"
+  },
+  "input_files": 1,
+  "findings": [
+    {
+      "item": "file-0:19",
+      "rule": "generic_secret_assignment"
+    }
+  ],
+  "uninspected_count": 0,
+  "uninspected": [],
+  "limitations": [
+    "Pattern checks cannot identify every confidential fact or secret.",
+    "Images and uninspected content require manual review.",
+    "No history, remote deletion, malware guarantee or publication authorization."
+  ],
+  "manual_review": {
+    "evaluator": "Codex, not independent certification",
+    "disposition": "Only matched assignment is random-token generation source, not a credential literal.",
+    "private_term_findings": 0,
+    "raw_finding_retained": true,
+    "weekly_savings_claim": false
+  }
+}

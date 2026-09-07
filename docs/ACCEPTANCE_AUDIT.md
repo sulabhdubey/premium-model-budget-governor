@@ -1,8 +1,9 @@
 # Product Acceptance Audit
 
-Date: 2026-09-07. Engineering checkpoint: rc.4, draft PR 1.
-Decision: the complete product goal is not achieved. The next candidate is rc.4;
-see RELEASE_CANDIDATE_RC4.md for artifact qualification and publication status.
+Date: 2026-09-07. Engineering checkpoint: privacy-corrected rc.5.
+Decision: the complete product goal is not achieved. The current candidate is rc.5;
+see RELEASE_CANDIDATE_RC5.md for artifact qualification and publication status.
+The old PR was closed for the approved history rewrite; cached copies may persist.
 REMAINING_VALIDATION.md defines the remaining empirical and human execution gates.
 
 This audit follows the original seven-phase objective. It does not turn software

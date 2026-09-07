@@ -14,14 +14,14 @@ report applies to its recorded wheel hash, not every later checkout edit.
 
 ## Preview, Then Install
 
-For the **rc.4 testing prerelease**, download both
-[install_governor.py](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.4/install_governor.py)
-and the [rc.4 wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.4/premium_model_budget_governor-0.4.0rc4-py3-none-any.whl).
+For the **rc.5 testing prerelease**, download both
+[install_governor.py](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/install_governor.py)
+and the [rc.5 wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/premium_model_budget_governor-0.4.0rc5-py3-none-any.whl).
 Open a terminal in their folder:
 
 ```sh
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl --yes
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl --yes
 ```
 
 This candidate includes direct and explicit multi-stage workflows plus an

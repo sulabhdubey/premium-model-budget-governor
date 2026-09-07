@@ -16,9 +16,9 @@ everything to cheaper models.
 
 **[Try the illustrative demo](https://sulabhdubey.github.io/premium-model-budget-governor/)** · [Install](#install) · [Connect the MCP server](docs/MCP.md)
 
-> **Testing candidate: 0.4.0rc4.** Adds explicit two-stage workflows, clearer
-> usage receipts, an experimental folder chooser and opt-in focused skill catalog. See the
-> [candidate notes](docs/RELEASE_CANDIDATE_RC4.md) and
+> **Testing candidate: 0.4.0rc5.** A privacy-corrected successor with publication
+> checks, usage receipts and opt-in focused skill discovery. See the
+> [candidate notes](docs/RELEASE_CANDIDATE_RC5.md) and
 > [acceptance audit](docs/ACCEPTANCE_AUDIT.md). This is not a stable release.
 > No universal savings or automatic control of existing Codex chats is claimed.
 
@@ -63,7 +63,7 @@ on [Windows](artifacts/onboarding/windows-rc4-dev2-regression.json) and
 one platform-specific skip each, with MCP stdio checks and clean uninstall.
 These tests do not establish Astra-quality savings or macOS support.
 Candidate-specific qualification is recorded in the
-[release notes](docs/RELEASE_CANDIDATE_RC4.md);
+[release notes](docs/RELEASE_CANDIDATE_RC5.md);
 native dialog selection and human onboarding remain unverified.
 
 **One real Astra Workbench run:** 24,076 input tokens, 386 output tokens,
@@ -194,14 +194,14 @@ remains open.
 
 ## Install
 
-For the **rc.4 testing prerelease**, download the
-[installer](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.4/install_governor.py)
-and [wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.4/premium_model_budget_governor-0.4.0rc4-py3-none-any.whl)
+For the **rc.5 testing prerelease**, download the
+[installer](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/install_governor.py)
+and [wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/premium_model_budget_governor-0.4.0rc5-py3-none-any.whl)
 into the same folder. From that folder, preview and then approve installation:
 
 ```bash
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl --yes
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl --yes
 ```
 
 This candidate includes the multi-stage workflows and experimental folder chooser.
@@ -213,7 +213,7 @@ and existing Python environments untouched.
 For development in an environment you manage yourself:
 
 ```bash
-git clone --branch v0.4.0-rc.4 https://github.com/sulabhdubey/premium-model-budget-governor.git
+git clone --branch v0.4.0-rc.5 https://github.com/sulabhdubey/premium-model-budget-governor.git
 cd premium-model-budget-governor
 python -m pip install -e ".[dev]"
 ```
