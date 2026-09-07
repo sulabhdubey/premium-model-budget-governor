@@ -17,7 +17,7 @@ everything to cheaper models.
 **[Try the illustrative demo](https://sulabhdubey.github.io/premium-model-budget-governor/)** · [Install](#install) · [Connect the MCP server](docs/MCP.md)
 
 > **Testing candidate: 0.4.0rc4.** Adds explicit two-stage workflows, clearer
-> usage receipts and an experimental folder chooser. See the
+> usage receipts, an experimental folder chooser and opt-in focused skill catalog. See the
 > [candidate notes](docs/RELEASE_CANDIDATE_RC4.md) and
 > [acceptance audit](docs/ACCEPTANCE_AUDIT.md). This is not a stable release.
 > No universal savings or automatic control of existing Codex chats is claimed.
@@ -29,7 +29,7 @@ an **Astra Preferred** or **Economy** run. Review the estimate and approve the
 read-only task. The result includes recorded token counts and projected credits,
 not a fabricated weekly-limit percentage.
 
-![Local workbench with an Astra-preferred preview; no model run started](artifacts/workbench-qa/1440.png)
+![Local workbench with an Astra-preferred preview; no model run started](artifacts/workbench-rc4-qa/1440.png)
 
 After installing this source version, launch it once:
 
@@ -70,6 +70,15 @@ native dialog selection and human onboarding remain unverified.
 21.3 seconds and 6.5015 token-rate-estimated credits. Its response passed seven
 predefined checks in Codex review. This is execution evidence, not a matched
 savings comparison or independent human evaluation. [Full report](artifacts/approved-astra-ui-smoke-2026-09-07.md).
+
+**Expanded real pilot:** 39 worker calls, five task families across four workflows,
+plus a bounded joint RTA-Net/CircuitProof review and exploratory tests. Extra
+handoffs usually cost more than direct Astra. An opt-in smaller skill catalog
+reduced mean estimated cost about 17% on one repeated visual task; useful guidance
+may be omitted, so inherited discovery stays the default. These are limited,
+Codex-graded observations, not guaranteed weekly savings.
+[Results and negative findings](docs/FIELD_TRIAL_2026_09_07.md) ·
+[Focused catalog tradeoffs](docs/FOCUSED_CATALOG.md).
 
 > **Idea, research guidance, and product management: Sulabh Dubey.**<br>
 > Research synthesis, design, engineering, testing, documentation, and release

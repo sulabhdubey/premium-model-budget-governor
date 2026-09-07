@@ -1,6 +1,6 @@
 # Workbench Candidate: 0.4.0rc4
 
-Status: candidate preparation. Not a stable release or completion of the product goal.
+Status: testing candidate. Not a stable release or completion of the product goal.
 
 ## Changes Since rc.3
 
@@ -16,6 +16,10 @@ Status: candidate preparation. Not a stable release or completion of the product
   public package-index distribution. Optional MCP is tested as a real stdio client.
 - One actual approved read-only Astra UI run is now recorded separately from
   mocked browser tests and historical CLI benchmarks.
+- Completed five-family/four-arm real comparison, one bounded combined project
+  review, and exploratory prompt/catalog experiments. Negative outcomes included.
+- Opt-in focused skill catalog for direct Astra at low reasoning, with immutable
+  preview binding, scope gates and explicit guidance-loss warning. Default unchanged.
 
 ## Evidence And Limits
 
@@ -33,33 +37,39 @@ Desktop-only tools and editing are not silently substituted. Secret/injection
 pattern checks do not guarantee detection of malicious content. The loopback
 service is not suitable for public hosting; never share its private launch link.
 
-Prepared/review workflows have automated execution and recovery coverage, but no
-new real multi-stage comparisons. Human onboarding, fresh independent-project
-trials, representative quality/savings evidence and independent security review
-remain release gates. No learned policy is promoted by this candidate.
+The [expanded pilot](FIELD_TRIAL_2026_09_07.md) contains 39 actual worker calls,
+27 workflows and 195.95418 estimated credits, including every stage. Extra
+handoffs usually cost more; a four-call, one-task catalog probe reduced mean
+estimated cost about 17%. Cache, small samples and Codex grading limit conclusions.
+Human onboarding, independent matched project trials, representative savings
+evidence and independent security review remain open. No learned policy is promoted.
 
 ## Qualification
 
 The exact candidate wheel SHA-256 is
-`6eacbd15685cd9bb0b84b441f447e8a3dd6dff17b1c805853c05513b0420784f`.
+`658065b66e8b7ed3937c7ae6d5b6b661acb962c2a7d4264c2fb16ce09df58428`.
 [Windows](../artifacts/onboarding/windows-rc4-regression.json) and
 [Ubuntu/WSL](../artifacts/onboarding/linux-wsl-rc4-regression.json) each passed
-304 installed-wheel tests with one platform-specific skip, real MCP stdio
+319 installed-wheel tests with one platform-specific skip, real MCP stdio
 initialize/list/call, setup checks and owned uninstall. Qualification used the
 same wheel on both systems. Initial stale rc.3/dev2 documentation assertions
 were corrected before these passing runs; no product behavior was relaxed.
+The earlier rc.4 wheel beginning `6eacbd15` predates the focused profile and is
+superseded by this artifact, not published under the same tag.
 
-Packaged Workbench assets are byte-identical to the dev2 browser-tested assets
-at 1440/390/320 widths. These fixture checks are not human or real-call evidence.
-Remote candidate CI must pass before publication. Historical dev2 tests are not
-a substitute for checking this artifact. The full
+Updated Workbench preview/approval flows passed browser QA at 1440/390/320 widths,
+including focused-profile scope and older-server rejection. These fixture checks
+are not human or real-call execution evidence. Remote candidate CI must pass
+before publication. Historical dev2 tests are not a substitute for this artifact. The full
 [acceptance audit](ACCEPTANCE_AUDIT.md) remains authoritative for open requirements.
 
 ## Try And Report
 
 **Volunteers wanted:** one technical and one nontechnical user for formative
-onboarding trials. Open the repository's **Volunteer for an onboarding trial**
-issue template using only your GitHub handle and general environment details.
+onboarding trials. [Open a volunteer issue](https://github.com/sulabhdubey/premium-model-budget-governor/issues/new?title=Volunteer%20for%20an%20onboarding%20trial)
+using only your GitHub handle, technical/nontechnical preference and general
+environment details. The candidate also includes an onboarding issue template;
+it may not appear in the default-branch selector until merged.
 No purchase, private repository or account screenshot is requested. Model
 execution and recording require separate consent; offline setup/preview trials
 are welcome and will be labeled accordingly. No sessions have yet been completed.

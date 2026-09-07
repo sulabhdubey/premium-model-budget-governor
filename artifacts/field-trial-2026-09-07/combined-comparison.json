@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "baseline": "astra_direct",
+  "comparisons": [
+    {
+      "arm": "prepared",
+      "matched_quality_pairs": 5,
+      "matched_cost_pairs": 5,
+      "distinct_tasks": 5,
+      "unmatched_runs": 0,
+      "baseline_passes": 5,
+      "arm_passes": 5,
+      "quality_regressions": 0,
+      "quality_improvements": 0,
+      "mean_credit_difference": 3.9075819999999997,
+      "cost_bases": [
+        "token_rate_estimate"
+      ],
+      "cost_by_basis": {
+        "token_rate_estimate": {
+          "matched_pairs": 5,
+          "mean_credit_difference": 3.9075819999999997
+        }
+      },
+      "matched_time_pairs": 5,
+      "mean_elapsed_difference_seconds": 54.9188,
+      "time_basis": "caller_reported_complete_workflow_wall_time",
+      "interpretation": "descriptive_only; negative difference means lower cost, not equivalent quality"
+    },
+    {
+      "arm": "review",
+      "matched_quality_pairs": 5,
+      "matched_cost_pairs": 5,
+      "distinct_tasks": 5,
+      "unmatched_runs": 0,
+      "baseline_passes": 5,
+      "arm_passes": 5,
+      "quality_regressions": 0,
+      "quality_improvements": 0,
+      "mean_credit_difference": 3.10534,
+      "cost_bases": [
+        "token_rate_estimate"
+      ],
+      "cost_by_basis": {
+        "token_rate_estimate": {
+          "matched_pairs": 5,
+          "mean_credit_difference": 3.10534
+        }
+      },
+      "matched_time_pairs": 5,
+      "mean_elapsed_difference_seconds": 27.6238,
+      "time_basis": "caller_reported_complete_workflow_wall_time",
+      "interpretation": "descriptive_only; negative difference means lower cost, not equivalent quality"
+    },
+    {
+      "arm": "sol_direct",
+      "matched_quality_pairs": 5,
+      "matched_cost_pairs": 5,
+      "distinct_tasks": 5,
+      "unmatched_runs": 0,
+      "baseline_passes": 5,
+      "arm_passes": 5,
+      "quality_regressions": 0,
+      "quality_improvements": 0,
+      "mean_credit_difference": -3.711452,
+      "cost_bases": [
+        "token_rate_estimate"
+      ],
+      "cost_by_basis": {
+        "token_rate_estimate": {
+          "matched_pairs": 5,
+          "mean_credit_difference": -3.711452
+        }
+      },
+      "matched_time_pairs": 5,
+      "mean_elapsed_difference_seconds": 2.9424,
+      "time_basis": "caller_reported_complete_workflow_wall_time",
+      "interpretation": "descriptive_only; negative difference means lower cost, not equivalent quality"
+    }
+  ],
+  "recommendation": "insufficient_evidence",
+  "automatic_promotion": false,
+  "limitations": [
+    "No universal winner or weekly-limit conversion is inferred.",
+    "Call completeness, model identity and grading are supplied by the host.",
+    "Timing is caller-reported, includes failed outcomes, and does not establish equivalent quality.",
+    "Different credit bases are reported separately, never averaged together.",
+    "Use preregistered held-out tasks and repeated trials before changing policy."
+  ],
+  "raw_prompts_stored": false
+}

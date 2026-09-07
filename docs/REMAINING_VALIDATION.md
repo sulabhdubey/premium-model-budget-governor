@@ -4,6 +4,14 @@ The software can be shipped as a testing candidate. The complete product goal
 cannot be closed from software tests alone. This register distinguishes actions
 from dependencies and prevents a successful single call becoming a savings claim.
 
+**2026-09-07 update:** the owner approved the 150-credit pilot and additional
+spending, bounded locally by a separate 100-credit extension. The completed
+[pilot](FIELD_TRIAL_2026_09_07.md) contains all five public task families across
+four workflows, one fresh combined two-project review, a negative preparation
+experiment and a four-call catalog test. Total: 195.95418 estimated credits;
+zero pending leases, retries or resets. The protocol below remains the standard
+for future independent validation, not a claim that these executions are absent.
+
 ## Matched Execution Protocol
 
 Before dispatch, obtain a total experiment credit ceiling distinct from the
@@ -60,8 +68,10 @@ as free or claim a worker receipt covers all account activity.
   hashes, not private source, personal paths or credentials. Owner-supplied earlier
   reports remain historical context, not new governor-executed trials.
 
-Both need approved, bounded model execution and complete receipts if they are to
-count as new governor trials. Static source inspection alone is not equivalent.
+The fresh combined read-only review now has complete receipts and unchanged-source
+checks. It is one call covering both projects, not two independent matched trials.
+Future project comparisons need separately frozen tasks, independent evaluation
+and complete receipts; static source inspection alone is not equivalent.
 
 ## Human And Capability Gates
 

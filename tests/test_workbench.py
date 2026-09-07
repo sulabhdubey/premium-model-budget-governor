@@ -38,6 +38,38 @@ def request(**changes):
             "budget_credits": 20, "evidence": ["proof.txt"], **changes}
 
 
+def test_focused_catalog_preview_binding_and_conservative_estimate(tmp_path):
+    calls = []
+    def executor(packet, ledger):
+        calls.append(packet)
+        return completed(packet, ledger)
+    app = service(tmp_path, executor)
+    inherited = app.preview(request())
+    focused = app.preview(request(context_profile="focused_catalog"))
+    assert focused["context_profile"] == "focused_catalog"
+    assert focused["plan"]["selected"]["estimated_total_credits"] == inherited["plan"]["selected"]["estimated_total_credits"]
+    assert focused["policy_scope"]["host_profile"] != inherited["policy_scope"]["host_profile"]
+    assert any("skill discovery" in warning for warning in focused["warnings"])
+    focused["context_profile"] = "inherit"
+    result = app.execute(focused["id"], approved=True)
+    assert calls[0]["context_profile"] == "focused_catalog"
+    assert result["context_profile"] == "focused_catalog"
+    assert app.history()[0]["context_profile"] == "focused_catalog"
+
+
+@pytest.mark.parametrize("changes", [
+    {"context_profile":"bad"}, {"context_profile":None}, {"context_profile":{}},
+    {"context_profile":"focused_catalog", "mode":"economy"},
+    {"context_profile":"focused_catalog", "strategy":"prepared"},
+    {"context_profile":"focused_catalog", "effort":"high"},
+])
+def test_incompatible_context_profile_never_previews(tmp_path, changes):
+    app = service(tmp_path)
+    with pytest.raises(ValueError, match="catalog|context profile"):
+        app.preview(request(**changes))
+    assert app.history() == []
+
+
 def test_discard_preview_releases_capacity_without_creating_run(tmp_path):
     app = service(tmp_path)
     for _ in range(12):

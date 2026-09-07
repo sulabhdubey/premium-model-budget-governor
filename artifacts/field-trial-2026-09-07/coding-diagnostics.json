@@ -1,0 +1,586 @@
+{
+  "scope": "Supplemental edge cases, not a preregistered comparative score; LF-normalized disposable fixture.",
+  "results": [
+    {
+      "arm": "astra_direct",
+      "strict_patch_valid": true,
+      "strict_diagnostic": "",
+      "normalized_diagnostic": "",
+      "normalized_hunk_application": true,
+      "normalization": "git apply --recount; only hunk counts, not semantic repair",
+      "semantic_cases": [
+        {
+          "case": "valid",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "equal",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "expired",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "zero",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "negative",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "float",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "large_integer",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "decimal",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "fraction",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_8",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_8",
+          "passed": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "arm": "prepared",
+      "strict_patch_valid": true,
+      "strict_diagnostic": "",
+      "normalized_diagnostic": "",
+      "normalized_hunk_application": true,
+      "normalization": "git apply --recount; only hunk counts, not semantic repair",
+      "semantic_cases": [
+        {
+          "case": "valid",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "equal",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "expired",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "zero",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "negative",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "float",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "large_integer",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "decimal",
+          "passed": false,
+          "error": null
+        },
+        {
+          "case": "fraction",
+          "passed": false,
+          "error": null
+        },
+        {
+          "case": "invalid_now_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_8",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_8",
+          "passed": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "arm": "review",
+      "strict_patch_valid": true,
+      "strict_diagnostic": "",
+      "normalized_diagnostic": "",
+      "normalized_hunk_application": true,
+      "normalization": "git apply --recount; only hunk counts, not semantic repair",
+      "semantic_cases": [
+        {
+          "case": "valid",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "equal",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "expired",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "zero",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "negative",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "float",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "large_integer",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "decimal",
+          "passed": false,
+          "error": null
+        },
+        {
+          "case": "fraction",
+          "passed": false,
+          "error": null
+        },
+        {
+          "case": "invalid_now_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_8",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_8",
+          "passed": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "arm": "sol_direct",
+      "strict_patch_valid": true,
+      "strict_diagnostic": "",
+      "normalized_diagnostic": "",
+      "normalized_hunk_application": true,
+      "normalization": "git apply --recount; only hunk counts, not semantic repair",
+      "semantic_cases": [
+        {
+          "case": "valid",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "equal",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "expired",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "zero",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "negative",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "float",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "large_integer",
+          "passed": false,
+          "error": "OverflowError"
+        },
+        {
+          "case": "decimal",
+          "passed": false,
+          "error": null
+        },
+        {
+          "case": "fraction",
+          "passed": false,
+          "error": null
+        },
+        {
+          "case": "invalid_now_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_0",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_1",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_2",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_3",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_4",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_5",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_6",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_7",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_now_8",
+          "passed": true,
+          "error": null
+        },
+        {
+          "case": "invalid_expiry_8",
+          "passed": true,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "limitation": "Decimal/Fraction support is an ambiguous numeric-domain requirement; do not convert these checks into a general model-quality ranking."
+}

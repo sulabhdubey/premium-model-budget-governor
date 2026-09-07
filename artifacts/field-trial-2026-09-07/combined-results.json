@@ -1,0 +1,825 @@
+{
+  "schema_version": 1,
+  "status": "completed_pilot_not_policy_eligible",
+  "suite_sha256": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f",
+  "matched_task_families": 5,
+  "matched_workflows": 20,
+  "model_calls": 39,
+  "workflows": 27,
+  "spent_estimated_credits": 195.95418,
+  "original_envelope_spent": 129.77603,
+  "extension_envelope_spent": 66.17815,
+  "reserved_credits": 0,
+  "reset_count": 0,
+  "model_retry_count": 0,
+  "joint_project_source_hashes_unchanged": true,
+  "global_config_unchanged": true,
+  "matched_and_joint_project_runs": [
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "astra_direct",
+      "status": "completed",
+      "estimated_credits": 7.03475,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 41.896,
+      "calls": [
+        {
+          "call_id": "0ab2e758fcf746ffb5a2f0b63cc7d66f",
+          "actual_model": "gpt-6-astra",
+          "credits": 7.03475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23619,
+            "cached_tokens": 0,
+            "output_tokens": 904
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "sol_direct",
+      "status": "completed",
+      "estimated_credits": 3.33648,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 46.235,
+      "calls": [
+        {
+          "call_id": "06d9a1fc5978cd701f228b8278166b27",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 3.33648,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48170,
+            "cached_tokens": 22528,
+            "output_tokens": 1094
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "prepared",
+      "status": "completed",
+      "estimated_credits": 21.049509999999998,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 210.533,
+      "calls": [
+        {
+          "call_id": "5e828a68d53fd57a7b63c67301635b4c-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 10.03796,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 259621,
+            "cached_tokens": 196096,
+            "output_tokens": 3449
+          }
+        },
+        {
+          "call_id": "5e828a68d53fd57a7b63c67301635b4c-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 11.01155,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 110306,
+            "cached_tokens": 79872,
+            "output_tokens": 1125
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "review",
+      "status": "completed",
+      "estimated_credits": 11.92912,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 92.719,
+      "calls": [
+        {
+          "call_id": "aa06828d400a2ddacd064982680c6383-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.38992,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22735,
+            "cached_tokens": 3712,
+            "output_tokens": 901
+          }
+        },
+        {
+          "call_id": "aa06828d400a2ddacd064982680c6383-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 9.5392,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 77065,
+            "cached_tokens": 50048,
+            "output_tokens": 1227
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "sol_direct",
+      "status": "completed",
+      "estimated_credits": 3.19924,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 35.337,
+      "calls": [
+        {
+          "call_id": "2a78779478e7d2c4a03bef4375a4ca3e",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 3.19924,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48863,
+            "cached_tokens": 22784,
+            "output_tokens": 727
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "prepared",
+      "status": "completed",
+      "estimated_credits": 9.38291,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 55.393,
+      "calls": [
+        {
+          "call_id": "4e227cfd4b4498a060b2408ccbf35863-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.86816,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48888,
+            "cached_tokens": 26496,
+            "output_tokens": 728
+          }
+        },
+        {
+          "call_id": "4e227cfd4b4498a060b2408ccbf35863-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.51475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24214,
+            "cached_tokens": 0,
+            "output_tokens": 369
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "review",
+      "status": "completed",
+      "estimated_credits": 8.77242,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 46.766,
+      "calls": [
+        {
+          "call_id": "c0e74b409ed036fd3b416138e5970a6c-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.22792,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22935,
+            "cached_tokens": 3712,
+            "output_tokens": 537
+          }
+        },
+        {
+          "call_id": "c0e74b409ed036fd3b416138e5970a6c-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.5445,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24183,
+            "cached_tokens": 0,
+            "output_tokens": 399
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "study-evidence-synthesis",
+      "arm": "astra_direct",
+      "status": "completed",
+      "estimated_credits": 6.40475,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 22.876,
+      "calls": [
+        {
+          "call_id": "79e6e9eaee9f606c5dcf529ae3cddaa6",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.40475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23819,
+            "cached_tokens": 0,
+            "output_tokens": 360
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "prepared",
+      "status": "completed",
+      "estimated_credits": 8.59197,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 39.721,
+      "calls": [
+        {
+          "call_id": "96d656124593ac6d2e1c3888ab1eed60-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.20722,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22908,
+            "cached_tokens": 3712,
+            "output_tokens": 501
+          }
+        },
+        {
+          "call_id": "96d656124593ac6d2e1c3888ab1eed60-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.38475,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24234,
+            "cached_tokens": 0,
+            "output_tokens": 261
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "review",
+      "status": "completed",
+      "estimated_credits": 8.7224,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 32.329,
+      "calls": [
+        {
+          "call_id": "982420aefd2a32b814f4e85f0229bc0e-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.4159,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22899,
+            "cached_tokens": 0,
+            "output_tokens": 252
+          }
+        },
+        {
+          "call_id": "982420aefd2a32b814f4e85f0229bc0e-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.3065,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24026,
+            "cached_tokens": 0,
+            "output_tokens": 240
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "astra_direct",
+      "status": "completed",
+      "estimated_credits": 6.20575,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 13.727,
+      "calls": [
+        {
+          "call_id": "33998824d152ad97832c25a64c0d8485",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.20575,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23783,
+            "cached_tokens": 0,
+            "output_tokens": 208
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "honest-launch-copy",
+      "arm": "sol_direct",
+      "status": "completed",
+      "estimated_credits": 2.414,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 16.296,
+      "calls": [
+        {
+          "call_id": "210e5731bbe0211509ce09c49bdd300f",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.414,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22890,
+            "cached_tokens": 0,
+            "output_tokens": 250
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 7,
+      "criteria_total": 7
+    },
+    {
+      "task_id": "release-authority-review",
+      "arm": "review",
+      "status": "completed",
+      "estimated_credits": 9.358460000000001,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 45.929,
+      "calls": [
+        {
+          "call_id": "2bf4ba41d2c140ed61122eee171a87ea-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 3.12096,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 48595,
+            "cached_tokens": 22656,
+            "output_tokens": 601
+          }
+        },
+        {
+          "call_id": "2bf4ba41d2c140ed61122eee171a87ea-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.2375,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23930,
+            "cached_tokens": 0,
+            "output_tokens": 204
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "release-authority-review",
+      "arm": "astra_direct",
+      "status": "completed",
+      "estimated_credits": 6.0815,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 13.629,
+      "calls": [
+        {
+          "call_id": "903a569255e7adbc3918b0041f9510e4",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.0815,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23676,
+            "cached_tokens": 0,
+            "output_tokens": 130
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "release-authority-review",
+      "arm": "sol_direct",
+      "status": "completed",
+      "estimated_credits": 2.3523,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 12.325,
+      "calls": [
+        {
+          "call_id": "e9d4b62d49d7463a836f3526ab5d1a3d",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.3523,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22783,
+            "cached_tokens": 0,
+            "output_tokens": 148
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "visual-queue-priority",
+      "arm": "astra_direct",
+      "status": "completed",
+      "estimated_credits": 6.17625,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 15.174,
+      "calls": [
+        {
+          "call_id": "973c27f33543bc9373f2848a286a393a",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.17625,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24140,
+            "cached_tokens": 0,
+            "output_tokens": 113
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 5,
+      "criteria_total": 5
+    },
+    {
+      "task_id": "independent-project-review",
+      "arm": "astra_direct",
+      "status": "completed",
+      "estimated_credits": 6.7205,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 25.507,
+      "calls": [
+        {
+          "call_id": "188360c4a5649df41f3f034012ad71bb",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.7205,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24747,
+            "cached_tokens": 0,
+            "output_tokens": 427
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "bounded_two_project_review_in_one_call",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "visual-queue-priority",
+      "arm": "sol_direct",
+      "status": "completed",
+      "estimated_credits": 2.04372,
+      "cost_basis": "token_rate_estimate",
+      "elapsed_seconds": 11.821,
+      "calls": [
+        {
+          "call_id": "6010231996e5f9cdf13fa4516fca310d",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.04372,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23248,
+            "cached_tokens": 3712,
+            "output_tokens": 106
+          }
+        }
+      ],
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 5,
+      "criteria_total": 5
+    },
+    {
+      "task_id": "release-authority-review",
+      "arm": "prepared",
+      "variant": "original",
+      "estimated_credits": 8.67035,
+      "elapsed_seconds": 33.531,
+      "calls": [
+        {
+          "call_id": "22b44f6929f18cfeb94131eda28ba864-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.4396,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22801,
+            "cached_tokens": 0,
+            "output_tokens": 319
+          }
+        },
+        {
+          "call_id": "22b44f6929f18cfeb94131eda28ba864-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.23075,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23948,
+            "cached_tokens": 0,
+            "output_tokens": 195
+          }
+        }
+      ],
+      "cost_basis": "token_rate_estimate",
+      "status": "completed",
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 6,
+      "criteria_total": 6
+    },
+    {
+      "task_id": "visual-queue-priority",
+      "arm": "prepared",
+      "variant": "original",
+      "estimated_credits": 3.74617,
+      "elapsed_seconds": 42.718,
+      "calls": [
+        {
+          "call_id": "6a5fa8aae51b4a9928db0abdd81504a8-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.52442,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 46796,
+            "cached_tokens": 26752,
+            "output_tokens": 505
+          }
+        },
+        {
+          "call_id": "6a5fa8aae51b4a9928db0abdd81504a8-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 1.22175,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24382,
+            "cached_tokens": 22400,
+            "output_tokens": 133
+          }
+        }
+      ],
+      "cost_basis": "token_rate_estimate",
+      "status": "completed",
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 5,
+      "criteria_total": 5
+    },
+    {
+      "task_id": "visual-queue-priority",
+      "arm": "review",
+      "variant": "original",
+      "estimated_credits": 8.6473,
+      "elapsed_seconds": 27.678,
+      "calls": [
+        {
+          "call_id": "65555adf202acd412150fb26a84455d1-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.4163,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 23253,
+            "cached_tokens": 0,
+            "output_tokens": 182
+          }
+        },
+        {
+          "call_id": "65555adf202acd412150fb26a84455d1-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.231,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24299,
+            "cached_tokens": 0,
+            "output_tokens": 125
+          }
+        }
+      ],
+      "cost_basis": "token_rate_estimate",
+      "status": "completed",
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "public_fixture",
+      "criteria_passed": 5,
+      "criteria_total": 5
+    }
+  ],
+  "exploratory_preparation_runs": [
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "prepared",
+      "variant": "bounded_preparation",
+      "estimated_credits": 12.62617,
+      "elapsed_seconds": 108.557,
+      "calls": [
+        {
+          "call_id": "692b8080c8c23c07a798c3e9aa29d516-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 2.07062,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 22827,
+            "cached_tokens": 3712,
+            "output_tokens": 244
+          }
+        },
+        {
+          "call_id": "692b8080c8c23c07a798c3e9aa29d516-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 10.55555,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 97314,
+            "cached_tokens": 71552,
+            "output_tokens": 1861
+          }
+        }
+      ],
+      "cost_basis": "token_rate_estimate",
+      "status": "completed",
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "exploratory_preparation_prompt_pair_not_adopted"
+    },
+    {
+      "task_id": "lease-expiry-repair",
+      "arm": "prepared",
+      "variant": "repeat_baseline",
+      "estimated_credits": 9.86966,
+      "elapsed_seconds": 202.63,
+      "calls": [
+        {
+          "call_id": "4546ad0c4dffda22599388876aa477f0-0",
+          "actual_model": "gpt-5.6-sol",
+          "credits": 4.35326,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 194016,
+            "cached_tokens": 184576,
+            "output_tokens": 3127
+          }
+        },
+        {
+          "call_id": "4546ad0c4dffda22599388876aa477f0-1",
+          "actual_model": "gpt-6-astra",
+          "credits": 5.5164,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 81415,
+            "cached_tokens": 73216,
+            "output_tokens": 1309
+          }
+        }
+      ],
+      "cost_basis": "token_rate_estimate",
+      "status": "completed",
+      "quality_evaluator": "Codex, not blinded or independent human",
+      "scope": "exploratory_preparation_prompt_pair_not_adopted"
+    }
+  ],
+  "catalog_abba": [
+    {
+      "order": 0,
+      "profile": "inherit",
+      "calls": [
+        {
+          "call_id": "6ee6a0e97f2eecf6e288553f8c6811be",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.19325,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24143,
+            "cached_tokens": 0,
+            "output_tokens": 126
+          }
+        }
+      ],
+      "estimated_credits": 6.19325,
+      "elapsed_seconds": 12.698,
+      "quality": "All fixed visual criteria passed in Codex review; not independent grading"
+    },
+    {
+      "order": 1,
+      "profile": "focused_catalog",
+      "calls": [
+        {
+          "call_id": "a4bbd106e8c7ef4d5f27918dd41a7022",
+          "actual_model": "gpt-6-astra",
+          "credits": 5.108,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 19822,
+            "cached_tokens": 0,
+            "output_tokens": 122
+          }
+        }
+      ],
+      "estimated_credits": 5.108,
+      "elapsed_seconds": 11.645,
+      "quality": "All fixed visual criteria passed in Codex review; not independent grading"
+    },
+    {
+      "order": 2,
+      "profile": "focused_catalog",
+      "calls": [
+        {
+          "call_id": "9f5d3a83dfdbcd6c0b9fdbd994a4bb8d",
+          "actual_model": "gpt-6-astra",
+          "credits": 5.12825,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 19823,
+            "cached_tokens": 0,
+            "output_tokens": 138
+          }
+        }
+      ],
+      "estimated_credits": 5.12825,
+      "elapsed_seconds": 13.133,
+      "quality": "All fixed visual criteria passed in Codex review; not independent grading"
+    },
+    {
+      "order": 3,
+      "profile": "inherit",
+      "calls": [
+        {
+          "call_id": "458ceb7c8189a8e5039600f2d3b3fa4e",
+          "actual_model": "gpt-6-astra",
+          "credits": 6.189,
+          "cost_basis": "token_rate_estimate",
+          "usage": {
+            "input_tokens": 24141,
+            "cached_tokens": 0,
+            "output_tokens": 123
+          }
+        }
+      ],
+      "estimated_credits": 6.189,
+      "elapsed_seconds": 14.394,
+      "quality": "All fixed visual criteria passed in Codex review; not independent grading"
+    }
+  ],
+  "limitations": [
+    "One observation per task/arm, not a representative benchmark or holdout.",
+    "Order rotated across the main task set; visual direct follow-up was Astra-first, not fully counterbalanced.",
+    "Observed cache differed across calls; reported total includes cached and uncached rates.",
+    "Host counters and configured model identity are not independent provider attestation.",
+    "Parent-chat development and grading consumption is not included in this worker envelope.",
+    "No weekly allowance attribution, human onboarding, full-project audit or universal savings claim.",
+    "Read-only tools are retained; this does not prove write/Desktop-only capability equivalence.",
+    "Three missing original arms were completed later with an additional approved envelope; not fully counterbalanced.",
+    "Catalog ABBA uses one visual task twice per profile and an experimental adapter; integrated UI execution was mocked.",
+    "A smaller catalog can omit useful skill discovery; broad capability equivalence is not established.",
+    "The joint two-project review is one bounded call, not two independent matched project experiments.",
+    "Original result artifacts are an immutable partial-envelope checkpoint, superseded by this combined report."
+  ]
+}

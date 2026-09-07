@@ -2,7 +2,7 @@
   "schema_version": 1,
   "platform": "Linux",
   "python": "3.12.3",
-  "wheel_sha256": "6eacbd15685cd9bb0b84b441f447e8a3dd6dff17b1c805853c05513b0420784f",
+  "wheel_sha256": "658065b66e8b7ed3937c7ae6d5b6b661acb962c2a7d4264c2fb16ce09df58428",
   "optional_mcp_requested": true,
   "regression_requested": true,
   "model_calls_started": 0,
@@ -16,13 +16,13 @@
     "regression_against_installed_wheel_without_checkout_imports",
     "preview_preserves_and_uninstall_removes_owned_runtime"
   ],
-  "install_seconds": 8.212,
+  "install_seconds": 7.221,
   "workbench_asset_sha256": {
-    "index.html": "a6ebae81e98912db19d5e380e92df34556f5e85f14755452f97f1091809b33bf",
-    "app.js": "410e8d07bae3b34351eb48ecccdfd804239909d0cd338760486c9488d9b9a6fd",
+    "index.html": "1c3f2b83cb8eb3122ab954ff35c2addc0687f1dfcbf72d85299b06f843fadd7e",
+    "app.js": "5542d63a2de4acf3cf178b891b940ea0ff28499b9dbfe7f547b8c6051dcb4ced",
     "styles.css": "74ae354a7255b2edab47922852eaea00a43064e08ecfd253597a030291abc15f"
   },
-  "regression_summary": "304 passed, 1 skipped in 19.28s",
+  "regression_summary": "319 passed, 1 skipped in 21.37s",
   "status": "passed",
-  "elapsed_seconds": 31.466
+  "elapsed_seconds": 32.876
 }

@@ -20,7 +20,7 @@ async function api(path, payload) {
   return data.result;
 }
 function notice(text) { $("notice").textContent = text; }
-const errorFields = ["project", "task", "budget", "evidence", "images", "context", "output", "effort"];
+const errorFields = ["project", "task", "budget", "evidence", "images", "context", "output", "effort", "context-profile"];
 for (const id of errorFields) {
   const message = document.createElement("p"); message.id = `${id}-error`; message.className = "field-error"; message.hidden = true;
   $(id).insertAdjacentElement("afterend", message);
@@ -142,7 +142,15 @@ function renderEfforts() {
   select.value = previous; select.disabled = false;
   select.setCustomValidity(values.includes(previous) ? "" : "Choose an available reasoning level; the previous choice was not changed.");
   $("effort-status").textContent = values.length ? (values.includes(previous) ? "Host-supported options" : "Previous choice unavailable. Select a supported level.") : "No compatible host options. Check setup.";
+  renderContextProfile();
 }
+function renderContextProfile() {
+  const focused = $("context-profile").value === "focused_catalog";
+  const compatible = $("strategy").value === "direct" && $("effort").value === "low" && document.querySelector('input[name="mode"]:checked').value === "astra_preferred";
+  $("context-profile").setCustomValidity(focused && !compatible ? "Focused catalog requires Direct, Astra Preferred and Low reasoning." : "");
+  $("catalog-status").textContent = focused ? (compatible ? "Reduced skill discovery may omit useful guidance. Tools and safety rules remain enabled." : "Requires Direct, Astra Preferred and Low reasoning. Your selection has not been changed.") : "Inherited host configuration.";
+}
+$("context-profile").addEventListener("change", renderContextProfile);
 async function refreshHostOptions() {
   const version = ++hostRevision;
   hostModels = []; invalidate(); $("effort").disabled = true; $("preview-button").disabled = true;
@@ -168,8 +176,12 @@ $("task-form").addEventListener("submit", async event => {
   try {
     await previewCleanup;
     if (requestedRevision !== revision) return;
-    const row = await api("/api/preview", {project:$("project").value, task:$("task").value, family:$("family").value, strategy:$("strategy").value, mode:document.querySelector('input[name="mode"]:checked').value, budget_credits:Number($("budget").value), effort:$("effort").value, evidence:lines($("evidence").value), images:lines($("images").value), context_allowance_tokens:Number($("context").value), output_allowance_tokens:Number($("output").value)});
+    const row = await api("/api/preview", {project:$("project").value, task:$("task").value, family:$("family").value, strategy:$("strategy").value, context_profile:$("context-profile").value, mode:document.querySelector('input[name="mode"]:checked').value, budget_credits:Number($("budget").value), effort:$("effort").value, evidence:lines($("evidence").value), images:lines($("images").value), context_allowance_tokens:Number($("context").value), output_allowance_tokens:Number($("output").value)});
     if (requestedRevision !== revision) { discardPreview(row.id); notice("Task changed while previewing. Review the updated task again."); return; }
+    if ($("context-profile").value !== "inherit" && row.context_profile !== $("context-profile").value) {
+      discardPreview(row.id);
+      throw new Error("This server does not support the selected context profile. Restart with the matching release before running.");
+    }
     if (!row.plan.selected) { discardPreview(row.id); $("plan-status").textContent="Needs a new plan: requested participation does not fit this budget."; notice("No run started. Review the budget and allowances."); return; }
     preview = row; $("preview").hidden = false; $("plan-status").textContent = "Ready for your approval";
     $("model").textContent = row.plan.selected.stages.map(stage=>stage.model).join(" then ");
@@ -195,6 +207,7 @@ function showReceipt(row) {
   }
   const partial = row.status === "unknown_usage" || row.cost_complete === false;
   const fields = [[partial ? "Known input tokens" : "Input tokens",usage.input_tokens],[partial ? "Known cached tokens" : "Cached tokens",usage.cached_tokens],[partial ? "Known output tokens" : "Output tokens",usage.output_tokens],["Projected credits",partial ? "Unknown" : money(row.estimated_credits)],["Still reserved",money(row.budget?.reserved_credits)],["Weekly remaining","Unavailable"]];
+  fields.push(["Skill discovery",row.context_profile === "focused_catalog" ? "Focused catalog (experimental)" : "Inherited"]);
   if (partial) {
     fields.push(["Known projected credits",money(row.known_estimated_credits)]);
     fields.push(["Accounting status","Incomplete. Additional usage may be unrecorded; reservations remain until reconciliation."]);
