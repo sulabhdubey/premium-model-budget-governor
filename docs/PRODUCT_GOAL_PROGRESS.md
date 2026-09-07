@@ -13,7 +13,7 @@ This file tracks the full pinned goal; passing a phase's tests does not complete
 | 3. Everyday interface | Plain-language task, project/evidence/images, Astra Preferred/Economy, preview/approval/execution/progress/receipt; responsive | One real approved Astra UI run passed. Live preview QA at 1440/390/320 includes opt-in focused catalog; failure/multi-stage UI uses declared fixtures. Human and native-dialog operation remain unverified. |
 | 4. Optimization | Direct/prepared/review workflows measured end-to-end; preserve capabilities; reviewed calibration and rollback | Five-family/four-arm real pilot completed; direct Astra default retained. Smaller catalog showed a narrow one-task reduction and ships opt-in, with guidance-loss warning. Independent holdout and broad capability validation remain; no policy promoted. |
 | 5. Controls | Actual usage ledger/UI; honest units; cancellation/crashes/timeouts/retries/concurrency/expiry/unknown usage; local app security | Receipt-journal recovery, unknown-spend retention, process ownership, HTTP boundaries and private launch files are tested. Missing terminal usage still requires reconciliation; independent security review remains. Native hooks stay supplementary. |
-| 6. Validation | Fresh bounded Private Project A/Private Project B tasks; coding/research/writing/visual/review comparisons; negative results; technical and nontechnical volunteers | Five public fixture families and one fresh combined two-project read-only review completed. Negative findings published. Not independent matched project benchmarks; no human participants yet. |
+| 6. Validation | Fresh bounded private-project tasks; coding/research/writing/visual/review comparisons; negative results; technical and nontechnical volunteers | Five public fixture families and one fresh combined two-project read-only review completed. Public-fixture negative findings published; private-project findings withheld. Not independent matched project benchmarks; no human participants yet. |
 | 7. Release | Accurate docs, screenshots, demo, license/security notices, release candidate then release, feedback/diagnostics/outreach materials | rc.3 is published. rc.4 qualification/publication is tracked in RELEASE_CANDIDATE_RC4.md; draft PR 1 and main-site promotion are distinct. Stable acceptance still requires missing human and broader evidence. |
 
 ## Working Contract
@@ -803,8 +803,8 @@ are not complete. Read-only tasks are not substitutes for write/Desktop-only wor
   27 workflows, zero outstanding reservations, model retries or resets. The
   earlier 6.5015 UI smoke and parent-chat engineering/grading are separate.
 - All five public task families now have four workflow arms, with complete stage
-  counters and Codex-graded fixed criteria. One fresh combined read-only Private Project A
-  and Private Project B review passed scoped criteria with unchanged source hashes.
+  counters and Codex-graded fixed criteria. One fresh combined read-only review
+  across two private projects passed scoped criteria with unchanged source hashes.
   Neither authored fixtures nor this one project call establish independent
   representative quality. FIELD_TRIAL_2026_09_07.md includes negative findings.
 - A shorter Sol preparation prompt reduced its stage cost but raised the complete

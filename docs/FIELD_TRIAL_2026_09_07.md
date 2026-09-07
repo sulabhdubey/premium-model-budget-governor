@@ -46,7 +46,10 @@ numeric-domain choices. Those post-hoc checks are not a preregistered model rank
 
 ## Two Real Projects, One Bounded Review
 
-One additional read-only Astra call used bounded evidence from two private projects. It cost 6.7205 estimated credits and passed six scoped criteria in Codex review. Project identities, architecture, operational state and substantive findings are withheld.
+One additional read-only Astra call used bounded evidence from two private
+projects. It cost 6.7205 estimated credits and passed six scoped criteria in
+Codex review. Project identities, architecture, operational state and substantive
+findings are withheld; public reporting is limited to aggregate evaluation data.
 
 The source hashes were unchanged afterward. No project file, runtime authority
 or release authorization was modified. Private source and answer text are not
