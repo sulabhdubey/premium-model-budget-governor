@@ -1,0 +1,62 @@
+[
+  {
+    "width": 1440,
+    "dimensions": {
+      "width": 1440,
+      "scroll": 1440
+    },
+    "errors": [],
+    "live_host_preview": true,
+    "canvas_nonblank": true,
+    "file_picker": true,
+    "approval_invalidation": true,
+    "live_project_registration_removal": true,
+    "simulated_launch_alias_removal": true,
+    "simulated_field_errors": true,
+    "simulated_dynamic_efforts": true,
+    "simulated_receipt_recovery": true,
+    "diagnostic_download_allowlist_and_failure_reset": true,
+    "simulated_receipt_stop_reconnect_and_stale_preview_tested": true,
+    "model_turns_started": 0
+  },
+  {
+    "width": 390,
+    "dimensions": {
+      "width": 390,
+      "scroll": 390
+    },
+    "errors": [],
+    "live_host_preview": true,
+    "canvas_nonblank": true,
+    "file_picker": true,
+    "approval_invalidation": true,
+    "live_project_registration_removal": true,
+    "simulated_launch_alias_removal": true,
+    "simulated_field_errors": true,
+    "simulated_dynamic_efforts": true,
+    "simulated_receipt_recovery": true,
+    "diagnostic_download_allowlist_and_failure_reset": true,
+    "simulated_receipt_stop_reconnect_and_stale_preview_tested": false,
+    "model_turns_started": 0
+  },
+  {
+    "width": 320,
+    "dimensions": {
+      "width": 320,
+      "scroll": 320
+    },
+    "errors": [],
+    "live_host_preview": true,
+    "canvas_nonblank": true,
+    "file_picker": true,
+    "approval_invalidation": true,
+    "live_project_registration_removal": true,
+    "simulated_launch_alias_removal": true,
+    "simulated_field_errors": true,
+    "simulated_dynamic_efforts": true,
+    "simulated_receipt_recovery": true,
+    "diagnostic_download_allowlist_and_failure_reset": true,
+    "simulated_receipt_stop_reconnect_and_stale_preview_tested": false,
+    "model_turns_started": 0
+  }
+]

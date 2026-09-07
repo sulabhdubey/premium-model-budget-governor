@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
 import sqlite3
+from .database import connection
 import time
 
 
@@ -11,7 +12,7 @@ def export_dashboard(ledger: Path, output: Path) -> dict:
     source = ledger.resolve(strict=True)
     if output.resolve() == source:
         raise ValueError("dashboard cannot overwrite the ledger")
-    with sqlite3.connect(source.as_uri() + "?mode=ro", uri=True) as db:
+    with connection(source.as_uri() + "?mode=ro", uri=True) as db:
         db.execute("BEGIN")
         tasks = db.execute("SELECT id,ceiling,reserve FROM tasks ORDER BY id").fetchall()
         columns = {r[1] for r in db.execute("PRAGMA table_info(leases)")}

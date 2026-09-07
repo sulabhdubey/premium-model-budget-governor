@@ -106,3 +106,39 @@ def test_mixed_billing_and_estimation_are_not_cost_pairs():
     rows[1]["calls"][0].pop("billed_credits")
     rows[1]["calls"][0]["usage"] = {"input_tokens": 100, "output_tokens": 100}
     assert compare_runs({"baseline": "sol", "runs": rows})["comparisons"][0]["matched_cost_pairs"] == 0
+
+
+def test_different_pair_cost_bases_are_never_averaged_together():
+    rows = [run("sol", 4), run("astra", 2), run("sol", repeat=1), run("astra", repeat=1)]
+    for row, incoming in zip(rows[2:], [1000, 2000]):
+        call = row["calls"][0]
+        call.pop("billed_credits")
+        call["usage"] = {"input_tokens": incoming, "output_tokens": 0}
+    result = compare_runs({"baseline": "sol", "runs": rows})["comparisons"][0]
+    assert result["matched_cost_pairs"] == 2
+    assert result["mean_credit_difference"] is None
+    assert result["cost_by_basis"]["host_billed"]["mean_credit_difference"] == -2
+    assert result["cost_by_basis"]["token_rate_estimate"]["mean_credit_difference"] == .25
+
+
+def test_complete_workflow_time_is_optional_and_not_a_quality_claim():
+    rows = [run("sol"), run("astra")]
+    rows[0]["total_elapsed_seconds"] = 20
+    rows[1]["total_elapsed_seconds"] = 12.5
+    rows[1]["passed"] = False
+    result = compare_runs({"baseline": "sol", "runs": rows})["comparisons"][0]
+    assert result["matched_time_pairs"] == 1
+    assert result["mean_elapsed_difference_seconds"] == -7.5
+    assert result["quality_regressions"] == 1
+    rows[1]["complete"] = False
+    result = compare_runs({"baseline": "sol", "runs": rows})["comparisons"][0]
+    assert result["matched_time_pairs"] == 0
+    assert result["mean_elapsed_difference_seconds"] is None
+
+
+@pytest.mark.parametrize("bad", [-1, True, "10", float("nan"), float("inf")])
+def test_invalid_workflow_time_rejected(bad):
+    rows = [run("sol"), run("astra")]
+    rows[1]["total_elapsed_seconds"] = bad
+    with pytest.raises(ValueError):
+        compare_runs({"baseline": "sol", "runs": rows})

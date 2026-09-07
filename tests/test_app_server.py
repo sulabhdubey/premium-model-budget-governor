@@ -1,4 +1,6 @@
 from collections import deque
+from threading import Event, Timer
+import time
 import pytest
 
 import premium_model_budget_governor.app_server as app
@@ -70,6 +72,24 @@ def test_missing_usage_is_not_free(tmp_path, monkeypatch):
     assert result["reservation_retained"]
 
 
+def test_terminal_journal_survives_settlement_failure(tmp_path, monkeypatch):
+    from premium_model_budget_governor.receipt_journal import recover_terminal
+    monkeypatch.setattr(app, "AppServer", FakeClient)
+    original = app.budget_action
+    def fail_settlement(packet, ledger):
+        if packet["action"] == "settle":
+            raise OSError("simulated settlement interruption")
+        return original(packet, ledger)
+    monkeypatch.setattr(app, "budget_action", fail_settlement)
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action": "open", "task_id": "t", "budget_credits": 10}, ledger)
+    result = app.execute_app_server(packet(tmp_path), ledger)
+    assert result["status"] == "unknown_usage"
+    recovered = recover_terminal(ledger, "t", "c")
+    assert recovered["usage"]["input_tokens"] == 100
+    assert recovered["budget"]["reserved_credits"] == 0
+
+
 def test_execution_requires_explicit_approval(tmp_path):
     with pytest.raises(ValueError, match="explicit_approval"):
         app.execute_app_server({**packet(tmp_path),"explicit_approval":False},tmp_path/"unused.db")
@@ -133,3 +153,41 @@ def test_published_live_receipt_retains_exact_case_failure():
     answer = json.loads(result["answer"])
     assert answer["sol_cold_input"] == 18 and answer["units"].casefold() == "thousands of tokens"
     assert result["smoke_passed"] is False
+
+
+def test_cancel_before_dispatch_never_opens_host(tmp_path, monkeypatch):
+    event = Event()
+    event.set()
+    monkeypatch.setattr(app, "AppServer", lambda *a, **kw: pytest.fail("canceled call opened host"))
+    result = app.execute_app_server(packet(tmp_path), tmp_path / "unused.db", cancel_event=event)
+    assert result["status"] == "canceled_before_dispatch"
+    assert not (tmp_path / "unused.db").exists()
+
+
+def test_receive_interrupts_promptly_without_turn_replay(tmp_path):
+    event = Event()
+    client = app.AppServer(tmp_path, cancel_event=event)
+    timer = Timer(.05, event.set)
+    timer.start()
+    started = time.monotonic()
+    try:
+        with pytest.raises(app.ExecutionCancelled):
+            client.receive(5)
+    finally:
+        timer.join()
+    assert time.monotonic() - started < 1
+
+
+def test_cancel_after_dispatch_retains_unknown_usage(tmp_path, monkeypatch):
+    class Interrupted(FakeClient):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args)
+        def event(self, timeout):
+            raise app.ExecutionCancelled()
+    monkeypatch.setattr(app, "AppServer", Interrupted)
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action": "open", "task_id": "t", "budget_credits": 10}, ledger)
+    result = app.execute_app_server(packet(tmp_path), ledger, cancel_event=Event())
+    assert result["status"] == "unknown_usage"
+    assert result["stop_requested"] is True
+    assert budget_action({"action": "status", "task_id": "t"}, ledger)["reserved_credits"] == 5

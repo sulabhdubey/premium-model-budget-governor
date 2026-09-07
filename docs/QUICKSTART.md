@@ -2,6 +2,27 @@
 
 This guide gets you from clone to first routing decision in a few minutes.
 
+## Local Workbench Preview
+
+The unreleased source version includes a real local task interface. It is separate
+from the public website's illustrative demo and is not in the published rc.2 wheel.
+Follow [isolated installation](INSTALLATION.md), then launch the installed command
+with `serve --project /absolute/path/to/project` (use your actual folder path).
+
+1. Keep the private browser link and terminal output out of public messages.
+2. Describe a read-only task; choose Astra Preferred and a task budget estimate.
+3. Select evidence or images, then preview. No model call has started yet.
+4. Inspect the model, required reasoning, estimate and uncertainty. Approve only
+   when you accept the task and potential spend; estimates are not hard billing caps.
+5. Inspect the answer and recorded usage. Stop/reconnect avoids resubmitting the
+   same task. Missing terminal usage remains unknown, not zero.
+6. Use Manage projects for additional approved folders. Removing a registration
+   does not delete that project's files or past usage records.
+
+For CLI-only planning without model execution, continue below. For exact UI scope,
+read [WORKBENCH.md](WORKBENCH.md). Technical setup and human usability validation
+remain open; this is not yet a one-click product for every user.
+
 ## 1. Install
 
 ```bash

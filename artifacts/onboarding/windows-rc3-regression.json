@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "platform": "Windows",
+  "python": "3.13.7",
+  "wheel_sha256": "8273260df59499fc37adc94a3a15769ab205c47cfe3b2fb85352a165bfc81ed7",
+  "optional_mcp_requested": true,
+  "regression_requested": true,
+  "model_calls_started": 0,
+  "checks": [
+    "preview_created_nothing",
+    "imports_installed_wheel_not_checkout",
+    "offline_doctor_outside_checkout",
+    "astra_preferred_example_plans_without_model_call",
+    "installed_workbench_assets_auth_and_modules_outside_checkout",
+    "installed_mcp_stdio_initialize_list_call",
+    "regression_against_installed_wheel_without_checkout_imports",
+    "preview_preserves_and_uninstall_removes_owned_runtime"
+  ],
+  "install_seconds": 41.216,
+  "workbench_asset_sha256": {
+    "index.html": "b4d4d1096ba09d9b40922be02b3ed7cdfa897a555f8f67dd89fd658d6bc5af20",
+    "app.js": "499188530cb66bf22dd3dd1f96998ab51815b276cc963b6e8dcafdefdbb6ec6a",
+    "styles.css": "8f372e00fc9025d378858dad7bde15218941ac6f9204a290041de38cede4b7f6"
+  },
+  "regression_summary": "268 passed, 1 skipped in 16.25s",
+  "status": "passed",
+  "elapsed_seconds": 67.818
+}

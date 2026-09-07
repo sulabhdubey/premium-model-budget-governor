@@ -1,0 +1,88 @@
+{
+  "source": "artifacts/benchmark-v3/calibration-input.json",
+  "model_calls_started": 0,
+  "results": [
+    {
+      "candidate": "astra_direct",
+      "baseline": "sol_direct",
+      "eligible_for_review": false,
+      "groups": [
+        {
+          "family": "mixed_contract_batch",
+          "candidate": "astra_direct",
+          "baseline": "sol_direct",
+          "split": "calibration",
+          "cost_basis": "token_rate_estimate",
+          "independent_tasks": 1,
+          "quality_regressions": 0,
+          "observed_wins": 0,
+          "candidate_passes": 1,
+          "baseline_passes": 1,
+          "win_rate_interval_95": [
+            0,
+            0.7934567085261071
+          ],
+          "candidate_mean_credits": 6.62525,
+          "baseline_mean_credits": 2.5318,
+          "status": "insufficient_support"
+        }
+      ],
+      "activated": false
+    },
+    {
+      "candidate": "astra_led",
+      "baseline": "sol_direct",
+      "eligible_for_review": false,
+      "groups": [
+        {
+          "family": "mixed_contract_batch",
+          "candidate": "astra_led",
+          "baseline": "sol_direct",
+          "split": "calibration",
+          "cost_basis": "token_rate_estimate",
+          "independent_tasks": 1,
+          "quality_regressions": 0,
+          "observed_wins": 0,
+          "candidate_passes": 1,
+          "baseline_passes": 1,
+          "win_rate_interval_95": [
+            0,
+            0.7934567085261071
+          ],
+          "candidate_mean_credits": 5.89051,
+          "baseline_mean_credits": 2.5318,
+          "status": "insufficient_support"
+        }
+      ],
+      "activated": false
+    },
+    {
+      "candidate": "astra_shadow",
+      "baseline": "sol_direct",
+      "eligible_for_review": false,
+      "groups": [
+        {
+          "family": "mixed_contract_batch",
+          "candidate": "astra_shadow",
+          "baseline": "sol_direct",
+          "split": "calibration",
+          "cost_basis": "token_rate_estimate",
+          "independent_tasks": 1,
+          "quality_regressions": 0,
+          "observed_wins": 0,
+          "candidate_passes": 1,
+          "baseline_passes": 1,
+          "win_rate_interval_95": [
+            0,
+            0.7934567085261071
+          ],
+          "candidate_mean_credits": 8.940010000000001,
+          "baseline_mean_credits": 2.5318,
+          "status": "insufficient_support"
+        }
+      ],
+      "activated": false
+    }
+  ],
+  "conclusion": "Existing batched pilot cannot justify activating a learned routing preference."
+}

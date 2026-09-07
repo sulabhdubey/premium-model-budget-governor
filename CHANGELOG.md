@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.4.0rc3 - Unreleased Candidate
+
+- Added a local Astra-preferred workbench with project/evidence/image selection,
+  preview, explicit approval, asynchronous read-only execution, stop/reconnect
+  and usage receipts. Existing Codex chats are not automatically controlled.
+- Added an isolated preview-first installer, compatibility diagnostics and a
+  privacy-filtered setup-report download. Initial setup remains terminal-based.
+- Added reviewed policy proposal/approval/rollback without automatic promotion.
+  No existing real evidence set currently qualifies for activation.
+- Added terminal-receipt crash recovery, retained unknown-spend reservations,
+  process ownership, private launch files and bounded authenticated HTTP access.
+- Fixed SQLite handle cleanup, stale preview buildup, project registration
+  identity/removal behavior and aggregation of different credit bases.
+- Added optional complete-workflow timing and fixed-input authored evaluation
+  tasks. These are not independent project results or evidence of savings.
+- Source and installed-package tests cover Windows and Ubuntu/WSL. Native macOS,
+  independent real-task benefits, human onboarding and final release qualification
+  remain open; consult the candidate notes for exact evidence.
+
 ## 0.2.0 - 2026-09-07
 
 - Completed two rounds of four live workflows (12 calls), plus the prior pilot's

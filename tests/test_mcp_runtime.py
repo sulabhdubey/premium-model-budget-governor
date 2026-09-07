@@ -43,6 +43,17 @@ def test_mcp_server_routes_model_over_stdio():
                         "arm": "sol", "passed": True, "complete": False, "expected_calls": 1, "calls": []}]}})
                 experiments_data = getattr(experiments, "structured_content", None) or getattr(experiments, "structuredContent")
                 assert experiments_data["recommendation"] == "insufficient_evidence"
+                # Explicit synthetic receipts test transport, not model performance.
+                timed_rows = [{"task_id": "timed", "snapshot": "s", "rubric": "r",
+                    "arm": arm, "passed": True, "complete": True, "expected_calls": 1,
+                    "receipt_source": "host", "total_elapsed_seconds": seconds,
+                    "calls": [{"call_id": arm, "actual_model": "gpt-6-astra", "billed_credits": 1}]}
+                    for arm, seconds in [("direct", 10), ("prepared", 12)]]
+                timed = await session.call_tool("compare_workflow_experiments", {
+                    "packet": {"baseline": "direct", "runs": timed_rows}})
+                timed_data = getattr(timed, "structured_content", None) or getattr(timed, "structuredContent")
+                assert timed_data["comparisons"][0]["mean_elapsed_difference_seconds"] == 2
+                assert timed_data["comparisons"][0]["cost_by_basis"]["host_billed"]["matched_pairs"] == 1
                 packet = json.loads((Path(__file__).parents[1] / "examples/astra_preferred.json").read_text())
                 planned = await session.call_tool("plan_model_workflow", {"packet": packet})
                 plan_data = getattr(planned, "structured_content", None) or getattr(planned, "structuredContent")

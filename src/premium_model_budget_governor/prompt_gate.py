@@ -5,6 +5,7 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import sqlite3
+from .database import connection
 import sys
 import time
 
@@ -25,7 +26,7 @@ def check_prompt(event: dict, grant: dict) -> dict:
     if digest != grant["prompt_sha256"]:
         raise ValueError("grant prompt mismatch")
     ledger = Path(grant["ledger"]).resolve(strict=True)
-    with sqlite3.connect(ledger.as_uri() + "?mode=rw", uri=True, timeout=5) as db:
+    with connection(ledger.as_uri() + "?mode=rw", uri=True, timeout=5) as db:
         db.execute("BEGIN IMMEDIATE")
         lease = db.execute("SELECT status,expires_at FROM leases WHERE task=? AND id=?", (grant["task_id"], grant["lease_id"])).fetchone()
         if lease is None or lease[0] != "reserved" or lease[1] is None or lease[1] <= time.time():
