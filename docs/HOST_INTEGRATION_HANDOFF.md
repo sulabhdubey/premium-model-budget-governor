@@ -9,14 +9,19 @@
 - Python prompt-gate tests cover prompt/session/turn binding, expiration and shared dispatch exclusion.
 - No global hook installed; no hook trust bypass; no credentials copied.
 
-## Next Operator Gate
+## Native Gate Completed
 
-Native hook testing requires review/trust of the exact command through `/hooks` in
-an isolated trusted project. The optional template is under `examples/`, not active.
-Do not mark native prompt rejection verified on the basis of the Python subprocess
-test alone. Verify missing-grant rejection, allowed grant, expiry, disabled hook,
-changed hook hash, timeout and script failure. Record whether the host skips or
-blocks each failure. Use bounded spend only for a deliberately allowed prompt.
+The exact commands were reviewed and trusted via native Codex UI in the isolated
+lab. Seven conditions were measured against a rejecting loopback provider with
+no account calls. Missing/expired grants blocked; valid grants proceeded. Modified,
+disabled, crashed and timed-out hooks allowed model dispatch. The lab hook was
+disabled in native UI at the end. See NATIVE_HOOK_RESULTS.md and sanitized artifacts.
+
+Do not repeat this gate or claim global hard enforcement. Keep governor-owned
+admission primary. Required hook hashes are optional preflight checks, not a
+substitute for reservations. Original initializer failure remains documented.
+
+## Next Operator Gate
 
 After that, assemble actual independent task manifests from approved repositories.
 Do not repeat synthetic questions and relabel them as real projects. Use isolated

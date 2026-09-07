@@ -10,7 +10,7 @@ Date: 2026-09-07. Audience: Sulabh Dubey and governor maintainers.
 | Accounting and truth fixes | Implemented | Strict counters, complete workflow costs, regression tests |
 | Workflow and capability profiles | Implemented for declared profiles | Project roles/models, required capabilities, upper estimates; profiles are not runtime attestation |
 | Evidence and reservations | Implemented | Hashes, snapshot/expiry, line ranges, serial leases, replay protection, unknown-spend retention |
-| Execution adapter | CLI implemented; experimental App Server client live-tested | Image delivery, catalog discovery and token reconciliation; native prompt-hook enforcement awaits trust review |
+| Execution adapter | CLI and experimental App Server tested | Native hook matrix verified; failure paths can allow dispatch, so controlled admission remains primary |
 | CLI/MCP/plugin/dashboard/demo | Implemented within documented surfaces | Shared planner, generated demo costs, MCP runtime tests, static local dashboard |
 | Comparative evaluation | Bounded pilots completed, broader gate open | Live executable repair and 24 batched contract/visual questions; not 24 independent enterprise tasks |
 | Learned routing | Conservative calibration report implemented | Automatic policy learning/promotion awaits independent held-out evidence |

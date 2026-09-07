@@ -152,6 +152,23 @@ def parse_usage(raw):
     return {"input_tokens": incoming, "cached_tokens": cached, "output_tokens": output}
 
 
+def require_hooks(client, root: Path, hashes):
+    """Admission check only: native hooks may still fail after turn dispatch."""
+    if not isinstance(hashes, list) or any(not isinstance(h, str) or len(h) != 71 or not h.startswith("sha256:") or any(c not in "0123456789abcdef" for c in h[7:]) for h in hashes):
+        raise ValueError("required_hook_hashes must contain sha256 hashes")
+    if len(hashes) != len(set(hashes)):
+        raise ValueError("duplicate required hook hash")
+    if not hashes:
+        return
+    inventory = client.request("hooks/list", {"cwds": [str(root)]})
+    if any(row.get("errors") for row in inventory["data"]):
+        raise ValueError("hook inventory contains errors")
+    ready = {h["currentHash"] for row in inventory["data"] for h in row["hooks"]
+             if h.get("enabled") is True and h.get("trustStatus") == "trusted"}
+    if set(hashes) - ready:
+        raise ValueError("required hook is missing, disabled or not trusted")
+
+
 def execute_app_server(packet: dict, ledger: Path) -> dict:
     for key in ("root", "prompt", "model", "task_id", "call_id"):
         if not isinstance(packet.get(key), str) or not packet[key].strip():
@@ -181,6 +198,7 @@ def execute_app_server(packet: dict, ledger: Path) -> dict:
             raise ValueError("model or reasoning effort unavailable on this host")
         if images and "image" not in available.get("inputModalities", []):
             raise ValueError("image capability unavailable on this host")
+        require_hooks(client, root, packet.get("required_hook_hashes", []))
         budget_action({**base, "action": "reserve", "model": model,
                        "estimated_credits": packet.get("estimated_credits"), "ttl_seconds": timeout}, ledger)
         _claim_dispatch(ledger, packet["task_id"], packet["call_id"])
@@ -201,6 +219,8 @@ def execute_app_server(packet: dict, ledger: Path) -> dict:
                 params = message.get("params", {})
                 if params.get("threadId") != thread_id or params.get("turnId", turn_id) != turn_id:
                     continue
+                if message.get("method") == "hook/completed" and params.get("run", {}).get("status") in {"failed", "blocked"}:
+                    raise ValueError("native hook failed or blocked; retain unknown spend")
                 if message.get("method") == "thread/tokenUsage/updated":
                     current = parse_usage(params["tokenUsage"]["total"])
                     if usage and any(current[k] < usage[k] for k in usage):

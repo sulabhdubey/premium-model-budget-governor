@@ -1,0 +1,119 @@
+{
+  "codex_version": "0.153.4",
+  "account_model_calls": 0,
+  "paid_tokens": 0,
+  "backend": "loopback-only fixture returns HTTP 400; no generation",
+  "cases": [
+    {
+      "case": "missing",
+      "fixture_requests": 1,
+      "event_methods": [
+        "error",
+        "turn/completed"
+      ],
+      "trust_statuses": [
+        "modified"
+      ],
+      "hook_statuses": []
+    },
+    {
+      "case": "missing",
+      "fixture_requests": 0,
+      "event_methods": [
+        "hook/started",
+        "hook/completed",
+        "turn/completed"
+      ],
+      "trust_statuses": [
+        "trusted"
+      ],
+      "hook_statuses": [
+        "blocked"
+      ]
+    },
+    {
+      "case": "expired",
+      "fixture_requests": 0,
+      "event_methods": [
+        "hook/started",
+        "hook/completed",
+        "turn/completed"
+      ],
+      "trust_statuses": [
+        "trusted"
+      ],
+      "hook_statuses": [
+        "blocked"
+      ]
+    },
+    {
+      "case": "valid",
+      "fixture_requests": 1,
+      "event_methods": [
+        "hook/started",
+        "hook/completed",
+        "error",
+        "turn/completed"
+      ],
+      "trust_statuses": [
+        "trusted"
+      ],
+      "hook_statuses": [
+        "completed"
+      ]
+    },
+    {
+      "case": "crash",
+      "fixture_requests": 1,
+      "event_methods": [
+        "hook/started",
+        "hook/completed",
+        "error",
+        "turn/completed"
+      ],
+      "trust_statuses": [
+        "trusted"
+      ],
+      "hook_statuses": [
+        "failed"
+      ]
+    },
+    {
+      "case": "timeout",
+      "fixture_requests": 1,
+      "event_methods": [
+        "hook/started",
+        "hook/completed",
+        "error",
+        "turn/completed"
+      ],
+      "trust_statuses": [
+        "trusted"
+      ],
+      "hook_statuses": [
+        "failed"
+      ]
+    },
+    {
+      "case": "disabled",
+      "fixture_requests": 1,
+      "event_methods": [
+        "error",
+        "turn/completed"
+      ],
+      "trust_statuses": [
+        "trusted"
+      ],
+      "hook_enabled": [
+        false
+      ],
+      "hook_statuses": []
+    }
+  ],
+  "trust_review": "Exact lab hooks reviewed and trusted via native Codex UI; no trust bypass",
+  "final_lab_hook_enabled": [
+    false
+  ],
+  "initial_harness_issue": "One initialization transport failure before the original valid case; rerun only that offline case. Early diagnostics are private, not exported.",
+  "limitations": "Tests cover this CLI/App Server build in an isolated home, not all Desktop versions. Requests are local fixture attempts, not successful model calls. Failure/timeout/modified/disabled hooks are not fail-closed enforcement."
+}

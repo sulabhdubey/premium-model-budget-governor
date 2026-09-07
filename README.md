@@ -120,8 +120,10 @@ for commands, input contracts, and exact enforcement limits.
 
 Experimental [App Server integration](docs/HOST_INTEGRATION.md) adds live model
 discovery and explicitly authorized budgeted turns. An optional prompt-gate
-template is included but is **not installed or trusted automatically**. Native
-hook execution and broad real-task validation remain open gates.
+template is included but is **not installed or trusted automatically**.
+[Native tests](docs/NATIVE_HOOK_RESULTS.md) show why hooks alone cannot guarantee
+enforcement: crashes and timeouts can allow dispatch. Broad real-task validation
+remains open.
 
 ## Install
 

@@ -101,6 +101,28 @@ def test_catalog_repeated_cursor_fails():
         app.catalog(Repeating())
 
 
+@pytest.mark.parametrize("enabled,trust", [(False,"trusted"),(True,"modified"),(True,"untrusted")])
+def test_required_hook_rejects_unready_inventory(tmp_path, enabled, trust):
+    digest = "sha256:" + "a"*64
+    class Inventory:
+        def request(self,*args):
+            return {"data":[{"hooks":[{"currentHash":digest,"enabled":enabled,"trustStatus":trust}],"errors":[]}]}
+    with pytest.raises(ValueError,match="required hook"):
+        app.require_hooks(Inventory(), tmp_path, [digest])
+
+
+def test_required_hook_accepts_trusted_hash_only(tmp_path):
+    digest = "sha256:"+"a"*64
+    class Inventory:
+        def request(self,*args):
+            return {"data":[{"hooks":[{"currentHash":digest,"enabled":True,"trustStatus":"trusted"}],"errors":[]}]}
+    app.require_hooks(Inventory(),tmp_path,[digest])
+    with pytest.raises(ValueError):
+        app.require_hooks(Inventory(),tmp_path,["sha256:"+"b"*64])
+    with pytest.raises(ValueError):
+        app.require_hooks(Inventory(),tmp_path,["invalid"])
+
+
 def test_published_live_receipt_retains_exact_case_failure():
     import json
     from pathlib import Path
