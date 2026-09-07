@@ -10,7 +10,7 @@ Date: 2026-09-07. Audience: Sulabh Dubey and governor maintainers.
 | Accounting and truth fixes | Implemented | Strict counters, complete workflow costs, regression tests |
 | Workflow and capability profiles | Implemented for declared profiles | Project roles/models, required capabilities, upper estimates; profiles are not runtime attestation |
 | Evidence and reservations | Implemented | Hashes, snapshot/expiry, line ranges, serial leases, replay protection, unknown-spend retention |
-| Execution adapter | Implemented for opt-in read-only Codex CLI | Actual token events and explicit images; provider identity and desktop pre-model enforcement unavailable |
+| Execution adapter | CLI implemented; experimental App Server client live-tested | Image delivery, catalog discovery and token reconciliation; native prompt-hook enforcement awaits trust review |
 | CLI/MCP/plugin/dashboard/demo | Implemented within documented surfaces | Shared planner, generated demo costs, MCP runtime tests, static local dashboard |
 | Comparative evaluation | Bounded pilots completed, broader gate open | Live executable repair and 24 batched contract/visual questions; not 24 independent enterprise tasks |
 | Learned routing | Conservative calibration report implemented | Automatic policy learning/promotion awaits independent held-out evidence |

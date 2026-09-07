@@ -1,0 +1,64 @@
+{
+  "schema_version": 2,
+  "mode": "astra_preferred",
+  "decision": "planned",
+  "astra_participation": "planned",
+  "selected": {
+    "id": "image_smoke",
+    "quality_score": 1.0,
+    "estimated_min_credits": 9.125,
+    "estimated_total_credits": 15.75,
+    "astra_credits": 13.75,
+    "astra_roles": [
+      "verify"
+    ],
+    "stages": [
+      {
+        "model": "gpt-6-astra",
+        "role": "verify",
+        "estimated_credits": 13.75,
+        "host": "app_server",
+        "required_capabilities": [
+          "image"
+        ],
+        "max_attempts": 1,
+        "effective_input_tokens": 26000
+      }
+    ],
+    "blocks": []
+  },
+  "candidates": [
+    {
+      "id": "image_smoke",
+      "quality_score": 1.0,
+      "estimated_min_credits": 9.125,
+      "estimated_total_credits": 15.75,
+      "astra_credits": 13.75,
+      "astra_roles": [
+        "verify"
+      ],
+      "stages": [
+        {
+          "model": "gpt-6-astra",
+          "role": "verify",
+          "estimated_credits": 13.75,
+          "host": "app_server",
+          "required_capabilities": [
+            "image"
+          ],
+          "max_attempts": 1,
+          "effective_input_tokens": 26000
+        }
+      ],
+      "blocks": []
+    }
+  ],
+  "budget_credits": 20.0,
+  "spent_credits": 0.0,
+  "reserve_credits": 2.0,
+  "minimum_input_tokens_per_call": 26000,
+  "warnings": [],
+  "execution_status": "not_executed",
+  "host_action": "execute_via_host_or_handoff",
+  "estimate_basis": "caller_supplied; quality and weekly burn are not guaranteed"
+}

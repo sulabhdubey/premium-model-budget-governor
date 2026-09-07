@@ -23,6 +23,7 @@ from .evidence_demand import evidence_packet
 from .host import execute_codex
 from .calibration import calibrate
 from .dashboard import export_dashboard
+from .app_server import probe_app_server, execute_app_server
 
 
 DEFAULT_LEDGER = Path.home() / ".pm-bg" / "ledger.jsonl"
@@ -55,6 +56,11 @@ def main(argv: list[str] | None = None) -> int:
     execute = sub.add_parser("run", help="Explicitly execute a governed read-only Codex CLI call")
     execute.add_argument("--input", required=True)
     execute.add_argument("--ledger", default=str(Path.home() / ".pm-bg" / "budget.sqlite3"))
+    probe = sub.add_parser("host-probe", help="Read App Server catalog and hook support without starting model turns")
+    probe.add_argument("--root", default=".")
+    app_run = sub.add_parser("app-run", help="Explicit read-only App Server execution with reserved budget")
+    app_run.add_argument("--input", required=True)
+    app_run.add_argument("--ledger", required=True)
 
     capsule = sub.add_parser("capsule", help="Build a safe premium-model capsule")
     capsule.add_argument("--root", default=".")
@@ -144,6 +150,10 @@ def _load_json(path: str) -> dict[str, object]:
 
 
 def _dispatch(args: argparse.Namespace) -> object:
+    if args.cmd == "host-probe":
+        return probe_app_server(Path(args.root))
+    if args.cmd == "app-run":
+        return execute_app_server(_load_json(args.input), Path(args.ledger))
     if args.cmd == "dashboard":
         return export_dashboard(Path(args.ledger), Path(args.output))
     if args.cmd == "calibrate":

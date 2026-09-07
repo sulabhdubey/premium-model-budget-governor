@@ -118,6 +118,11 @@ is not the enemy. Ungoverned context is.
 See [capability controls, image input, calibration, and dashboard](docs/CAPABILITY_CONTROLS.md)
 for commands, input contracts, and exact enforcement limits.
 
+Experimental [App Server integration](docs/HOST_INTEGRATION.md) adds live model
+discovery and explicitly authorized budgeted turns. An optional prompt-gate
+template is included but is **not installed or trusted automatically**. Native
+hook execution and broad real-task validation remain open gates.
+
 ## Install
 
 ```bash

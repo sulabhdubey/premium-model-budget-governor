@@ -9,6 +9,12 @@ Use Astra for substantive work within a complete task budget.
 
 ## Workflow Planning (Default)
 
+Experimental `pm-bg host-probe` reads the App Server model/reasoning/modality
+catalog without a model turn. `pm-bg app-run` executes an explicitly approved
+reserved turn, retaining unknown spend. It does not control unrelated Desktop
+tasks. The optional prompt hook is inactive until reviewed and trusted; never
+claim native enforcement from standalone Python tests. See docs/HOST_INTEGRATION.md.
+
 Evaluate direct Astra first, alongside hybrids. The small v0.2 benchmark found
 direct Astra cheaper on average than adding a planning worker or evidence-request
 turn; do not generalize that into a universal rule. For explicitly authorized
