@@ -14,7 +14,71 @@ everything to cheaper models.
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-0f8b8d)
 
-**[Try the interactive governor](https://sulabhdubey.github.io/premium-model-budget-governor/)** · [Install](#install) · [Connect the MCP server](docs/MCP.md)
+**[Try the illustrative demo](https://sulabhdubey.github.io/premium-model-budget-governor/)** · [Install](#install) · [Connect the MCP server](docs/MCP.md)
+
+> **Testing candidate: 0.4.0rc5.** A privacy-corrected successor with publication
+> checks, usage receipts and opt-in focused skill discovery. See the
+> [candidate notes](docs/RELEASE_CANDIDATE_RC5.md) and
+> [acceptance audit](docs/ACCEPTANCE_AUDIT.md). This is not a stable release.
+> No universal savings or automatic control of existing Codex chats is claimed.
+
+## Start With The Workbench
+
+Describe a task, select a project and optional evidence or images, then preview
+an **Astra Preferred** or **Economy** run. Review the estimate and approve the
+read-only task. The result includes recorded token counts and projected credits,
+not a fabricated weekly-limit percentage.
+
+![Local workbench with an Astra-preferred preview; no model run started](artifacts/workbench-rc4-qa/1440.png)
+
+After installing this source version, launch it once:
+
+```sh
+pm-bg serve --project /absolute/path/to/project
+```
+
+For an isolated Windows installation, use its executable directly:
+
+```powershell
+& "$HOME/.pm-bg/runtime/Scripts/pm-bg.exe" serve --project "C:\path\to\project"
+```
+
+The private local browser link opens automatically. **Manage projects** saves
+additional folders without another launch command. Routine task entry, evidence
+selection, approval, stop/reconnect and receipt inspection do not require JSON.
+Python/Codex installation and initial launch still require technical setup.
+
+**Current limits:** execution is read-only; inherited connector permissions are
+not revoked. Direct is the default. This candidate UI also offers preparation
+with Sol followed by Astra, or a Sol draft followed by Astra review. Both retain
+original evidence and require compatible capabilities; extra stages can cost more.
+The older rc.3 does not include these multi-stage UI paths. Estimates are not billing caps;
+unknown usage can block further runs. Human onboarding and broad real-task savings
+are not yet proven. See [the workbench guide](docs/WORKBENCH.md),
+[installation](docs/INSTALLATION.md), and [full progress](docs/PRODUCT_GOAL_PROGRESS.md).
+
+**Development baseline evidence:** the same 0.4.0rc4.dev2 wheel passed installed-package regression
+on [Windows](artifacts/onboarding/windows-rc4-dev2-regression.json) and
+[Ubuntu/WSL](artifacts/onboarding/linux-wsl-rc4-dev2-regression.json): 304 passed,
+one platform-specific skip each, with MCP stdio checks and clean uninstall.
+These tests do not establish Astra-quality savings or macOS support.
+Candidate-specific qualification is recorded in the
+[release notes](docs/RELEASE_CANDIDATE_RC5.md);
+native dialog selection and human onboarding remain unverified.
+
+**One real Astra Workbench run:** 24,076 input tokens, 386 output tokens,
+21.3 seconds and 6.5015 token-rate-estimated credits. Its response passed seven
+predefined checks in Codex review. This is execution evidence, not a matched
+savings comparison or independent human evaluation. [Full report](artifacts/approved-astra-ui-smoke-2026-09-07.md).
+
+**Expanded real pilot:** 39 worker calls, five task families across four workflows,
+plus a bounded review across two private projects and exploratory tests. Extra
+handoffs usually cost more than direct Astra. An opt-in smaller skill catalog
+reduced mean estimated cost about 17% on one repeated visual task; useful guidance
+may be omitted, so inherited discovery stays the default. These are limited,
+Codex-graded observations, not guaranteed weekly savings.
+[Results and negative findings](docs/FIELD_TRIAL_2026_09_07.md) ·
+[Focused catalog tradeoffs](docs/FOCUSED_CATALOG.md).
 
 > **Idea, research guidance, and product management: Sulabh Dubey.**<br>
 > Research synthesis, design, engineering, testing, documentation, and release
@@ -97,13 +161,16 @@ is not the enemy. Ungoverned context is.
 
 | Feature | What it does |
 | --- | --- |
+| Local workbench (unreleased) | Preview, approve and execute a read-only task; inspect usage and manage project folders |
+| Recorded-usage recovery (unreleased) | Reconcile a locally journaled terminal receipt without rerunning the task; missing evidence stays unknown |
+| Reviewed preferences (unreleased) | Scoped evidence proposals, manual activation and rollback; no production policy is activated |
 | Sol-parity estimator | Compares broad Sol cost with premium capsule cost |
 | Deterministic router | Allows, blocks, or routes a requested premium call |
-| Astra Shadow Mode | Premium model judges a cheaper model's final answer only |
+| Astra Shadow Mode | Builds a bounded review packet; execution is a separate approved step |
 | Evidence Graph Compiler | Compresses files, tests, risks, and signals into graph summaries |
-| Context Poison Firewall | Scans untrusted text for prompt-injection and secret patterns |
-| Capsule quality score | Blocks thin, broad, truncated, or weak capsules |
-| Cheap Model Tournament | Cheap models compete; premium model judges finalists |
+| Untrusted-text checks | Supplementary injection/secret pattern scans, not malware protection |
+| Capsule quality score | Heuristic warnings and policy gates, not correctness proof |
+| Candidate ranking | Ranks supplied answers and prepares finalists; does not launch competing models |
 | Distillation Ledger | Stores reusable doctrine without storing raw prompts |
 | Benefit Predictor | Heuristic benefit signals; no fabricated learned probability |
 | Capability controls | Preserve required images/tools and respect project restrictions |
@@ -127,11 +194,32 @@ remains open.
 
 ## Install
 
+For the **rc.5 testing prerelease**, download the
+[installer](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/install_governor.py)
+and [wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/premium_model_budget_governor-0.4.0rc5-py3-none-any.whl)
+into the same folder. From that folder, preview and then approve installation:
+
 ```bash
-git clone https://github.com/sulabhdubey/premium-model-budget-governor.git
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl --yes
+```
+
+This candidate includes the multi-stage workflows and experimental folder chooser.
+See [guided installation and
+recovery](docs/INSTALLATION.md). The script prints the installed command location;
+run it with `doctor` to check setup without a model call. It leaves Codex settings
+and existing Python environments untouched.
+
+For development in an environment you manage yourself:
+
+```bash
+git clone --branch v0.4.0-rc.5 https://github.com/sulabhdubey/premium-model-budget-governor.git
 cd premium-model-budget-governor
 python -m pip install -e ".[dev]"
 ```
+
+This command pins the candidate source. The default branch and public demo may
+still reflect an older release; do not assume they contain candidate features.
 
 On Windows, if `pm-bg` is not on PATH in the current terminal, use:
 

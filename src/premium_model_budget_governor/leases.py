@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import sqlite3
+from .database import connection
 import time
 
 from .workflow import number
@@ -18,7 +19,7 @@ def budget_action(packet: dict, ledger: Path) -> dict:
     if not isinstance(task, str) or not task.strip():
         raise ValueError("task_id is required")
     ledger.parent.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(ledger, timeout=15) as db:
+    with connection(ledger, timeout=15) as db:
         db.executescript("""
             CREATE TABLE IF NOT EXISTS tasks (
                 id TEXT PRIMARY KEY, ceiling REAL NOT NULL, reserve REAL NOT NULL);

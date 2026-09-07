@@ -1,88 +1,67 @@
-# Outreach Kit
+# Creator Feedback Kit
 
-Use these as starting points after the repo is verified and public CI is green.
-Keep claims measured and reproducible.
+Status: preparation only. No messages sent or endorsements claimed. Verify each
+creator's identity, recent relevance and preferred public contact route before
+requesting action-time approval for the exact message.
 
-## One-Line Pitch
+## Positioning
 
-Premium Model Budget Governor helps agent users keep frontier models for
-judgment instead of burning premium budget on broad context and repeated logs.
+Use Astra directly. Measure the whole workflow. Reduce avoidable context only
+when the quality tradeoff is understood.
 
-## GitHub Repo Description
+This is a local, read-only testing candidate for Codex users with premium-model
+budget concerns. It does not lower provider prices, bypass limits or automatically
+govern every existing chat.
 
-Use frontier AI models for judgment, not waste.
+## Evidence
 
-## LinkedIn Post
+- Installer, Workbench, CLI, MCP and plugin with documented scope limitations.
+- Five public task families across four workflows: extra handoffs usually cost more.
+- One four-call visual catalog probe: about 17% lower mean estimated credits,
+  no cache hits and correct answers under fixed checks, graded by Codex.
+- Smaller catalogs may omit useful skill guidance. Broad original-quality
+  equivalence, human usability and weekly-limit savings are not established.
+- Share public fixtures and sanitized aggregates only. Private project identities,
+  findings, source, local paths and account data stay private.
 
-I built Premium Model Budget Governor after running into a very real AI-dev
-problem: the best model is not always the best model for every step.
+[Pilot](FIELD_TRIAL_2026_09_07.md), [acceptance audit](ACCEPTANCE_AUDIT.md),
+[publication privacy](PUBLICATION_PRIVACY.md).
 
-Frontier models are excellent at judgment. They are also expensive when they
-read whole repos, repeated test output, stale artifacts, and long logs.
+## Draft Feedback Request
 
-This repo adds a local-first governor:
+Subject: A testable way to investigate premium-model context cost
 
-- cheaper models explore and implement
-- evidence is selected, scanned, and compressed
-- premium models review compact capsules
-- routing decisions are explainable
-- telemetry avoids storing raw prompts
-- MCP and Codex plugin scaffolding are included
+Hello [verified name],
 
-The claim is intentionally narrow: it does not make tokens cheaper or bypass
-limits. It helps you spend premium turns later, smaller, and with a reason.
+I originated and directed an open-source budget governor after heavy frontier-model
+use exhausted my weekly allowance quickly. Codex handled engineering under my
+direction. Direct Astra remains the default; we measure complete workflow cost.
 
-Repo: https://github.com/sulabhdubey/premium-model-budget-governor
+Our small visual test found about 17% lower estimated credits with a smaller
+skill catalog and the same correct answers. That is not a broad quality or
+weekly-savings claim, and reduced skill discovery has a real tradeoff.
 
-## Short X Post
+Would you test the candidate on one of your own non-sensitive tasks and tell us
+where it fails? There is no expectation of a video or endorsement.
 
-I built Premium Model Budget Governor: a local-first router that keeps frontier
-models for judgment, not repo crawling and repeated logs.
+[Candidate release] / [public evidence report]
 
-CLI + MCP + Codex plugin scaffold + capsule scanning + synthetic eval.
+Sulabh Dubey
 
-Repo: https://github.com/sulabhdubey/premium-model-budget-governor
+Before sending, replace placeholders with verified relevance and current links.
+No invented familiarity, bulk outreach or unrelated project cross-promotion.
 
-## Hacker News Title Options
+## Independent Demo
 
-- Show HN: A budget governor for premium AI model usage
-- Show HN: Keep frontier models for judgment, not context waste
-- Show HN: Local-first routing for expensive agent model calls
+1. Explain read-only scope and that existing chats are unaffected.
+2. Choose a creator-owned non-sensitive task with fixed evidence and acceptance checks.
+3. Preview direct Astra with inherited discovery; approve a bounded allowance.
+4. Compare focused discovery only with separate consent and required skills understood.
+5. Inspect quality before unblinding costs; count all calls, failures and cache hits.
+6. Report no-saving outcomes too. Never infer weekly percentages from tokens.
 
-## Reddit/Discord Version
+## Contact Gate
 
-I kept burning premium model budget on broad repo context and repeated logs, so
-I built a small local-first governor.
-
-It routes broad work to cheaper models, builds scanned evidence capsules, and
-reserves premium models for final approve/reject/patch judgment. It includes a
-CLI, MCP server, Codex plugin scaffold, docs, examples, and a synthetic eval.
-
-I would love feedback on the routing rules and what provider telemetry adapters
-people want first.
-
-## YouTube/Creator Angle
-
-Suggested video idea:
-
-```text
-I stopped wasting premium AI credits by using the best model only at the moment
-of judgment.
-```
-
-Suggested demo flow:
-
-- show a broad repo task
-- run `pm-bg route`
-- show blocked premium reasons
-- create a capsule
-- explain shadow review
-- compare premium-only vs hybrid workflow
-
-## What Not To Claim
-
-- Do not claim guaranteed savings for every repo.
-- Do not claim premium-only quality parity without measured evidence.
-- Do not claim the tool bypasses limits.
-- Do not publish private project names, prompts, logs, or token ledgers.
-
+A suggested name is a lead, not a verified identity or permission to send. Request
+approval for recipient, destination, exact message and attachments immediately
+before sending. Stop after rejection or opt-out; no automatic follow-up.

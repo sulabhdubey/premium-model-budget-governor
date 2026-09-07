@@ -73,7 +73,7 @@ below. The production normalizer was also fixed and regression-tested.
 Four additional contracts covered cross-module cache accounting, a source-derived
 mission-runtime architecture choice, adversarial release evidence, and bounded
 research synthesis. These are **not five independent real-project deployments**.
-Private-project source-derived scenarios were not fresh audits of those repos.
+Private-project-derived scenarios were not fresh audits of their source projects.
 
 The fixture, answer key, and two opposite workflow orders were written before
 calls. Every arm received the same task contract and access to the same evidence.

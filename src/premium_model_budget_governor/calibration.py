@@ -51,6 +51,8 @@ def calibrate(packet: dict) -> dict:
         results.append({"family": family, "candidate": candidate, "baseline": baseline,
                         "split": split, "cost_basis": basis, "independent_tasks": n,
                         "quality_regressions": regressions, "observed_wins": wins,
+                        "candidate_passes": sum(v[0] for v in values),
+                        "baseline_passes": sum(v[1] for v in values),
                         "win_rate_interval_95": [max(0, center-radius), min(1, center+radius)],
                         "candidate_mean_credits": sum(v[2] for v in values)/n,
                         "baseline_mean_credits": sum(v[3] for v in values)/n,

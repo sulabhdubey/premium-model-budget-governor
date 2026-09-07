@@ -10,9 +10,17 @@ the CLI.
 
 ## Install
 
-```bash
-python -m pip install "premium-model-budget-governor[mcp]"
+Download the installer and wheel from the
+[rc.5 prerelease](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.5).
+From their folder, use the isolated installation with optional dependencies:
+
+```sh
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl --mcp
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl --mcp --yes
 ```
+
+Do not reuse an existing runtime folder; see [installation and recovery](INSTALLATION.md).
+This guide uses a verified GitHub asset, not an assumed package-index release.
 
 For local development:
 
@@ -44,6 +52,12 @@ configuration:
 ```
 
 The same example is available at `examples/mcp-config.codex.json`.
+Replace `python` in the configuration with the absolute path of the runtime that
+contains the optional MCP package: on Windows this is normally
+`C:\\Users\\YOUR_USER\\.pm-bg\\runtime\\Scripts\\python.exe`, and on Linux/macOS
+`/home/YOUR_USER/.pm-bg/runtime/bin/python` (use your actual home path).
+Bare `python` may resolve to a different installation. JSON is an illustrative
+MCP client format; apply your client's supported configuration format explicitly.
 
 ## Tools
 

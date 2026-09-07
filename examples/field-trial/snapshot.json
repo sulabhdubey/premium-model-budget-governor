@@ -1,0 +1,11 @@
+{
+  "suite_id": "governor-field-starter-v1",
+  "files": {
+    "lease_check.py": "6e18378d84831581dc8f6a1019c8caf2310667efa89a8556a2df31f6566ecfd8",
+    "product-brief.md": "4a8a40b7a50e2836ae2fb140dc5dc8155d4b7074e67abec1439b7ae5724e2004",
+    "queue-chart.png": "db10649d09116b96ce1a6a021348d78306ffe68d9e23cafcbd3b190190d3cce1",
+    "release-evidence.json": "845085211049c128a786db8f64dc52a2da54a28253cc599aade50d4bd3d20b89",
+    "study-notes.md": "36da8b8f23782d1a17378b7e76f47175e74b2e4c7ec76d732fc424c1c6ecb48c",
+    "suite.json": "6545072ecbf5fe8752e80f1e8100ed846f9f1f5e34b215488c5af50f1d9b916f"
+  }
+}

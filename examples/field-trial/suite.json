@@ -1,0 +1,33 @@
+{
+  "id": "governor-field-starter-v1",
+  "status": "preregistered_not_executed",
+  "scope": "Five authored independent task definitions; not five validated outcomes or a representative benchmark.",
+  "arms": ["astra_direct", "sol_direct", "prepared_astra", "astra_targeted_review"],
+  "tasks": [
+    {
+      "id": "lease-expiry-repair", "family": "coding", "inputs": ["lease_check.py"],
+      "prompt": "Review lease_check.py. Provide a minimal unified diff and focused tests. A lease is valid only strictly before expiry. Booleans, non-numeric values and non-finite numbers must be rejected; do not add dependencies. Return the patch without changing other behavior.",
+      "criteria": ["Rejects boolean timestamps explicitly", "Rejects non-numeric and non-finite timestamps before comparison", "Equality is expired", "Preserves valid finite timestamps including zero and negative timestamps", "Provides focused tests for valid, expired, boundary and invalid inputs", "Patch is runnable Python with no external dependency"]
+    },
+    {
+      "id": "study-evidence-synthesis", "family": "research", "inputs": ["study-notes.md"],
+      "prompt": "Using only the supplied study notes, assess whether we can claim the governor halves weekly allowance consumption. Cite note IDs, distinguish observations from causal evidence, and propose the smallest next matched experiment. Keep the answer under 250 words.",
+      "criteria": ["Rejects a proven weekly-halving claim", "Uses corrected 12.8 total candidate cost rather than 7.2", "Recognizes fewer passed tasks in B and non-equivalent scopes", "Distinguishes account-wide allowance observations from per-task attribution", "Identifies C as a single matched task, not general proof", "Proposes equivalent scope and quality with complete receipts, retries and order/cache controls", "Cites supplied note IDs without invented sources and respects word limit"]
+    },
+    {
+      "id": "honest-launch-copy", "family": "writing", "inputs": ["product-brief.md"],
+      "prompt": "Write a launch announcement of 120 to 180 words for a technical community, based only on this brief. Explain the benefit, acknowledge the current limits, credit the creator and invite a useful test. Do not promise savings or ask for stars.",
+      "criteria": ["120 to 180 words", "Preserves Astra-preferred intent without promising equal quality at lower cost", "States read-only local execution and lack of automatic control of existing chats", "Separates projected credits from actual weekly billing", "Credits Sulabh Dubey for idea and product direction and Codex for engineering", "Includes a concrete test or feedback request", "Clear publishable prose without invented adoption, endorsements or savings"]
+    },
+    {
+      "id": "release-authority-review", "family": "review", "inputs": ["release-evidence.json"],
+      "prompt": "Decide whether this release may launch. Explain which evidence controls the decision, identify the unresolved gate, and propose a bounded next action. Do not modify or infer authorization from passed local tests.",
+      "criteria": ["Decision is not authorized", "Current signed qualification overrides older campaign copy", "Does not treat seven passing local checks as full launch approval", "Identifies independent recovery drill as incomplete", "Keeps an approval decision with the named owner rather than self-authorizing", "Proposes completing the missing drill and obtaining a new authority record"]
+    },
+    {
+      "id": "visual-queue-priority", "family": "visual", "inputs": ["queue-chart.png"],
+      "prompt": "Inspect the attached queue chart. Which team should be investigated first for overdue work? Give each team's overdue count, total overdue work, and the percentage contributed by the highest-overdue team. Resolve any conflict with the note shown on the image. Do not prioritize by total queue size alone.",
+      "criteria": ["Overdue counts are North 3, East 11, West 6, South 2", "Total overdue is 22", "East is highest overdue and contributes 50 percent", "Rejects the stale note naming North", "Distinguishes gray within-target bars from red overdue bars"]
+    }
+  ]
+}

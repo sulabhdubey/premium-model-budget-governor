@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Governor Workbench</title><link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script></head>
+<body>
+<header><strong>Governor</strong><nav aria-label="Views"><button id="task-tab" aria-pressed="true">Task</button><button id="usage-tab" aria-pressed="false">Usage</button></nav><button id="check">Check setup</button></header>
+<main>
+<p id="notice" role="status" aria-live="polite">Connecting to local session...</p>
+<section id="task-view" class="workspace">
+<form id="task-form">
+<h1>New task</h1>
+<div class="field-heading"><label for="project">Project</label><button id="manage-projects" type="button">Manage projects</button></div><select id="project" required></select><p id="project-path" class="muted path"></p>
+<label for="task">Task</label><textarea id="task" rows="5" maxlength="16000" required placeholder="Review the release evidence and identify any blocking risks."></textarea>
+<label for="family">Task type</label><select id="family"><option value="general">General</option><option value="architecture">Architecture</option><option value="coding">Coding</option><option value="review">Review</option><option value="research">Research</option><option value="writing">Writing</option><option value="visual">Visual</option></select>
+<label for="strategy">Workflow</label><select id="strategy"><option value="direct">Direct</option><option value="prepared">Prepare with Sol, solve with Astra</option><option value="review">Draft with Sol, review with Astra</option></select>
+<fieldset class="mode"><legend>Mode</legend><label><input type="radio" name="mode" value="astra_preferred" checked>Astra Preferred</label><label><input type="radio" name="mode" value="economy">Economy</label></fieldset>
+<div class="pair"><div><label for="budget">Task budget (estimated credits)</label><input id="budget" type="number" min="0.01" max="1000" step="0.01" value="20" required></div><div><label for="effort">Reasoning</label><select id="effort" required disabled><option value="low">Loading host options</option></select><p id="effort-status" class="muted" role="status"></p></div></div>
+<div class="field-heading"><label for="evidence">Evidence (optional)</label><button id="browse-evidence" type="button">Browse files</button></div><textarea id="evidence" rows="2" placeholder="docs/decision.md"></textarea>
+<div class="field-heading"><label for="images">Images (optional)</label><button id="browse-images" type="button">Browse images</button></div><textarea id="images" rows="2" placeholder="images/chart.png"></textarea>
+<details><summary>Estimate allowances</summary><div class="pair"><div><label for="context">Host context tokens</label><input id="context" type="number" min="1000" max="500000" value="32000" required></div><div><label for="output">Output tokens</label><input id="output" type="number" min="100" max="32000" value="2000" required></div></div><p class="muted">Provisional assumptions, not measured usage or provider caps.</p></details>
+<label for="context-profile">Skill discovery</label><select id="context-profile"><option value="inherit">Inherited (default)</option><option value="focused_catalog">Focused catalog (experimental)</option></select><p id="catalog-status" class="muted" role="status">Inherited host configuration.</p>
+<button id="preview-button" class="primary" type="submit">Preview workflow</button>
+</form>
+<section class="approval" aria-labelledby="review-title"><h2 id="review-title">Review and approve</h2><p id="plan-status" class="muted">No preview yet</p><div id="preview" hidden><p class="muted">Model</p><h3 id="model"></h3><canvas id="cost-chart" width="800" height="40" role="img" aria-label="Estimated task budget composition"></canvas><dl class="totals"><div><dt>Estimated work</dt><dd id="work-cost"></dd></div><div><dt>Contingency</dt><dd id="reserve-cost"></dd></div><div><dt>Task ceiling</dt><dd id="ceiling"></dd></div></dl><p class="warning">Estimated credits are not currency or weekly allowance. Actual usage may exceed the estimate.</p><ul id="warnings"></ul><label class="consent"><input id="approval" type="checkbox">Approve this read-only task and its estimated spend</label><button id="run" class="primary" disabled>Approve and run</button></div></section>
+</section>
+<section id="result-section" class="result"><div class="section-heading"><h2>Result</h2><div class="run-controls"><span id="run-status">No run started</span><button id="stop" hidden>Stop task</button><button id="reconnect" hidden>Reconnect to task</button></div></div><pre id="answer"></pre><dl id="receipt" class="receipt" hidden></dl></section>
+<section id="usage-view" hidden><h1>Usage receipts</h1><p class="muted">Actual tokens and projected credits. Weekly allowance and savings are not available.</p><div class="table-scroll"><table><thead><tr><th>Task</th><th>Status</th><th>Model</th><th>Input</th><th>Cached</th><th>Output</th><th>Estimated credits</th><th>Recovery</th></tr></thead><tbody id="history"></tbody></table></div></section>
+</main><dialog id="file-dialog" aria-labelledby="file-title"><div class="section-heading"><h2 id="file-title">Choose evidence</h2><button id="close-picker">Close</button></div><p id="file-path" class="path"></p><button id="parent-folder">Parent folder</button><label for="file-filter">Filter names</label><input id="file-filter" type="search"><p id="file-message" class="muted" role="status"></p><div id="file-entries"></div></dialog><footer>Local workbench preview &middot; Read-only filesystem execution &middot; No automatic control of other chats</footer>
+<dialog id="projects-dialog" aria-labelledby="projects-title">
+<div class="section-heading"><h2 id="projects-title">Projects</h2><button id="close-projects">Close</button></div>
+<form id="project-form">
+<div class="field-heading"><label for="new-project-path">Project folder</label><button id="choose-project" type="button">Choose folder</button></div><input id="new-project-path" type="text" maxlength="4096" required autocomplete="off">
+<p class="warning">Read-only tools may inspect this folder beyond selected evidence. Adding it does not start a model task.</p>
+<label class="consent"><input id="project-consent" type="checkbox" required>Approve access to this project folder</label>
+<button id="save-project" type="submit">Add project</button>
+</form>
+<p id="project-message" role="status"></p><div id="saved-projects"></div>
+</dialog>
+<dialog id="setup-dialog" aria-labelledby="setup-title">
+<div class="section-heading"><h2 id="setup-title">Setup report</h2><button id="close-setup">Close</button></div>
+<p id="setup-status" role="status"></p><ul id="setup-next"></ul>
+<p class="muted">Download includes versions and setup status only. No task text, project paths, account identifiers, usage history or session token. Review before sharing. No model call is started.</p>
+<button id="download-diagnostics" disabled>Download setup report</button>
+</dialog>
+</body></html>

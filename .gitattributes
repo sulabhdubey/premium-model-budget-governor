@@ -1,2 +1,7 @@
 # Preserve the byte identity used by published benchmark receipts across hosts.
 examples/benchmark_v3.json text eol=lf
+examples/field-trial/*.json text eol=lf
+examples/field-trial/*.md text eol=lf
+examples/field-trial/*.py text eol=lf
+examples/field-trial/*.html text eol=lf
+examples/field-trial/*.png binary

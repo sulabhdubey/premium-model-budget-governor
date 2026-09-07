@@ -1,0 +1,13 @@
+{
+  "fixture": true,
+  "campaign": {"revision": 3, "statement": "Ready to launch", "authority": "promotional_copy"},
+  "qualification": {
+    "revision": 4,
+    "authority": "signed_qualification",
+    "owner": "Release owner",
+    "local_checks_passed": 7,
+    "local_checks_total": 7,
+    "independent_recovery_drill": "not_completed",
+    "releaseAuthorized": false
+  }
+}

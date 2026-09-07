@@ -14,18 +14,25 @@ import time
 from .cost import RATES, _token
 from .experiments import normalize_receipt
 from .host import _claim_dispatch
+from .receipt_journal import record_terminal
 from .leases import budget_action
 from . import __version__
+from .context_profile import context_profile_config
+
+
+class ExecutionCancelled(Exception):
+    """Local stop request; never implies a provider-side billing refund."""
 
 
 class AppServer:
-    def __init__(self, root: Path, timeout: int = 60):
+    def __init__(self, root: Path, timeout: int = 60, *, cancel_event=None):
         self.root = root.resolve(strict=True)
         self.timeout = timeout
         self.pending = deque()
         self.queue = Queue()
         self.sequence = 0
         self.process = None
+        self.cancel_event = cancel_event
 
     def __enter__(self):
         executable = shutil.which("codex.exe") or shutil.which("codex")
@@ -55,14 +62,26 @@ class AppServer:
             self.queue.put(None)
 
     def send(self, message):
+        self._check_cancel()
         self.process.stdin.write(json.dumps(message) + "\n")
         self.process.stdin.flush()
 
+    def _check_cancel(self):
+        if self.cancel_event is not None and self.cancel_event.is_set():
+            raise ExecutionCancelled()
+
     def receive(self, timeout=None):
-        try:
-            message = self.queue.get(timeout=self.timeout if timeout is None else max(.001, timeout))
-        except Empty as exc:
-            raise TimeoutError("App Server response timed out") from exc
+        deadline = time.monotonic() + (self.timeout if timeout is None else max(.001, timeout))
+        while True:
+            self._check_cancel()
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("App Server response timed out")
+            try:
+                message = self.queue.get(timeout=min(.2, remaining))
+                break
+            except Empty:
+                continue
         if not isinstance(message, dict) or message.get("_transport_error"):
             raise ValueError("App Server transport ended or returned malformed data")
         if "method" in message and "id" in message:
@@ -89,6 +108,7 @@ class AppServer:
             self.pending.append(response)
 
     def event(self, timeout):
+        self._check_cancel()
         return self.pending.popleft() if self.pending else self.receive(timeout)
 
     def __exit__(self, *args):
@@ -169,7 +189,17 @@ def require_hooks(client, root: Path, hashes):
         raise ValueError("required hook is missing, disabled or not trusted")
 
 
-def execute_app_server(packet: dict, ledger: Path) -> dict:
+def execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dict:
+    if cancel_event is not None and cancel_event.is_set():
+        return {"status": "canceled_before_dispatch", "stop_requested": True}
+    try:
+        return _execute_app_server(packet, ledger, cancel_event=cancel_event)
+    except ExecutionCancelled:
+        # The dispatch region catches cancellation separately and retains its reservation.
+        return {"status": "canceled_before_dispatch", "stop_requested": True}
+
+
+def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dict:
     for key in ("root", "prompt", "model", "task_id", "call_id"):
         if not isinstance(packet.get(key), str) or not packet[key].strip():
             raise ValueError(f"{key} is required")
@@ -178,6 +208,8 @@ def execute_app_server(packet: dict, ledger: Path) -> dict:
     model, effort = packet["model"], packet.get("effort", "low")
     if model not in RATES or not isinstance(effort, str):
         raise ValueError("unsupported model or effort")
+    profile = packet.get("context_profile", "inherit")
+    overrides = context_profile_config(profile, model=model, effort=effort)
     root = Path(packet["root"]).resolve(strict=True)
     timeout = _token(packet.get("timeout_seconds", 300), "timeout_seconds")
     if not 1 <= timeout <= 1800:
@@ -192,7 +224,7 @@ def execute_app_server(packet: dict, ledger: Path) -> dict:
             raise ValueError("unsupported image path or size")
         inputs.append({"type": "localImage", "path": str(path)})
     base = {"task_id": packet["task_id"], "lease_id": packet["call_id"]}
-    with AppServer(root, timeout) as client:
+    with AppServer(root, timeout, **({"cancel_event": cancel_event} if cancel_event is not None else {})) as client:
         available = next((v for v in catalog(client) if v.get("model") == model), None)
         if available is None or effort not in [v["reasoningEffort"] for v in available.get("supportedReasoningEfforts", [])]:
             raise ValueError("model or reasoning effort unavailable on this host")
@@ -204,8 +236,11 @@ def execute_app_server(packet: dict, ledger: Path) -> dict:
         _claim_dispatch(ledger, packet["task_id"], packet["call_id"])
         started = time.monotonic()
         try:
-            thread = client.request("thread/start", {"cwd": str(root), "model": model,
-                "approvalPolicy": "never", "sandbox": "read-only", "ephemeral": True, "serviceTier": "default"})
+            start_params = {"cwd": str(root), "model": model,
+                "approvalPolicy": "never", "sandbox": "read-only", "ephemeral": True, "serviceTier": "default"}
+            if overrides:
+                start_params["config"] = overrides
+            thread = client.request("thread/start", start_params)
             if thread.get("model") != model:
                 raise ValueError("host model configuration differs from requested model")
             thread_id = thread["thread"]["id"]
@@ -234,14 +269,21 @@ def execute_app_server(packet: dict, ledger: Path) -> dict:
                     if params["turn"]["status"] != "completed" or usage is None:
                         raise ValueError("incomplete turn or missing usage")
                     credits = normalize_receipt({"call_id": packet["call_id"], "actual_model": model, "usage": usage})["credits"]
+                    record_terminal(ledger, task_id=packet["task_id"], call_id=packet["call_id"],
+                                    model=model, thread_id=thread_id, turn_id=turn_id, usage=usage)
                     status = budget_action({**base, "action": "settle", "actual_model": model,
                         "actual_credits": credits, "cost_basis": "token_rate_estimate"}, ledger)
                     return {"status": "completed", "requested_model": model, "host_configured_model": thread["model"],
+                            "context_profile": profile,
                             "model_identity_source": "App Server configuration, not provider attestation",
                             "call_id": packet["call_id"], "usage": usage, "answer": answer,
                             "estimated_credits": credits, "cost_basis": "token_rate_estimate",
                             "elapsed_seconds": round(time.monotonic()-started, 3), "budget": status}
             raise TimeoutError("turn timed out")
+        except ExecutionCancelled:
+            return {"status": "unknown_usage", "call_id": packet["call_id"],
+                    "reservation_retained": True, "stop_requested": True,
+                    "error": "Local execution stopped; reconcile any provider usage before retry"}
         except (ValueError, OSError, TimeoutError, KeyError, TypeError):
             return {"status": "unknown_usage", "call_id": packet["call_id"], "reservation_retained": True,
                     "error": "Incomplete or incompatible host execution; reconcile before retry"}
