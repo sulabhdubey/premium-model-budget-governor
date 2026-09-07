@@ -44,6 +44,7 @@ class Workbench:
         with connection(self.database) as db:
             db.execute("CREATE TABLE IF NOT EXISTS runs (id TEXT PRIMARY KEY, status TEXT NOT NULL, receipt TEXT NOT NULL)")
             db.execute("CREATE TABLE IF NOT EXISTS projects (id TEXT PRIMARY KEY, path TEXT NOT NULL UNIQUE)")
+            db.execute("CREATE TABLE IF NOT EXISTS run_stages (task TEXT NOT NULL,id TEXT NOT NULL,model TEXT NOT NULL,status TEXT NOT NULL,PRIMARY KEY(task,id))")
             for identifier, value in db.execute("SELECT id,path FROM projects LIMIT 32"):
                 if identifier in self.launch_projects and self.launch_projects[identifier] != Path(value):
                     raise ValueError("launch project identifier conflicts with a saved registration")
@@ -251,6 +252,9 @@ class Workbench:
         if not isinstance(mode, str) or mode not in {"astra_preferred", "economy"}:
             raise ValueError("choose Astra Preferred or Economy")
         family = request.get("family", "general")
+        strategy = request.get("strategy", "direct")
+        if not isinstance(strategy, str) or strategy not in {"direct", "prepared", "review"}:
+            raise ValueError("choose a supported workflow strategy")
         if not isinstance(family, str) or family not in {"general", "architecture", "coding", "review", "research", "writing", "visual"}:
             raise ValueError("select a supported task family")
         capabilities = string_list(request.get("required_capabilities", ["text", "read_only_tools"]), "required_capabilities")
@@ -309,6 +313,20 @@ class Workbench:
             candidates.append({"id": model + "-direct", "complete_workflow": True, "quality_score": 0,
                                "stages": [{"model": model, "role": "investigate", "evidence_ready": True,
                                            "tokens": {"input": incoming, "output": output}}]})
+        if strategy != "direct":
+            supported = {row["stages"][0]["model"] for row in candidates}
+            sol = available.get("gpt-5.6-sol", {})
+            if ("gpt-6-astra" not in supported or effort not in sol.get("reasoning_efforts", [])
+                    or (images and "image" not in sol.get("input_modalities", []))):
+                raise InputIssue("host_unavailable")
+            # Both calls carry original evidence; the final call reserves room for
+            # the full bounded handoff, not a hoped-for compression or cache hit.
+            candidates = [{"id": strategy + "-astra", "complete_workflow": True, "quality_score": 0,
+                "stages": [
+                    {"model":"gpt-5.6-sol", "role":"prepare" if strategy == "prepared" else "implement",
+                     "evidence_ready":True, "tokens":{"input":incoming + 1000,"output":output}},
+                    {"model":"gpt-6-astra", "role":"investigate" if strategy == "prepared" else "review",
+                     "evidence_ready":True, "tokens":{"input":incoming + 65000,"output":output}}]}]
         if not candidates:
             raise InputIssue("host_unavailable")
         reserve = round(budget * .1, 6)
@@ -317,12 +335,13 @@ class Workbench:
                               "candidates": candidates})
         scope = {"project": fingerprint(os.path.normcase(str(root))), "family": family, "mode": mode,
                  "host_profile": fingerprint({"adapter": "codex-app-server", "models": host["models"],
-                                              "effort": effort, "capabilities": sorted(capabilities),
+                                              "effort": effort, "strategy": strategy, "capabilities": sorted(capabilities),
                                               "context_allowance": allowance, "output_allowance": output, "rates": RATES})}
         plan = self.policies.apply(plan, scope)
         # The planner's conditional approval permits a preview, not execution authorization.
         identifier = secrets.token_hex(16)
         preview = {"id": identifier, "expires_at": time.time() + 600, "project": project,
+                   "strategy": strategy,
                    "policy_scope": scope,
                    "plan": plan, "requires_approval": True, "effort": effort,
                    "capabilities": capabilities, "estimate_basis": "provisional_allowances_not_measured",
@@ -334,7 +353,7 @@ class Workbench:
                                 "Read-only tools may inspect the selected project, not just attached excerpts.",
                                 "The filesystem sandbox does not revoke inherited connector permissions.",
                                 "Image signatures and text patterns do not establish malware or injection safety.",
-                                "Direct candidates only; task quality is not measured by this preview.",
+                                "Task quality is unmeasured. Extra stages can cost more than a direct Astra run.",
                                 ("Reviewed preference applied for this project and host profile; savings and quality are not guaranteed."
                                  if plan["policy_application"]["status"] == "applied" else
                                  "No reviewed preference applied; the default planner remains in control.")]}
@@ -384,6 +403,11 @@ class Workbench:
                 if db.execute("SELECT 1 FROM runs WHERE status IN ('running','unknown_usage')").fetchone():
                     raise ValueError("reconcile the running or unknown-usage task before another run")
                 db.execute("INSERT INTO runs VALUES (?,'running','{}')", (identifier,))
+                if len(selected["stages"]) > 1:
+                    db.executemany("INSERT INTO run_stages VALUES (?,?,?,'planned')",
+                                   [(identifier, identifier + "-" + str(i), row["model"]) for i, row in enumerate(selected["stages"])])
+        if len(selected["stages"]) > 1:
+            return self._execute_multi(identifier, saved, cancel_event)
         stage = selected["stages"][0]
         packet = {"root": saved["root"], "prompt": saved["prompt"], "model": stage["model"],
                   "effort": preview["effort"], "task_id": identifier, "call_id": identifier,
@@ -444,6 +468,59 @@ class Workbench:
             self.previews.pop(identifier, None)
         return {**receipt, "answer": result.get("answer", "")}
 
+    def _execute_multi(self, identifier, saved, cancel_event):
+        from .workflow_runner import execute_stages, confirmed_without_dispatch
+        preview = saved["public"]
+        result = {"status":"unknown_usage", "estimated_credits":None, "stages":[]}
+        try:
+            budget_action({"action":"open", "task_id":identifier, "budget_credits":preview["plan"]["budget_credits"],
+                           "reserve_credits":preview["plan"]["reserve_credits"]}, self.ledger)
+            with tempfile.TemporaryDirectory(prefix="approved-images-", dir=self.data) as temporary:
+                images = []
+                for index, image in enumerate(saved["images"]):
+                    path = Path(temporary) / (str(index) + Path(image["path"]).suffix.lower())
+                    path.write_bytes(image["blob"])
+                    images.append(str(path))
+                stages = []
+                for index, stage in enumerate(preview["plan"]["selected"]["stages"]):
+                    if index == 0:
+                        instruction = ("Prepare an evidence-grounded brief with uncertainties for Astra; do not issue a final decision."
+                                       if preview["strategy"] == "prepared" else "Draft a complete answer for independent Astra review.")
+                    else:
+                        instruction = "Independently solve the original task. Verify the previous output against original evidence; correct it and return the final answer."
+                    stages.append({"task_id":identifier,"call_id":identifier + "-" + str(index),
+                                   "root":saved["root"],"model":stage["model"],"effort":preview["effort"],
+                                   "prompt":instruction + "\n\n" + saved["prompt"],"images":images,
+                                   "estimated_credits":stage["estimated_credits"],"timeout_seconds":300})
+                def invoke(packet, ledger, **kwargs):
+                    if self._project_root(preview["project"]) != Path(saved["root"]):
+                        raise InputIssue("project_invalid")
+                    # A durable started marker precedes every possible host dispatch.
+                    with connection(self.database) as db:
+                        db.execute("UPDATE run_stages SET status='started' WHERE task=? AND id=?", (identifier,packet["call_id"]))
+                    before = budget_action({"action":"status", "task_id":identifier}, ledger)
+                    returned = self.executor(packet, ledger, **kwargs)
+                    if confirmed_without_dispatch(returned, before, budget_action({"action":"status", "task_id":identifier}, ledger)):
+                        with connection(self.database) as db:
+                            db.execute("UPDATE run_stages SET status='not_dispatched' WHERE task=? AND id=?",(identifier,packet["call_id"]))
+                    return returned
+                result = execute_stages(stages, self.ledger, executor=invoke, approved=True, cancel_event=cancel_event)
+        except Exception:
+            pass
+        answer = result.pop("answer", "")
+        receipt = {**result,"id":identifier,"strategy":preview["strategy"],"requested_model":"gpt-6-astra",
+                   "usage":None,"weekly_allowance_remaining":None,"cost_basis":"token_rate_estimate"}
+        with connection(self.database) as db:
+            db.execute("UPDATE runs SET status=?,receipt=? WHERE id=?", (receipt["status"],json.dumps(receipt),identifier))
+        with self.lock:
+            self.previews.pop(identifier, None)
+        return {**receipt,"answer":answer}
+
+    def stage_progress(self, identifier):
+        with connection(self.database) as db:
+            rows = db.execute("SELECT model,status FROM run_stages WHERE task=? ORDER BY id",(identifier,)).fetchall()
+        return {"total":len(rows),"started":sum(row[1] == "started" for row in rows)}
+
     def history(self) -> list[dict]:
         with connection(self.database) as db:
             return [{"id": identifier, "status": status, **json.loads(receipt)}
@@ -460,6 +537,31 @@ class Workbench:
                 raise ValueError("only terminal unknown-usage runs can be reconciled")
             if saved[0] == "usage_recovered":
                 return json.loads(saved[1])
+            stages = db.execute("SELECT id,model,status FROM run_stages WHERE task=? ORDER BY id", (identifier,)).fetchall()
+            if stages:
+                recovered = []
+                for call_id, model, state in stages:
+                    if state in {"planned", "not_dispatched"}:
+                        continue
+                    if state != "started":
+                        raise ValueError("unknown persisted stage state")
+                    terminal = recover_terminal(self.ledger, identifier, call_id)
+                    if terminal is None or terminal["model"] != model:
+                        return {"id":identifier,"status":"unknown_usage","recovered":False,
+                                "message":"A started stage has no matching terminal receipt. Usage remains unknown; no stage was rerun."}
+                    recovered.append(normalize_receipt({"call_id":call_id,"actual_model":model,"usage":terminal["usage"]}))
+                accounting = budget_action({"action":"status","task_id":identifier},self.ledger)
+                if accounting["reserved_credits"] or {row["id"] for row in accounting["leases"]} != {row["call_id"] for row in recovered}:
+                    raise ValueError("stage accounting needs investigation")
+                total = sum(row["credits"] for row in recovered)
+                if abs(accounting["spent_credits"] - total) > 1e-6:
+                    raise ValueError("stage accounting disagrees with receipts")
+                receipt = {**json.loads(saved[1]),"id":identifier,"status":"usage_recovered","recovered":True,
+                           "stages":recovered,"estimated_credits":total,"known_estimated_credits":total,
+                           "cost_complete":True,"usage":None,"budget":accounting,"weekly_allowance_remaining":None,
+                           "message":"Stage usage recovered. Answers were not retained; no stage was rerun."}
+                db.execute("UPDATE runs SET status='usage_recovered',receipt=? WHERE id=?",(json.dumps(receipt),identifier))
+                return receipt
             terminal = recover_terminal(self.ledger, identifier, identifier)
             if terminal is None:
                 return {"id": identifier, "status": "unknown_usage", "recovered": False,

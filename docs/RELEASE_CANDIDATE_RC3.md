@@ -1,6 +1,7 @@
 # Workbench Candidate: 0.4.0rc3
 
-Status: local preparation, not yet published. This is a testing candidate, not
+Status: [published testing prerelease](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.3).
+This is a testing candidate, not
 completion of the product goal or a declaration of universal savings.
 
 ## Included
@@ -45,7 +46,12 @@ Installed-wheel qualification passed on
 [Ubuntu/WSL](../artifacts/onboarding/linux-wsl-rc3-regression.json): 268 tests
 passed, one platform-specific test skipped in each, with MCP and clean uninstall.
 Package/plugin version alignment was checked separately after the plugin bump.
-Remote CI, native macOS and publication have not yet been verified for rc.3.
+[Push CI](https://github.com/sulabhdubey/premium-model-budget-governor/actions/runs/34116571722)
+and pull-request CI 34116635180 passed on candidate commit
+`efd3bcbdbb2ebe762c1259d4142e3aeeca251cbb`. Remote core-only installed regression
+passed on Windows (268 passed, one skipped) and Linux/macOS (267 passed, two
+skipped); MCP was separately checked on Linux. This verifies installation and
+covered software behavior on macOS, not native Codex model execution there.
 
 - Distinct package version and successful source regression.
 - Fresh candidate-wheel installation, regression, MCP and uninstall checks with

@@ -10,6 +10,7 @@
 <div class="field-heading"><label for="project">Project</label><button id="manage-projects" type="button">Manage projects</button></div><select id="project" required></select><p id="project-path" class="muted path"></p>
 <label for="task">Task</label><textarea id="task" rows="5" maxlength="16000" required placeholder="Review the release evidence and identify any blocking risks."></textarea>
 <label for="family">Task type</label><select id="family"><option value="general">General</option><option value="architecture">Architecture</option><option value="coding">Coding</option><option value="review">Review</option><option value="research">Research</option><option value="writing">Writing</option><option value="visual">Visual</option></select>
+<label for="strategy">Workflow</label><select id="strategy"><option value="direct">Direct</option><option value="prepared">Prepare with Sol, solve with Astra</option><option value="review">Draft with Sol, review with Astra</option></select>
 <fieldset class="mode"><legend>Mode</legend><label><input type="radio" name="mode" value="astra_preferred" checked>Astra Preferred</label><label><input type="radio" name="mode" value="economy">Economy</label></fieldset>
 <div class="pair"><div><label for="budget">Task budget (estimated credits)</label><input id="budget" type="number" min="0.01" max="1000" step="0.01" value="20" required></div><div><label for="effort">Reasoning</label><select id="effort" required disabled><option value="low">Loading host options</option></select><p id="effort-status" class="muted" role="status"></p></div></div>
 <div class="field-heading"><label for="evidence">Evidence (optional)</label><button id="browse-evidence" type="button">Browse files</button></div><textarea id="evidence" rows="2" placeholder="docs/decision.md"></textarea>
@@ -25,7 +26,7 @@
 <dialog id="projects-dialog" aria-labelledby="projects-title">
 <div class="section-heading"><h2 id="projects-title">Projects</h2><button id="close-projects">Close</button></div>
 <form id="project-form">
-<label for="new-project-path">Absolute project folder</label><input id="new-project-path" type="text" maxlength="4096" required autocomplete="off">
+<div class="field-heading"><label for="new-project-path">Project folder</label><button id="choose-project" type="button">Choose folder</button></div><input id="new-project-path" type="text" maxlength="4096" required autocomplete="off">
 <p class="warning">Read-only tools may inspect this folder beyond selected evidence. Adding it does not start a model task.</p>
 <label class="consent"><input id="project-consent" type="checkbox" required>Approve access to this project folder</label>
 <button id="save-project" type="submit">Add project</button>

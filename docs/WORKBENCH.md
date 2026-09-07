@@ -1,6 +1,7 @@
 # Local Workbench Preview
 
-Status: unreleased local implementation. The public landing page remains a
+Status: rc.3 published the direct workbench; multi-stage changes below are local
+post-rc.3 development, not included in that immutable release. The landing page remains a
 separate illustrative demo. This workbench connects to the real local planner
 and read-only execution adapter; it is not yet the finished product goal.
 
@@ -38,7 +39,26 @@ and preview the budget. Browse files/images to select evidence inside the regist
 project. You can also enter project-relative paths, one per line. No JSON file is
 required. The picker shows at most 500 entries from the first 1,000 inspected per
 directory and clearly labels partial listings; exact path entry remains available.
-Guided project registration remains planned.
+Project registration is available through Manage projects. Local development adds
+an optional native folder chooser; desktop selection validation remains open.
+
+The development workflow selector offers Direct (default), Prepare with Sol then
+solve with Astra, or Draft with Sol then review with Astra. Both multi-stage paths
+retain original text evidence and actual images, require compatible reasoning
+on both models, and show every stage before approval. They are explicit choices,
+not automatically inferred improvements. Extra calls may cost more than direct.
+
+The final stage reserves an additional provisional 65,000 input-token allowance
+for a bounded serialized handoff and instructions, without assuming caching.
+This conservative estimate is not a tokenizer measurement or provider cap.
+Empty, flagged or over-64-KB UTF-8 handoffs stop for review, not truncation.
+Each stage settles before the next starts; overruns trigger replanning when the
+remaining whole workflow no longer fits. Progress counts stages started, not
+independently verified answers. Final receipts show per-model stage counters.
+
+Started stage IDs persist before possible host dispatch. Recovery uses each
+started stage's local terminal journal; a missing receipt preserves unknown usage
+and blocks another run. Recovery never reruns stages or claims answers recovered.
 
 Previews do not run models. Review the estimate and scope, then explicitly approve
 the read-only task before execution. Changing form inputs invalidates the preview,
@@ -63,8 +83,19 @@ not a liveness test. A dead parent does not prove provider work stopped.
 **Manage projects** accepts an absolute local folder path and explicit access
 approval. Saved folders are stored in the workbench's local database and return
 after restarting with the same data directory. Adding a folder does not run a
-model or write into that folder. A native operating-system folder picker is not
-implemented; users still need to select or paste the folder path.
+model or write into that folder. In local development, **Choose folder** opens
+an optional Tk desktop dialog on the server computer, not on a remote browser's
+device. Selecting a folder only fills the path and clears prior access consent;
+**Add project** still requires separate approval and normal path checks.
+
+The dialog runs in an isolated child process, with one dialog per server and a
+90-second parent-side timeout. Missing Tk or a desktop session, cancellation and
+errors leave manual absolute-path entry available. If the server abruptly exits,
+an open OS dialog may need to be closed manually. Nothing is automatically added.
+Process contracts and browser response fixtures are tested; actual native selection
+and platform-specific behavior remain unverified. This feature is newer than the
+qualified dev1 wheel and is not in published rc.3. Initial graphical installation
+is a separate remaining requirement.
 
 The UI can remove saved registrations without deleting project files or usage
 history. Removal invalidates that project's pending previews and is refused
