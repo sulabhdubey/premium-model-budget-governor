@@ -11,12 +11,12 @@ the CLI.
 ## Install
 
 Download the installer and wheel from the
-[rc.3 prerelease](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.3).
+[rc.4 prerelease](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.4).
 From their folder, use the isolated installation with optional dependencies:
 
 ```sh
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc3-py3-none-any.whl --mcp
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc3-py3-none-any.whl --mcp --yes
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl --mcp
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc4-py3-none-any.whl --mcp --yes
 ```
 
 Do not reuse an existing runtime folder; see [installation and recovery](INSTALLATION.md).

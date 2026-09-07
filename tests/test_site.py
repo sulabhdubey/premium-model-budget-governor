@@ -47,7 +47,7 @@ def test_package_version_matches_release() -> None:
     metadata = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     package = (ROOT / "src" / "premium_model_budget_governor" / "__init__.py").read_text(encoding="utf-8")
 
-    assert 'version = "0.4.0rc4.dev2"' in metadata
-    assert '__version__ = "0.4.0rc4.dev2"' in package
+    assert 'version = "0.4.0rc4"' in metadata
+    assert '__version__ = "0.4.0rc4"' in package
     plugin = json.loads((ROOT / "plugin/.codex-plugin/plugin.json").read_text(encoding="utf-8"))
-    assert plugin["version"] == "0.4.0-rc.4.dev.2"
+    assert plugin["version"] == "0.4.0-rc.4"
