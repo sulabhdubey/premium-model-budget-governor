@@ -13,6 +13,10 @@ This implementation was checked against locally generated schemas from Codex CLI
 0.153.4. Experimental interfaces may change. No global configuration, hook trust,
 credentials, installed integrations, or safety instructions were changed.
 
+**Update:** native hook behavior has now been tested in an isolated credential-free
+home. Missing/expired grants block, but modified, disabled, crashed or timed-out
+hooks do not stop model dispatch. See [native results](NATIVE_HOOK_RESULTS.md).
+
 ## Discover Without a Model Turn
 
 ```sh
@@ -105,9 +109,10 @@ active. To test natively, use an isolated trusted project, set absolute paths,
 review the exact command through Codex `/hooks`, and trust it explicitly. Test
 missing-grant rejection before allowing any paid prompt. **Do not bypass trust or
 install globally as a shortcut.** Untrusted/skipped hooks do not enforce anything;
-host timeout/error behavior must also be tested before claiming fail-closed native
-enforcement. The Python hook protocol and ledger behavior are tested; native
-trusted-hook execution remains pending.
+host timeout/error behavior matters. Native tests now confirm those failures can
+allow model dispatch. The hook is supplementary, not a fail-closed budget boundary.
+`app-run` can require trusted active hashes with `required_hook_hashes`; that is
+a pre-dispatch check, not a guarantee about every internal host request.
 
 ## Next Evidence Gate
 

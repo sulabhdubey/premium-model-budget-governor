@@ -12,8 +12,10 @@ Use Astra for substantive work within a complete task budget.
 Experimental `pm-bg host-probe` reads the App Server model/reasoning/modality
 catalog without a model turn. `pm-bg app-run` executes an explicitly approved
 reserved turn, retaining unknown spend. It does not control unrelated Desktop
-tasks. The optional prompt hook is inactive until reviewed and trusted; never
-claim native enforcement from standalone Python tests. See docs/HOST_INTEGRATION.md.
+tasks. Native tests show hooks can fail open on crashes/timeouts and be skipped
+when modified or disabled. Keep runner admission primary; never auto-trust hooks.
+Optional required_hook_hashes checks help before dispatch but do not cap internal
+generation. See docs/NATIVE_HOOK_RESULTS.md and docs/HOST_INTEGRATION.md.
 
 Evaluate direct Astra first, alongside hybrids. The small v0.2 benchmark found
 direct Astra cheaper on average than adding a planning worker or evidence-request
