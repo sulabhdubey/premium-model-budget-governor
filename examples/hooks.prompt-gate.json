@@ -1,0 +1,17 @@
+{
+  "description": "OPTIONAL TEMPLATE: replace absolute paths, review and trust before use. Not auto-installed.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/absolute/path/to/python\" -m premium_model_budget_governor.prompt_gate --grant \"/absolute/private/path/grant.json\"",
+            "timeout": 5,
+            "statusMessage": "Checking reserved prompt grant"
+          }
+        ]
+      }
+    ]
+  }
+}

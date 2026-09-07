@@ -94,8 +94,10 @@ capacity, saved credits, blocked attempts, or account bills from this ledger.
 
 ## Limits That Remain
 
-No pre-model desktop hook, provider-attested served-model identity, or reliable
-subscription-credit conversion is exposed by this integration. No universal
+No verified per-generation desktop gate, provider-attested served-model identity,
+or reliable subscription-credit conversion is exposed by this integration.
+Codex does expose prompt hooks and App Server model selection; see the newer
+[integration tests and limitations](HOST_INTEGRATION.md). No universal
 Sol-price Astra guarantee is possible. Broad enterprise task quality, subjective
 visual quality, and statistically defensible learned routing still require
 independent representative evaluation. The bounded pilot is not that evidence.

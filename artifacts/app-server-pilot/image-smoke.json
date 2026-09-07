@@ -1,0 +1,41 @@
+{
+  "status": "completed",
+  "requested_model": "gpt-6-astra",
+  "host_configured_model": "gpt-6-astra",
+  "model_identity_source": "App Server configuration, not provider attestation",
+  "call_id": "image-smoke",
+  "usage": {
+    "input_tokens": 24471,
+    "cached_tokens": 0,
+    "output_tokens": 19
+  },
+  "answer": "{\"sol_cold_input\":18,\"units\":\"thousands of tokens\"}",
+  "estimated_credits": 6.1415,
+  "cost_basis": "token_rate_estimate",
+  "elapsed_seconds": 10.461,
+  "budget": {
+    "task_id": "app-server-pilot",
+    "budget_credits": 20.0,
+    "spent_credits": 6.1415,
+    "max_pending_leases": 1,
+    "reserved_credits": 0,
+    "contingency_credits": 2.0,
+    "available_credits": 11.8585,
+    "over_budget": false,
+    "astra_receipts": 1,
+    "receipt_source": "caller_reported; host must supply trustworthy actual usage",
+    "leases": [
+      {
+        "id": "image-smoke",
+        "model": "gpt-6-astra",
+        "estimate": 13.75,
+        "actual": 6.1415,
+        "status": "settled",
+        "cost_basis": "token_rate_estimate",
+        "expires_at": 1788760388.3885865,
+        "expired": false
+      }
+    ]
+  },
+  "smoke_passed": false
+}
