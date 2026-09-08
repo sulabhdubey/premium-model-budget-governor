@@ -1,6 +1,6 @@
 """Opt-in Codex App Server client. Stdio only; no global configuration changes."""
 
-from collections import deque
+from collections import Counter, deque
 import json
 import os
 from pathlib import Path
@@ -248,6 +248,7 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
                 "model": model, "effort": effort, "serviceTierForTurn": "default"})
             turn_id = turn["turn"]["id"]
             usage, answer = None, ""
+            completed_items, seen_items = Counter(), set()
             deadline = time.monotonic() + timeout
             while time.monotonic() < deadline:
                 message = client.event(deadline - time.monotonic())
@@ -261,8 +262,19 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
                     if usage and any(current[k] < usage[k] for k in usage):
                         raise ValueError("usage counters decreased")
                     usage = current
-                if message.get("method") == "item/completed" and params.get("item", {}).get("type") == "agentMessage":
-                    answer = params["item"]["text"]
+                if message.get("method") == "item/completed":
+                    item = params.get("item", {})
+                    item_id = item.get("id")
+                    kind = item.get("type")
+                    # Export categories only, never commands, paths, outputs or arbitrary labels.
+                    allowed = {"agentMessage", "commandExecution", "mcpToolCall", "dynamicToolCall",
+                               "webSearch", "fileChange", "imageView", "reasoning", "plan", "userMessage"}
+                    if not isinstance(item_id, str) or item_id not in seen_items:
+                        completed_items[kind if isinstance(kind, str) and kind in allowed else "other"] += 1
+                        if isinstance(item_id, str):
+                            seen_items.add(item_id)
+                    if kind == "agentMessage":
+                        answer = item["text"]
                 if message.get("method") == "turn/completed":
                     if params.get("turn", {}).get("id") != turn_id:
                         continue
@@ -275,6 +287,8 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
                         "actual_credits": credits, "cost_basis": "token_rate_estimate"}, ledger)
                     return {"status": "completed", "requested_model": model, "host_configured_model": thread["model"],
                             "context_profile": profile,
+                            "activity": {"completed_items": dict(sorted(completed_items.items())),
+                                         "source": "host_item_completed_events", "tool_success_verified": False},
                             "model_identity_source": "App Server configuration, not provider attestation",
                             "call_id": packet["call_id"], "usage": usage, "answer": answer,
                             "estimated_credits": credits, "cost_basis": "token_rate_estimate",

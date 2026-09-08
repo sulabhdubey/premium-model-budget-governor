@@ -22,10 +22,10 @@ def test_landing_page_assets_and_core_sections_exist() -> None:
 def test_landing_page_uses_honest_install_and_product_copy() -> None:
     html = (SITE / "index.html").read_text(encoding="utf-8")
 
-    assert "python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl" in html
+    assert "python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc6-py3-none-any.whl" in html
     assert "Add the governor in one minute" not in html
-    assert "releases/download/v0.4.0-rc.5/install_governor.py" in html
-    assert "releases/download/v0.4.0-rc.5/premium_model_budget_governor-0.4.0rc5-py3-none-any.whl" in html
+    assert "releases/download/v0.4.0-rc.6/install_governor.py" in html
+    assert "releases/download/v0.4.0-rc.6/premium_model_budget_governor-0.4.0rc6-py3-none-any.whl" in html
     assert "Use frontier models for judgment, not waste." in html
     assert "No model calls, account connection, or live billing" in html
     assert "76% avoided overhead" not in html
@@ -47,10 +47,10 @@ def test_package_version_matches_release() -> None:
     metadata = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     package = (ROOT / "src" / "premium_model_budget_governor" / "__init__.py").read_text(encoding="utf-8")
 
-    assert 'version = "0.4.0rc5"' in metadata
-    assert '__version__ = "0.4.0rc5"' in package
+    assert 'version = "0.4.0rc6"' in metadata
+    assert '__version__ = "0.4.0rc6"' in package
     plugin = json.loads((ROOT / "plugin/.codex-plugin/plugin.json").read_text(encoding="utf-8"))
-    assert plugin["version"] == "0.4.0-rc.5"
+    assert plugin["version"] == "0.4.0-rc.6"
 
 
 def test_product_tour_has_accessible_controls_and_real_assets() -> None:

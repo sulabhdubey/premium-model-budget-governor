@@ -1,0 +1,5 @@
+task_id,arm,input_tokens,cached_tokens,output_tokens,estimated_credits,command_completed_events,passed,fixture_unchanged
+disk-evidence,inherit,47359,30080,63,5.1505,1,true,true
+disk-evidence,focused_catalog,38728,31616,82,2.6709,1,true,true
+local-skill,focused_catalog,38870,19072,112,5.5663,1,true,true
+local-skill,inherit,47484,23424,76,6.6956,1,true,true

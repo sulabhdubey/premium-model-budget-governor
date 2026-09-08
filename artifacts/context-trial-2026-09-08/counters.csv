@@ -1,0 +1,13 @@
+task_id,repeat,arm,input_tokens,cached_tokens,output_tokens,estimated_credits,passed
+renewal-authority,0,inherit,23771,0,46,6.00025,true
+renewal-authority,0,focused_catalog,19450,0,46,4.92,true
+renewal-authority,1,focused_catalog,19450,0,46,4.92,true
+renewal-authority,1,inherit,23771,0,46,6.00025,true
+complete-cost-evidence,0,inherit,23670,6656,50,4.4824,true
+complete-cost-evidence,0,focused_catalog,19349,0,50,4.89975,true
+complete-cost-evidence,1,focused_catalog,19349,0,50,4.89975,true
+complete-cost-evidence,1,inherit,23670,0,50,5.98,true
+visual-overdue,0,inherit,24168,0,64,6.122,true
+visual-overdue,0,focused_catalog,19847,12544,63,2.2181,true
+visual-overdue,1,focused_catalog,19847,6656,65,3.5454,true
+visual-overdue,1,inherit,24168,0,64,6.122,true

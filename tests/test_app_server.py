@@ -53,6 +53,27 @@ def test_reserves_before_turn_and_settles_usage(tmp_path, monkeypatch):
         app.execute_app_server(packet(tmp_path), ledger)
 
 
+def test_activity_counts_are_deduplicated_scoped_and_content_free(tmp_path, monkeypatch):
+    class Client(FakeClient):
+        def __init__(self, *args):
+            super().__init__(*args)
+            for thread, item in reversed([
+                ("foreign", {"id": "foreign", "type": "commandExecution"}),
+                ("th", {"id": "cmd", "type": "commandExecution", "command": "PRIVATE", "aggregatedOutput": "PRIVATE"}),
+                ("th", {"id": "cmd", "type": "commandExecution"}),
+                ("th", {"id": "weird", "type": "PRIVATE"}),
+            ]):
+                self.events.appendleft({"method": "item/completed", "params": {
+                    "threadId": thread, "turnId": "tu", "item": item}})
+    monkeypatch.setattr(app, "AppServer", Client)
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action": "open", "task_id": "t", "budget_credits": 10}, ledger)
+    result = app.execute_app_server(packet(tmp_path), ledger)
+    assert result["activity"]["completed_items"] == {"agentMessage": 1, "commandExecution": 1, "other": 1}
+    assert "PRIVATE" not in str(result)
+    assert result["activity"]["tool_success_verified"] is False
+
+
 @pytest.mark.parametrize("profile", ["inherit", "focused_catalog"])
 def test_context_profile_is_scoped_and_explicit(tmp_path, monkeypatch, profile):
     observed = []

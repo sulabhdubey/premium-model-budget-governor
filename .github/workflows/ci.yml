@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: python -m pytest
       - name: Check public text patterns
-        run: python scripts/check_publication.py README.md docs/OUTREACH_KIT.md docs/FIELD_TRIAL_2026_09_07.md docs/LAUNCH_PLAN.md
+        run: python scripts/check_publication.py README.md docs/OUTREACH_KIT.md docs/FIELD_TRIAL_2026_09_07.md docs/LAUNCH_PLAN.md docs/CONTEXT_TRIAL_RESULTS_2026_09_08.md docs/TOOL_SKILL_TRIAL_2026_09_08.md docs/RELEASE_CANDIDATE_RC6.md artifacts/context-trial-2026-09-08/counters.csv artifacts/tool-skill-trial-2026-09-08/counters.csv
 
   isolated-install:
     runs-on: ${{ matrix.os }}

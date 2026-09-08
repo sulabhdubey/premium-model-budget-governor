@@ -91,6 +91,31 @@ Raw sessions, private prompts, credentials, and SQLite ledgers must not be publi
 
 ## Next Experiment Protocol
 
+### Coverage And Cost-Quality Diagnostics
+
+The comparator also reports `coverage`: baseline-only and candidate-only runs,
+their totals, and whether every supplied run matches. This is coverage of the
+input packet, not proof that all planned experiments were submitted. An omitted
+task on both sides cannot be detected without an independent enrollment manifest.
+
+`cost_exclusion_reasons` counts each reason once per matched pair. A pair can
+have several reasons: incomplete workflow, non-host receipts, missing calls,
+unknown costs, or incompatible cost bases. Do not sum reason counts as if they
+were distinct excluded pairs. Unmatched runs are reported separately in coverage.
+
+Within each cost basis, `task_balanced_mean_credit_difference` averages repeats
+within each task ID first, then weights those tasks equally. The ordinary mean
+still weights each pair equally. Task IDs must be stable and fixed before trials;
+neither average establishes statistical significance or population savings.
+Totals cover only matched cost-valid pairs, not total campaign expenditure.
+
+`cheaper_both_passed` counts lower-cost pairs where both supplied grades passed.
+`cheaper_quality_regressions` exposes lower-cost candidates that failed while
+the baseline passed. Passing a fixed rubric is not general capability equivalence.
+These additive diagnostics do not change routing or automatically promote a model.
+
+See the [receipt reanalysis](EVALUATION_REANALYSIS_2026_09_08.md).
+
 ### Whole-Workflow Time And Comparable Units
 
 Each run may include `total_elapsed_seconds`: a finite nonnegative JSON number

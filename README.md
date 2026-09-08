@@ -8,7 +8,7 @@ A local workbench, CLI, and MCP server for planning premium-model work,
 approving estimated spend, and inspecting usage afterward.
 
 [![CI](https://github.com/sulabhdubey/premium-model-budget-governor/actions/workflows/ci.yml/badge.svg)](https://github.com/sulabhdubey/premium-model-budget-governor/actions/workflows/ci.yml)
-[![Public beta](https://img.shields.io/badge/public_beta-0.4.0rc5-008577)](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.5)
+[![Public beta](https://img.shields.io/badge/public_beta-0.4.0rc6-008577)](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.6)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10%2B-555555)
 
@@ -27,10 +27,22 @@ approving estimated spend, and inspecting usage afterward.
 *Real development capture in a product-tour layout. Playback is optional on the
 website; no model runs in the tour or planner demo.*
 
-> **Public beta, not a stable release.** The downloadable version is `0.4.0rc5`.
+> **Public beta, not a stable release.** The downloadable version is `0.4.0rc6`.
 > Execution is currently read-only and requires your explicit approval.
 > This does not change the active model in existing Codex chats, make tokens
 > cheaper, or guarantee the same quality at lower cost.
+
+### New Evidence, Same Astra
+
+In a [12-call context pilot](docs/CONTEXT_TRIAL_RESULTS_2026_09_08.md), both Astra
+profiles passed all frozen checks on three authored tasks. The focused catalog
+used 18.1% fewer input tokens and 26.8% fewer estimated credits, with unequal cache
+hits contributing to the credit difference. This is a small pilot, not a savings
+promise or proof of equal capability on every task.
+
+A [four-call extension](docs/TOOL_SKILL_TRIAL_2026_09_08.md) checked read-only tool
+use and access to one named local skill. See the [validation gate register](docs/VALIDATION_GATES_2026_09_08.md)
+for what passed and what still needs independent people and broader tasks.
 
 **Built for:** Codex users who want Astra participation with explicit task
 budgets, and developers connecting governed tools through MCP.
@@ -94,11 +106,11 @@ is illustrative and does not run models.
 
 ### 1. Download The Beta
 
-Get these files from the [rc.5 release](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.5):
+Get these files from the [rc.6 release](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.6):
 
-- [Installer](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/install_governor.py)
-- [Python wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/premium_model_budget_governor-0.4.0rc5-py3-none-any.whl)
-- [SHA-256 checksums](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/SHA256SUMS.txt)
+- [Installer](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.6/install_governor.py)
+- [Python wheel](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.6/premium_model_budget_governor-0.4.0rc6-py3-none-any.whl)
+- [SHA-256 checksums](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.6/SHA256SUMS.txt)
 
 Keep the installer and wheel in the same folder. Check the downloaded files
 against the release checksums before installing; only install code you trust.
@@ -108,8 +120,8 @@ against the release checksums before installing; only install code you trust.
 Open a terminal in that folder. The first command previews; the second installs:
 
 ```sh
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl
-python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc5-py3-none-any.whl --yes
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc6-py3-none-any.whl
+python install_governor.py install --wheel premium_model_budget_governor-0.4.0rc6-py3-none-any.whl --yes
 ```
 
 This creates a dedicated environment at `~/.pm-bg/runtime`. It does not change
@@ -146,7 +158,7 @@ qualification; native macOS interactive usability is not established.
 Use a dedicated environment for development:
 
 ```sh
-git clone --branch v0.4.0-rc.5 https://github.com/sulabhdubey/premium-model-budget-governor.git
+git clone --branch v0.4.0-rc.6 https://github.com/sulabhdubey/premium-model-budget-governor.git
 cd premium-model-budget-governor
 python -m venv .venv
 ```
@@ -174,7 +186,7 @@ such as `plan_model_workflow`, `manage_task_budget`, and `build_capsule_from_fil
 | Integration | Start here |
 | --- | --- |
 | Local MCP server | [Install optional dependencies and configure your client](docs/MCP.md) |
-| Codex plugin | [Setup guide](docs/CODEX_SETUP.md) and [downloadable plugin bundle](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.5/premium-model-budget-governor-plugin-0.4.0-rc.5.zip) |
+| Codex plugin | [Setup guide](docs/CODEX_SETUP.md) and [downloadable plugin bundle](https://github.com/sulabhdubey/premium-model-budget-governor/releases/download/v0.4.0-rc.6/premium-model-budget-governor-plugin-0.4.0-rc.6.zip) |
 | Governed read-only execution | [Host integration and approval boundaries](docs/HOST_INTEGRATION.md) |
 
 Adding MCP exposes tools; it does not force an agent to use them or automatically

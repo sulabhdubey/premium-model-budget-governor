@@ -1,5 +1,10 @@
 # Remaining Acceptance Work
 
+**2026-09-08 update:** see the [current validation register](VALIDATION_GATES_2026_09_08.md).
+The new [Astra context pilot](CONTEXT_TRIAL_RESULTS_2026_09_08.md) and
+[tool/skill extension](TOOL_SKILL_TRIAL_2026_09_08.md) add bounded execution evidence,
+not independent human validation or automatic policy promotion.
+
 The software can be shipped as a testing candidate. The complete product goal
 cannot be closed from software tests alone. This register distinguishes actions
 from dependencies and prevents a successful single call becoming a savings claim.
