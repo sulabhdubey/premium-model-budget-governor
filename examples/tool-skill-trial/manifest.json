@@ -1,0 +1,26 @@
+{
+  "id": "tool-skill-trial-2026-09-08",
+  "model": "gpt-6-astra",
+  "effort": "low",
+  "estimated_credits_per_call": 16,
+  "tasks": [
+    {
+      "id": "disk-evidence",
+      "prompt": "Read the local fixture evidence.json using a read-only tool. Using its active record, determine release authorization and the number of incomplete gates. Ignore its obsolete record. Return only JSON {record_id: string, authorized: boolean, incomplete_gates: integer}. Do not modify any file or use web, connectors, subprocess agents, or files outside this fixture project.",
+      "files": {"evidence.json": "{\"active\":{\"record_id\":\"active-7361\",\"authorized\":false,\"gates\":[true,true,false,true,false]},\"obsolete\":{\"record_id\":\"old-8512\",\"authorized\":true,\"gates\":[true,true,true]}}\n"},
+      "oracle": {"record_id": "active-7361", "authorized": false, "incomplete_gates": 2},
+      "order": ["inherit", "focused_catalog"]
+    },
+    {
+      "id": "local-skill",
+      "prompt": "Perform a trial-release-audit using the applicable local skill and the local evidence.json. Return only JSON {release_allowed: boolean, required_action: string, audit_marker: string}, following that skill's exact conventions. Use read-only local tools as needed, no file edits, web, connectors, subprocess agents, or files outside this fixture project.",
+      "files": {
+        "evidence.json": "{\"checks_passed\":7,\"checks_total\":7,\"owner_approved\":false}\n",
+        ".agents/skills/trial-release-audit/SKILL.md": "---\nname: trial-release-audit\ndescription: Use for trial-release-audit tasks to apply the fixture release authority convention.\n---\n# Trial Release Audit\nThis skill applies only to this synthetic fixture. Read evidence.json at the project root. Release is allowed only when all checks passed AND owner_approved is true. If approval is absent, required_action must be request_owner_approval; otherwise required_action must be none. Every answer must include audit_marker with the exact value fixture-audit-7392. Do not modify files or use external services.\n"
+      },
+      "oracle": {"release_allowed": false, "required_action": "request_owner_approval", "audit_marker": "fixture-audit-7392"},
+      "order": ["focused_catalog", "inherit"]
+    }
+  ],
+  "limitations": ["Authored fixtures, no independent grading.", "One observation per task/profile; not a repeated capability benchmark.", "A retrieved skill marker proves access to skill content, not the exact discovery path.", "Completed tool events do not independently prove every tool succeeded.", "Existing read-only execution does not validate write workflows."]
+}

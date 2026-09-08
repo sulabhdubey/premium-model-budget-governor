@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 import json
 from hashlib import sha256
 from pathlib import Path
@@ -116,11 +116,21 @@ def compare_runs(packet: Mapping) -> dict:
         if elapsed is not None:
             elapsed = number(elapsed, "total_elapsed_seconds")
         bases = {c["cost_basis"] for c in receipts}
-        cost_valid = (complete and row.get("receipt_source") == "host" and expected == len(receipts)
-                      and expected > 0 and len(bases) == 1 and "unknown" not in bases)
+        exclusions = []
+        for invalid, reason in [
+            (not complete, "incomplete_workflow"),
+            (row.get("receipt_source") != "host", "non_host_receipts"),
+            (expected != len(receipts), "call_count_mismatch"),
+            (expected == 0, "no_expected_calls"),
+            (not bases or "unknown" in bases, "unknown_cost"),
+            (len(bases) > 1, "mixed_cost_bases"),
+        ]:
+            if invalid:
+                exclusions.append(reason)
+        cost_valid = not exclusions
         grouped[arm][key] = {"passed": passed, "credits": sum(c["credits"] for c in receipts) if cost_valid else None,
                              "basis": next(iter(bases)) if cost_valid else "unknown",
-                             "elapsed": elapsed if complete else None}
+                             "elapsed": elapsed if complete else None, "exclusions": exclusions}
     if baseline not in grouped:
         raise ValueError("baseline has no runs")
     comparisons = []
@@ -133,12 +143,40 @@ def compare_runs(packet: Mapping) -> dict:
         cost_bases = sorted({a["basis"] for a, _ in costs})
         cost_by_basis = {}
         for basis in cost_bases:
-            values = [b["credits"] - a["credits"] for a, b in costs if a["basis"] == basis]
-            cost_by_basis[basis] = {"matched_pairs": len(values), "mean_credit_difference": mean(values)}
+            basis_pairs = [(k, a, b) for k, (a, b) in zip(keys, pairs)
+                           if a["credits"] is not None and b["credits"] is not None
+                           and a["basis"] == b["basis"] == basis]
+            per_task = defaultdict(list)
+            for k, a, b in basis_pairs:
+                per_task[k[0]].append(b["credits"] - a["credits"])
+            values = [b["credits"] - a["credits"] for _, a, b in basis_pairs]
+            cost_by_basis[basis] = {
+                "matched_pairs": len(values), "mean_credit_difference": mean(values),
+                "distinct_tasks": len(per_task),
+                "task_balanced_mean_credit_difference": mean(mean(v) for v in per_task.values()),
+                "total_baseline_credits": sum(a["credits"] for _, a, _ in basis_pairs),
+                "total_arm_credits": sum(b["credits"] for _, _, b in basis_pairs),
+                "cheaper_both_passed": sum(b["credits"] < a["credits"] and a["passed"] and b["passed"]
+                                           for _, a, b in basis_pairs),
+                "cheaper_quality_regressions": sum(b["credits"] < a["credits"] and a["passed"] and not b["passed"]
+                                                   for _, a, b in basis_pairs),
+            }
+        # Count each reason once per matched pair; multiple reasons may apply.
+        exclusions = Counter()
+        for a, b in pairs:
+            reasons = set(a["exclusions"]) | set(b["exclusions"])
+            if a["credits"] is not None and b["credits"] is not None and a["basis"] != b["basis"]:
+                reasons.add("incompatible_pair_cost_bases")
+            exclusions.update(sorted(reasons))
         times = [(a, b) for a, b in pairs if a["elapsed"] is not None and b["elapsed"] is not None]
         comparisons.append({"arm": arm, "matched_quality_pairs": len(pairs), "matched_cost_pairs": len(costs),
             "distinct_tasks": len({k[0] for k in keys}),
             "unmatched_runs": len(grouped[arm]) - len(keys),
+            "coverage": {"baseline_runs": len(grouped[baseline]), "arm_runs": len(grouped[arm]),
+                         "baseline_only_runs": len(grouped[baseline]) - len(keys),
+                         "arm_only_runs": len(grouped[arm]) - len(keys),
+                         "fully_matched": len(keys) == len(grouped[baseline]) == len(grouped[arm])},
+            "cost_exclusion_reasons": dict(sorted(exclusions.items())),
             "baseline_passes": sum(a["passed"] for a, _ in pairs),
             "arm_passes": sum(b["passed"] for _, b in pairs),
             "quality_regressions": sum(a["passed"] and not b["passed"] for a, b in pairs),

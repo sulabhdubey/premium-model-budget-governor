@@ -1,6 +1,13 @@
 # Human Onboarding Trial
 
 Status: protocol ready; no volunteer sessions recorded.
+
+An owner may perform a separately labeled **owner formative trial**. It can find
+real usability defects and exercise native folder selection, but familiarity with
+the product means it does not satisfy the independent participant requirement.
+Do not count one owner as both technical and nontechnical participants. Record
+facilitator help and prior involvement; do not publish responses without separate
+consent. The owner's trial and any independent trial use the same tasks below.
 Independent task comparisons use [INDEPENDENT_VALIDATION.md](INDEPENDENT_VALIDATION.md).
 Publication follows [PUBLICATION_PRIVACY.md](PUBLICATION_PRIVACY.md); no participant
 identity, private response or recording belongs in the public Git repository.

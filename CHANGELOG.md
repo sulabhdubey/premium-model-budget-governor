@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0rc6 - Evaluation Transparency
+
+- Added matched-pair coverage, exclusion reasons and task-balanced cost summaries.
+- Added privacy-bounded tool activity counters; completion is not success proof.
+- Added reproducible, approval-bounded context and tool/skill trial runners.
+- Published all outcomes from a 12-call Astra context pilot and four-call extension.
+- Qualified isolated installs and the rendered read-only workbench. Human onboarding,
+  independent grading and broad capability preservation remain open beta gates.
+- No automatic model switching, exact weekly-debit attribution or guaranteed savings.
+
 ## 0.4.0rc3 - Unreleased Candidate
 
 - Added a local Astra-preferred workbench with project/evidence/image selection,
