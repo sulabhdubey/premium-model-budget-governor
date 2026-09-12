@@ -58,6 +58,8 @@ jobs:
         run: python scripts/check_installation.py --wheel build/wheels/*.whl --regression --mcp --documents --report build/install-check.json
       - name: Build and pattern-check plugin archive
         if: runner.os == 'Linux'
+        env:
+          PYTHONPATH: src
         run: |
           python scripts/build_plugin.py --output build/governor-plugin.zip
           python scripts/check_publication.py build/governor-plugin.zip
