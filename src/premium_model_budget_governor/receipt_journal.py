@@ -16,16 +16,25 @@ def _encoded(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
 
 
-def record_terminal(ledger, *, task_id, call_id, model, thread_id, turn_id, usage):
-    for value in (task_id, call_id, model, thread_id, turn_id):
+def record_terminal(ledger, *, task_id, call_id, model, thread_id, turn_id, usage, rate_contract=None,
+                    host_source="app_server"):
+    if host_source not in {"app_server", "codex_cli"}:
+        raise ValueError("unsupported terminal host source")
+    if host_source == "codex_cli" and (thread_id is not None or turn_id is not None):
+        raise ValueError("CLI terminal identifiers must remain unavailable")
+    identifiers = (task_id, call_id, model) + ((thread_id, turn_id) if host_source == "app_server" else ())
+    for value in identifiers:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("terminal receipt identifiers required")
-    normalized = normalize_receipt({"call_id": call_id, "actual_model": model, "usage": usage})
+    normalized = normalize_receipt({"call_id": call_id, "actual_model": model, "usage": usage,
+                                    "rate_contract": rate_contract})
     if normalized["credits"] is None:
         raise ValueError("terminal token counters required")
-    row = {"schema_version": 1, "task_id": task_id, "call_id": call_id, "model": model,
+    row = {"schema_version": 2, "task_id": task_id, "call_id": call_id, "model": model,
+           "host_source": host_source,
            "thread_id": thread_id, "turn_id": turn_id, "usage": normalized["usage"],
-           "estimated_credits": normalized["credits"], "cost_basis": "token_rate_estimate"}
+           "estimated_credits": normalized["credits"], "cost_basis": "token_rate_estimate",
+           "rate_snapshot": normalized["rate_snapshot"], "rate_fingerprint": normalized["rate_fingerprint"]}
     payload = _encoded(row)
     checksum = hashlib.sha256(payload.encode()).hexdigest()
     with connection(ledger, timeout=15) as db:
@@ -41,7 +50,9 @@ def record_terminal(ledger, *, task_id, call_id, model, thread_id, turn_id, usag
         db.execute("INSERT OR IGNORE INTO terminal_receipts VALUES (?,?,?,?)", (task_id, call_id, payload, checksum))
 
 
-def recover_terminal(ledger, task_id, call_id):
+def recover_terminal(ledger, task_id, call_id, *, settle=True):
+    if type(settle) is not bool:
+        raise ValueError("settle must be boolean")
     if not ledger.exists():
         return None
     with connection(ledger.resolve().as_uri() + "?mode=ro", uri=True) as db:
@@ -54,16 +65,26 @@ def recover_terminal(ledger, task_id, call_id):
         if hashlib.sha256(payload.encode()).hexdigest() != checksum:
             raise ValueError("terminal receipt integrity check failed")
         row = json.loads(payload)
-        if row.get("schema_version") != 1 or row.get("task_id") != task_id or row.get("call_id") != call_id:
+        if type(row.get("schema_version")) is not int or row["schema_version"] not in {1, 2} or row.get("task_id") != task_id or row.get("call_id") != call_id:
             raise ValueError("terminal receipt identity mismatch")
         if not db.execute("SELECT 1 FROM dispatches WHERE task=? AND id=?", (task_id, call_id)).fetchone():
             raise ValueError("terminal receipt dispatch missing")
         lease = db.execute("SELECT model FROM leases WHERE task=? AND id=?", (task_id, call_id)).fetchone()
         if not lease or lease[0] != row.get("model"):
             raise ValueError("terminal receipt model mismatch")
-    normalized = normalize_receipt({"call_id": call_id, "actual_model": row["model"], "usage": row["usage"]})
+    contract = None
+    if row["schema_version"] == 2:
+        contract = row.get("rate_snapshot")
+        if not isinstance(contract, dict):
+            raise ValueError("terminal receipt rate snapshot missing")
+    normalized = normalize_receipt({"call_id": call_id, "actual_model": row["model"], "usage": row["usage"],
+                                    "rate_contract": contract})
+    if row["schema_version"] == 2 and normalized["rate_fingerprint"] != row.get("rate_fingerprint"):
+        raise ValueError("terminal receipt rate fingerprint mismatch")
     if normalized["credits"] is None or normalized["credits"] != row["estimated_credits"] or row["cost_basis"] != "token_rate_estimate":
         raise ValueError("terminal receipt rates or counters differ; manual investigation required")
+    if not settle:
+        return row
     accounting = budget_action({"action": "settle", "task_id": task_id, "lease_id": call_id,
                                 "actual_model": row["model"], "actual_credits": row["estimated_credits"],
                                 "cost_basis": "token_rate_estimate"}, ledger)

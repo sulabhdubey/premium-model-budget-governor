@@ -72,6 +72,13 @@ using the isolated environment's Python executable rather than another Python.
 Removing a client connection remains an explicit client action; the installer
 neither writes nor removes third-party configuration.
 
+A successful MCP-enabled install creates `governor-mcp-client.json` inside the
+owned runtime. It binds the server to that runtime's absolute Python executable,
+including paths with spaces. It is a client template, not proof of registration or
+connection. Adapt it through your client's supported configuration mechanism; do
+not paste JSON into a TOML file. Keep the file private because it contains a local
+path. Core-only and preview-only installations do not create this template.
+
 ## Recovery and Removal
 
 | Symptom | Next action |
@@ -94,7 +101,7 @@ python install_governor.py uninstall --yes
 For a source checkout, use `scripts/install_governor.py` instead. Keep the
 standalone installer for removal. Use the same `--directory` for a custom installation. Removal requires an
 installer ownership receipt bound to the resolved absolute directory and refuses
-root/home/repository ancestors, symlink/junction targets, and relocated receipts.
+filesystem-root, home-directory and repository ancestors, symlink/junction targets, and relocated receipts.
 It removes **all contents of that runtime only**, preserving external governor
 ledgers and Codex configuration. The receipt is an accidental-deletion guard,
 not a security boundary against someone who can edit local files.
@@ -111,7 +118,20 @@ Exit codes: 0 for a passing requested check, 1 for setup needing attention,
 presence alone is not a successful MCP runtime test. Reports contain no project
 paths, raw host logs, prompts, account identifiers, or credentials.
 
-## Verification Status
+## Development And Release Scope
+
+The public beta download is rc.6. The source checkout also contains unreleased V2
+work; installing a checkout and installing a published wheel are different choices.
+Use the [support matrix](SUPPORT_MATRIX.md) for current development scope. The
+results below are retained historical qualifications, not proof for every later
+build or for an unaided human setup.
+
+Source development adds optional `--provenance` installer reporting and the
+`pm-bg recover` preview/apply command. Do not assume those commands exist in an
+older installed wheel. See [recovery and accounting](ACCOUNTING_CONTRACT.md) and
+[private provenance handling](DEPENDENCY_SECURITY.md) before using them.
+
+## Historical Verification
 
 The published rc.3 wheel passed isolated installation, optional MCP stdio calls,
 installed-package regression and clean uninstall on

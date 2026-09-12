@@ -93,8 +93,11 @@ class Jobs:
 class LocalServer(ThreadingHTTPServer):
     daemon_threads = True
 
-    def __init__(self, app, *, port=0):
+    def __init__(self, app, *, port=0, preview_only=False):
+        if type(preview_only) is not bool:
+            raise ValueError("preview_only must be boolean")
         self.app = app
+        self.preview_only = preview_only
         self.token = secrets.token_urlsafe(32)
         self.jobs = Jobs(app)
         self.folder_picker = FolderPicker()
@@ -211,6 +214,16 @@ class Handler(BaseHTTPRequestHandler):
             self._reply(200, self.server.app.project_catalog())
         elif self.path == "/api/history":
             self._reply(200, self.server.app.history())
+        elif self.path == "/api/observations":
+            try:
+                self._reply(200, self.server.app.observation_history())
+            except (ValueError, OSError):
+                self._reply(400, error="Observation journal unavailable.")
+        elif self.path == "/api/usage-digest":
+            try:
+                self._reply(200, self.server.app.usage_digest())
+            except (ValueError, OSError):
+                self._reply(400, error="Usage digest unavailable. No records changed.")
         elif self.path == "/api/jobs":
             self._reply(200, self.server.jobs.list())
         elif self.path.startswith("/api/jobs/") and IDENTIFIER.fullmatch(self.path[len("/api/jobs/"):]):
@@ -222,7 +235,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not self._authorize():
             return
-        if self.path not in {"/api/preview", "/api/preview/discard", "/api/execute", "/api/doctor", "/api/cancel", "/api/files", "/api/reconcile", "/api/host-options", "/api/projects/add", "/api/projects/remove", "/api/projects/choose"}:
+        if self.path not in {"/api/preview", "/api/preview/discard", "/api/execute", "/api/doctor", "/api/cancel", "/api/files", "/api/reconcile", "/api/host-options", "/api/projects/add", "/api/projects/remove", "/api/projects/choose", "/api/experiments/compare", "/api/observations/preview", "/api/observations/import", "/api/observations/retention", "/api/usage-digest/settings"}:
             self._reply(404, error="Not found.")
             return
         if self.headers.get_content_type() != "application/json":
@@ -249,7 +262,21 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(packet, dict):
                 raise ValueError("object required")
             if self.path == "/api/preview":
-                self._reply(200, self.server.app.preview(packet))
+                self._reply(200, {**self.server.app.preview(packet),
+                                  "execution_disabled": self.server.preview_only})
+            elif self.path == "/api/experiments/compare":
+                from .experiments import compare_runs
+                from .report_export import experiment_summary
+                result = compare_runs(packet)
+                self._reply(200, {**result, "export_preview": experiment_summary(result)})
+            elif self.path == "/api/observations/preview":
+                self._reply(200, self.server.app.preview_observation(packet))
+            elif self.path == "/api/observations/import":
+                self._reply(200, self.server.app.import_observation(packet))
+            elif self.path == "/api/observations/retention":
+                self._reply(200, self.server.app.observation_retention(packet))
+            elif self.path == "/api/usage-digest/settings":
+                self._reply(200, self.server.app.configure_digest(packet))
             elif self.path == "/api/preview/discard":
                 identifier = packet.get("id")
                 if set(packet) != {"id"} or not isinstance(identifier, str) or not IDENTIFIER.fullmatch(identifier):
@@ -280,6 +307,9 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError("preview ID required")
                 self._reply(202, self.server.jobs.cancel(identifier))
             else:
+                if self.server.preview_only:
+                    self._reply(403, error="Preview-only session. Model execution is disabled.")
+                    return
                 identifier = packet.get("id")
                 if packet.get("approved") is not True or not isinstance(identifier, str) or not IDENTIFIER.fullmatch(identifier):
                     raise ValueError("explicit approval and preview ID required")
@@ -294,19 +324,19 @@ class Handler(BaseHTTPRequestHandler):
             self._reply(500, error="Local service needs attention. No automatic retry was started.")
 
 
-def serve(projects, data, *, port=0, open_browser=True, session_file=None):
+def serve(projects, data, *, port=0, open_browser=True, session_file=None, preview_only=False):
     import webbrowser
     from .workbench import Workbench
     from .runtime_lock import RuntimeLock
     with RuntimeLock(data) as ownership:
         app = Workbench(projects, data)
         app.recover_interrupted(ownership)
-        return _serve_owned(app, port, open_browser, session_file)
+        return _serve_owned(app, port, open_browser, session_file, preview_only=preview_only)
 
 
-def _serve_owned(app, port, open_browser, session_file):
+def _serve_owned(app, port, open_browser, session_file, *, preview_only=False):
     import webbrowser
-    with LocalServer(app, port=port) as server:
+    with LocalServer(app, port=port, preview_only=preview_only) as server:
         url = server.origin + "/#session=" + server.token
         session_bytes = json.dumps({"url": url}).encode("utf-8")
         if session_file:

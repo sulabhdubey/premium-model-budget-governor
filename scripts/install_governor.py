@@ -68,7 +68,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("action", choices=["install", "uninstall"])
     parser.add_argument("--directory", default=str(Path.home() / ".pm-bg" / "runtime"))
     parser.add_argument("--mcp", action="store_true", help="Include optional MCP dependencies (requires package download)")
+    parser.add_argument("--documents", action="store_true", help="Include optional bounded DOCX parsing dependencies (requires package download)")
     parser.add_argument("--wheel", help="Install a locally downloaded governor wheel instead of this checkout")
+    parser.add_argument("--provenance", action="store_true", help="Keep pip's private install report in this runtime (requires pip --report support)")
     parser.add_argument("--yes", action="store_true", help="Approve the displayed install or removal")
     args = parser.parse_args(argv)
     try:
@@ -89,12 +91,15 @@ def main(argv: list[str] | None = None) -> int:
             if not (SOURCE / "pyproject.toml").is_file():
                 raise ValueError("Use this script from the repository or supply --wheel.")
             source = str(SOURCE)
-        source += "[mcp]" if args.mcp else ""
+        extras = [name for name, enabled in (("mcp", args.mcp), ("documents", args.documents)) if enabled]
+        source += "[" + ",".join(extras) + "]" if extras else ""
         print(f"Create isolated Python runtime: {directory}")
         print(f"Install source: {source}")
         print("No changes to PATH, Codex configuration, hooks, login, or other Python environments.")
         print("MCP is not automatically connected. No model calls will be made.")
-        if args.wheel and not args.mcp:
+        if args.provenance:
+            print("Keep the pip installation report private: it may contain local paths and download URLs.")
+        if args.wheel and not extras:
             print("Local wheel installation uses no package index.")
         else:
             print("Installation can download build tools and optional dependencies from your configured package index.")
@@ -106,10 +111,18 @@ def main(argv: list[str] | None = None) -> int:
         try:
             _run([sys.executable, "-m", "venv", str(directory)])
             command = [str(_python(directory)), "-m", "pip", "install", "--disable-pip-version-check"]
-            if args.wheel and not args.mcp:
+            if args.provenance:
+                command += ["--report", str(directory / "pip-install-report.json")]
+            if args.wheel and not extras:
                 command += ["--no-index", "--no-deps"]
             _run([*command, source])
             _run([str(_python(directory)), "-m", "premium_model_budget_governor.cli", "doctor", "--offline"])
+            if args.mcp:
+                template = {"mcpServers": {"premium-model-budget-governor": {
+                    "command": str(_python(directory)),
+                    "args": ["-m", "premium_model_budget_governor.mcp_server"]}}}
+                with (directory / "governor-mcp-client.json").open("x", encoding="utf-8") as handle:
+                    json.dump(template, handle, indent=2)
         except (OSError, subprocess.SubprocessError):
             _write_receipt(directory, "failed")
             print("Installation failed. Check the local command output for dependency, network, or permission errors.")
@@ -118,6 +131,10 @@ def main(argv: list[str] | None = None) -> int:
         _write_receipt(directory, "installed")
         print("Installed. Next, run this executable with the doctor command:")
         print(directory / ("Scripts/pm-bg.exe" if os.name == "nt" else "bin/pm-bg"))
+        if args.mcp:
+            print("MCP client template (not registered; contains your local runtime path):")
+            print(directory / "governor-mcp-client.json")
+            print("Use your client's supported configuration format; this does not modify Codex settings.")
         return 0
     except (OSError, ValueError) as exc:
         print(f"Setup could not continue: {exc}")

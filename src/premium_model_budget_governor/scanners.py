@@ -7,6 +7,7 @@ from pathlib import Path
 
 
 SECRET_PATTERNS = [
+    ("private_key_header", re.compile(r"-----BEGIN (?:RSA |EC |DSA |OPENSSH |ENCRYPTED )?PRIVATE KEY-----", re.I)),
     ("openai_key", re.compile(r"\bsk-(?:proj|live|test)?-[A-Za-z0-9_-]{20,}\b")),
     ("github_token", re.compile(r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b")),
     ("generic_secret_assignment", re.compile(r"\b(?:api[_-]?key|token|password|secret)\s*=\s*[^\s]{12,}", re.I)),

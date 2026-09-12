@@ -16,11 +16,30 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install
-        run: python -m pip install -e ".[dev,mcp]"
+        run: python -m pip install -e ".[dev,mcp,documents]"
       - name: Test
         run: python -m pytest
       - name: Check public text patterns
-        run: python scripts/check_publication.py README.md docs/OUTREACH_KIT.md docs/FIELD_TRIAL_2026_09_07.md docs/LAUNCH_PLAN.md docs/CONTEXT_TRIAL_RESULTS_2026_09_08.md docs/TOOL_SKILL_TRIAL_2026_09_08.md docs/RELEASE_CANDIDATE_RC6.md artifacts/context-trial-2026-09-08/counters.csv artifacts/tool-skill-trial-2026-09-08/counters.csv
+        run: python scripts/check_publication.py README.md --docs-root docs artifacts/context-trial-2026-09-08/counters.csv artifacts/tool-skill-trial-2026-09-08/counters.csv
+
+  dependency-advisories:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install optional runtime and audit tooling
+        run: python -m pip install -e ".[mcp,documents]" "pip-audit==2.10.1"
+      - name: Check known dependency advisories
+        run: |
+          mkdir -p build
+          python -m pip_audit --skip-editable --progress-spinner off --format json --output build/dependency-audit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-advisories
+          path: build/dependency-audit.json
 
   isolated-install:
     runs-on: ${{ matrix.os }}
@@ -34,15 +53,18 @@ jobs:
           python-version: "3.13"
       - name: Build wheel
         run: python -m pip wheel . --no-deps --wheel-dir build/wheels
-      - name: Verify isolated install and removal
+      - name: Verify isolated core, MCP and documents installation and removal
         shell: bash
-        run: python scripts/check_installation.py --wheel build/wheels/*.whl --regression --report build/install-check.json
-      - name: Verify optional MCP installation
+        run: python scripts/check_installation.py --wheel build/wheels/*.whl --regression --mcp --documents --report build/install-check.json
+      - name: Build and pattern-check plugin archive
         if: runner.os == 'Linux'
-        shell: bash
-        run: python scripts/check_installation.py --wheel build/wheels/*.whl --mcp --report build/mcp-install-check.json
+        run: |
+          python scripts/build_plugin.py --output build/governor-plugin.zip
+          python scripts/check_publication.py build/governor-plugin.zip
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: installation-${{ runner.os }}
-          path: build/*install-check.json
+          path: |
+            build/*install-check.json
+            build/governor-plugin.zip

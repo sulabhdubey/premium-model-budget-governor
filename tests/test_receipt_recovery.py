@@ -60,3 +60,45 @@ def test_corrupt_journal_never_settles(tmp_path):
     with pytest.raises(ValueError):
         recover_terminal(path, "task", "call")
     assert budget_action({"action": "status", "task_id": "task"}, path)["reserved_credits"] == 10
+
+
+def test_terminal_snapshot_survives_bundled_rate_change(tmp_path, monkeypatch):
+    from premium_model_budget_governor.receipt_journal import record_terminal, recover_terminal
+    from premium_model_budget_governor.cost import RATES
+    path = setup_ledger(tmp_path)
+    record_terminal(path, **receipt())
+    monkeypatch.setitem(RATES["gpt-6-astra"], "input", 999)
+    recovered = recover_terminal(path, "task", "call")
+    assert recovered["estimated_credits"] == 1.25
+    assert recovered["rate_snapshot"]["per_million"]["input"] == 250
+
+
+def test_terminal_custom_contract_recovery(tmp_path):
+    from premium_model_budget_governor.receipt_journal import record_terminal, recover_terminal
+    from premium_model_budget_governor.accounting import estimate_observed
+    rates = estimate_observed("gpt-6-astra", receipt()["usage"])["rate_snapshot"]
+    rates["per_million"]["input"] = 100
+    path = setup_ledger(tmp_path)
+    record_terminal(path, **receipt(), rate_contract=rates)
+    rates["per_million"]["input"] = 999
+    recovered = recover_terminal(path, "task", "call")
+    assert recovered["estimated_credits"] == .5
+    assert recovered["budget"]["spent_credits"] == .5
+
+
+def test_legacy_terminal_row_recovers_without_migration(tmp_path):
+    import hashlib
+    from premium_model_budget_governor.receipt_journal import record_terminal, recover_terminal
+    path = setup_ledger(tmp_path)
+    record_terminal(path, **receipt())
+    with sqlite3.connect(path) as db:
+        row = json.loads(db.execute("SELECT payload FROM terminal_receipts").fetchone()[0])
+        row["schema_version"] = 1
+        row.pop("rate_snapshot")
+        row.pop("rate_fingerprint")
+        payload = json.dumps(row, sort_keys=True, separators=(",", ":"))
+        db.execute("UPDATE terminal_receipts SET payload=?,checksum=?",
+                   (payload, hashlib.sha256(payload.encode()).hexdigest()))
+    assert recover_terminal(path, "task", "call")["estimated_credits"] == 1.25
+    with sqlite3.connect(path) as db:
+        assert db.execute("SELECT payload FROM terminal_receipts").fetchone()[0] == payload

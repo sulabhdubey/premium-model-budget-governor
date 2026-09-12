@@ -37,6 +37,9 @@ def test_admission_stop_preserves_all_unexecuted_calls(tmp_path, monkeypatch):
     assert report["stop_reason"] == "budget_or_pending_lease"
     assert len(report["not_executed"]) == 4
     assert report["runs"] == []
+    comparison = json.loads((output / "comparison.json").read_text())
+    assert comparison["enrollment"]["missing_runs"] == 4
+    assert comparison["enrollment"]["complete"] is False
 
 
 def test_dispatch_exception_preserves_outcome_without_retry(tmp_path, monkeypatch):
@@ -58,3 +61,5 @@ def test_dispatch_exception_preserves_outcome_without_retry(tmp_path, monkeypatc
     assert len(report["not_executed"]) == 3
     assert report["outcomes"][0]["status"] == "dispatch_error"
     assert "private error detail" not in raw
+    comparison = json.loads((output / "comparison.json").read_text())
+    assert comparison["enrollment"]["missing_runs"] == 4

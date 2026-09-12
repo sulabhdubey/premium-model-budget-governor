@@ -12,7 +12,7 @@ is most valuable at decision boundaries, not during broad context gathering.
 - `evidence_graph.py`: compact graph summaries of files, tests, and risk signals
 - `shadow.py`: Astra Shadow Mode review packets
 - `tournament.py`: cheap-model candidate ranking before premium judging
-- `distillation.py`: prompt-free doctrine ledger
+- `distillation.py`: local doctrine inventory with optional source/policy/permission/expiry filtering; free text is not guaranteed prompt-free
 - `predictor.py`: lightweight benefit prediction from task shape and outcomes
 - `telemetry.py`: usage normalization without storing prompts
 - `cli.py`: user-facing command line

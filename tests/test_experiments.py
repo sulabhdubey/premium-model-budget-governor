@@ -33,6 +33,88 @@ def run(arm, cost=1, repeat=0):
                        "billed_credits": cost}]}
 
 
+def enrollment(*rows):
+    return [{k: row[k] for k in ('task_id', 'snapshot', 'rubric', 'repeat', 'arm')}
+            for row in rows]
+
+
+def test_enrollment_detects_omission_from_both_arms():
+    rows = [run('baseline'), run('focused')]
+    planned = enrollment(*rows, run('baseline', repeat=1), run('focused', repeat=1))
+    result = compare_runs({'baseline': 'baseline', 'runs': rows, 'enrollment': planned})
+    assert result['enrollment']['missing_runs'] == 2
+    assert result['enrollment']['complete'] is False
+    assert result['enrollment']['by_arm']['focused']['missing_runs'] == 1
+    assert result['comparisons'][0]['coverage']['fully_matched'] is True
+    assert result['automatic_promotion'] is False
+
+
+def test_enrollment_reports_wholly_missing_arm_and_empty_experiment():
+    planned = enrollment(run('baseline'), run('focused'))
+    for rows in ([], [run('baseline')]):
+        result = compare_runs({'baseline': 'baseline', 'runs': rows, 'enrollment': planned})
+        comparison = result['comparisons'][0]
+        assert comparison['arm'] == 'focused'
+        assert comparison['matched_cost_pairs'] == 0
+        assert comparison['coverage']['fully_matched'] is False
+        assert comparison['mean_credit_difference'] is None
+        assert result['enrollment']['complete'] is False
+
+
+def test_enrollment_detects_unplanned_rows_without_hiding_cost_evidence():
+    rows = [run('baseline'), run('focused'), run('focused', repeat=1)]
+    result = compare_runs({'baseline': 'baseline', 'runs': rows, 'enrollment': enrollment(*rows[:2])})
+    assert result['enrollment']['unexpected_runs'] == 1
+    assert result['enrollment']['complete'] is False
+    assert result['comparisons'][0]['matched_cost_pairs'] == 1
+
+
+def test_enrollment_fingerprint_is_order_independent_and_does_not_echo_extra_fields():
+    rows = [run('baseline'), run('focused')]
+    planned = enrollment(*rows)
+    planned[0]['private_note'] = 'DO NOT EXPORT'
+    a = compare_runs({'baseline': 'baseline', 'runs': rows, 'enrollment': planned})
+    b = compare_runs({'baseline': 'baseline', 'runs': rows[::-1], 'enrollment': planned[::-1]})
+    assert a == b
+    assert a['enrollment']['complete'] is True
+    assert 'DO NOT EXPORT' not in str(a)
+
+
+@pytest.mark.parametrize('planned', [None, [], {}, [1], [dict(arm='baseline')],
+    enrollment(run('baseline'), run('baseline')), enrollment(run('focused')),
+    [{**enrollment(run('baseline'))[0], 'repeat': True}]])
+def test_invalid_enrollment_fails_closed(planned):
+    with pytest.raises(ValueError):
+        compare_runs({'baseline': 'baseline', 'runs': [run('baseline')], 'enrollment': planned})
+
+
+def test_legacy_packet_does_not_claim_verified_enrollment():
+    result = compare_runs({'baseline': 'baseline', 'runs': [run('baseline'), run('focused')]})
+    assert result['enrollment'] == {'status': 'not_supplied', 'complete': None}
+
+
+def test_enrollment_matches_identity_not_success_or_receipt_completeness():
+    rows = [run('baseline'), run('focused')]
+    planned = enrollment(*rows)
+    rows[1].update(passed=False, complete=False)
+    result = compare_runs({'baseline': 'baseline', 'runs': rows, 'enrollment': planned})
+    assert result['enrollment']['complete'] is True
+    assert result['comparisons'][0]['quality_regressions'] == 1
+    assert result['comparisons'][0]['matched_cost_pairs'] == 0
+    rows[1]['snapshot'] = 'changed'
+    result = compare_runs({'baseline': 'baseline', 'runs': rows, 'enrollment': planned})
+    assert result['enrollment']['missing_runs'] == 1
+    assert result['enrollment']['unexpected_runs'] == 1
+
+
+def test_enrollment_bound_and_legacy_empty_rejected():
+    with pytest.raises(ValueError, match='10000'):
+        compare_runs({'baseline': 'baseline', 'runs': [],
+                      'enrollment': enrollment(run('baseline')) * 10001})
+    with pytest.raises(ValueError):
+        compare_runs({'baseline': 'baseline', 'runs': []})
+
+
 def test_missing_usage_is_not_free_and_small_sample_is_not_a_winner():
     rows = [run("sol"), run("astra")]
     rows[1]["calls"][0].pop("billed_credits")

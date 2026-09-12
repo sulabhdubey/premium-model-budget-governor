@@ -114,6 +114,23 @@ allow model dispatch. The hook is supplementary, not a fail-closed budget bounda
 `app-run` can require trusted active hashes with `required_hook_hashes`; that is
 a pre-dispatch check, not a guarantee about every internal host request.
 
+## Transport Bounds
+
+The local App Server client accepts at most 1,048,576 decoded characters per
+JSON line, queues at most 32 received events, and defers at most 64 events while
+waiting for a response. A full receive queue applies backpressure rather than
+dropping events. Waiting remains subject to the request timeout and cancellation.
+
+Oversized lines, malformed JSON, non-object messages and excessive deferred events
+fail explicitly; large valid host output is not silently truncated. A failure
+after dispatch leaves usage unknown and retains the budget reservation until
+reconciliation. It does not prove that the provider stopped or consumed nothing.
+
+These are character and event-count limits, not a hard process-memory limit,
+byte quota, malware scanner or provider token cap. Parsed JSON and runtime objects
+have additional memory overhead. Qualify representative large-output workflows
+before claiming compatibility with this bounded transport.
+
 ## Next Evidence Gate
 
 Use the measured runner to preregister independent real tasks with immutable

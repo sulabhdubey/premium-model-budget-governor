@@ -6,6 +6,15 @@ ROOT = Path(__file__).parents[1]
 SITE = ROOT / "site"
 
 
+def test_readme_explains_installation_scope_before_tour_and_evidence():
+    readme = " ".join((ROOT / "README.md").read_text(encoding="utf-8").split())
+    boundary = "Installing Governor does not automatically reduce token use in your existing Codex chats."
+    assert boundary in readme
+    assert readme.index(boundary) < readme.index("site/assets/tour-poster.png")
+    assert "Task explicitly started through the supported Governor runner" in readme
+    assert "prove savings from a single receipt" in readme
+
+
 def test_landing_page_assets_and_core_sections_exist() -> None:
     html = (SITE / "index.html").read_text(encoding="utf-8")
 
@@ -43,14 +52,15 @@ def test_pages_workflow_publishes_only_site_directory() -> None:
     assert "pages: write" in workflow
 
 
-def test_package_version_matches_release() -> None:
+def test_development_versions_are_distinct_from_public_beta() -> None:
     metadata = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     package = (ROOT / "src" / "premium_model_budget_governor" / "__init__.py").read_text(encoding="utf-8")
 
-    assert 'version = "0.4.0rc6"' in metadata
-    assert '__version__ = "0.4.0rc6"' in package
+    assert 'version = "0.5.0.dev1"' in metadata
+    assert '__version__ = "0.5.0.dev1"' in package
     plugin = json.loads((ROOT / "plugin/.codex-plugin/plugin.json").read_text(encoding="utf-8"))
-    assert plugin["version"] == "0.4.0-rc.6"
+    assert plugin["version"] == "0.5.0-dev.1"
+    assert "releases/tag/v0.4.0-rc.6" in (ROOT / "README.md").read_text(encoding="utf-8")
 
 
 def test_product_tour_has_accessible_controls_and_real_assets() -> None:

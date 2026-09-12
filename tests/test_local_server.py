@@ -109,12 +109,53 @@ def call(server, path, *, method="GET", payload=None, authenticated=True, header
     return result
 
 
+def test_preview_only_rejects_execution_before_queue_or_application():
+    from premium_model_budget_governor.local_server import LocalServer
+    app = App()
+    server = LocalServer(app, preview_only=True)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        status, _, body = call(server, "/api/preview", method="POST", payload={})
+        assert status == 200
+        assert json.loads(body)["result"]["execution_disabled"] is True
+        status, _, body = call(server, "/api/execute", method="POST",
+                               payload={"id": "a" * 32, "approved": True})
+        assert status == 403 and "Preview-only" in body
+        assert app.calls == 0 and server.jobs.list() == []
+    finally:
+        app.release.set()
+        server.shutdown()
+        server.server_close()
+        thread.join(3)
+
+
+def test_preview_only_requires_boolean_before_binding():
+    from premium_model_budget_governor.local_server import LocalServer
+    with pytest.raises(ValueError, match="boolean"):
+        LocalServer(App(), preview_only="false")
+
+
 def test_api_requires_token_and_exact_host(local):
     server, app = local
     assert call(server, "/api/projects", authenticated=False)[0] == 401
     assert call(server, "/api/projects", headers={"Host": "attacker.example"})[0] == 403
     assert call(server, "/api/projects")[0] == 200
     assert app.calls == 0
+
+
+def test_comparison_endpoint_is_authenticated_and_never_dispatches(local):
+    server, app = local
+    packet = {"baseline": "direct", "runs": [], "enrollment": [
+        {"task_id": "t", "snapshot": "s", "rubric": "r", "arm": "direct"},
+        {"task_id": "t", "snapshot": "s", "rubric": "r", "arm": "focused"}]}
+    path = "/api/experiments/compare"
+    assert call(server, path, method="POST", payload=packet, authenticated=False)[0] == 401
+    assert call(server, path, method="POST", payload=packet, headers={"Origin":"https://example.invalid"})[0] == 403
+    status, _, body = call(server, path, method="POST", payload=packet)
+    assert status == 200
+    assert json.loads(body)["result"]["enrollment"]["missing_runs"] == 2
+    assert app.calls == 0 and app.preview_calls == 0
 
 
 def test_preview_discard_requires_auth_and_only_identifier(local):
@@ -277,6 +318,24 @@ def test_no_lan_bind_parameter():
     from premium_model_budget_governor.local_server import LocalServer
     with pytest.raises(TypeError):
         LocalServer(App(), host="0.0.0.0")
+
+
+def test_digest_requires_auth_origin_and_explicit_local_consent(local, tmp_path):
+    from premium_model_budget_governor.workbench import Workbench
+    server, app = local
+    real = Workbench({"p": tmp_path}, tmp_path / "data")
+    app.configure_digest = real.configure_digest
+    app.usage_digest = real.usage_digest
+    assert call(server, "/api/usage-digest", authenticated=False)[0] == 401
+    assert json.loads(call(server, "/api/usage-digest")[2])["result"]["enabled"] is False
+    endpoint = "/api/usage-digest/settings"
+    assert call(server, endpoint, method="POST", payload={"enabled": True, "approved": True}, headers={"Origin": "https://example.invalid"})[0] == 403
+    for packet in ({"enabled": True}, {"enabled": True, "approved": 1}, {"enabled": True, "approved": True, "path": "other"}):
+        assert call(server, endpoint, method="POST", payload=packet)[0] == 400
+    assert call(server, endpoint, method="POST", payload={"enabled": True, "approved": True})[0] == 200
+    result = json.loads(call(server, "/api/usage-digest")[2])["result"]
+    assert result["enabled"] is True and result["report"]["weekly_cost"] is None
+    assert app.calls == 0
 
 
 def test_ui_assets_are_exact_allowlist_and_never_embed_token(local):

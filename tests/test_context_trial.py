@@ -41,6 +41,9 @@ def test_quality_failure_retains_receipt_and_unexecuted_enrollment(tmp_path):
     assert len(result["not_executed"]) == 3
     assert result["runs"][0]["passed"] is False
     assert (tmp_path / "new/one-0-inherit.json").exists()
+    comparison = json.loads((tmp_path / "new/comparison.json").read_text())
+    assert comparison["enrollment"]["missing_runs"] == 3
+    assert comparison["enrollment"]["complete"] is False
 
 
 def test_unknown_usage_stops_without_inventing_cost_pair(tmp_path):
@@ -49,11 +52,22 @@ def test_unknown_usage_stops_without_inventing_cost_pair(tmp_path):
     assert result["stop_reason"] == "execution_or_usage_uncertain"
     assert result["runs"] == []
     assert len(result["not_executed"]) == 3
+    comparison = json.loads((tmp_path / "new/comparison.json").read_text())
+    assert comparison["enrollment"]["missing_runs"] == 4
 
 
 def test_cannot_overwrite_existing_trial(tmp_path):
     with pytest.raises(FileExistsError):
         trial.run_trial(fixture(), tmp_path, execute=True, invoke=lambda *_: pytest.fail("dispatch"))
+
+
+def test_duplicate_enrollment_rejected_before_directory_or_dispatch(tmp_path):
+    data = fixture()
+    data["orders"] = [["inherit", "inherit"]]
+    out = tmp_path / "new"
+    with pytest.raises(ValueError, match="duplicate enrollment"):
+        trial.run_trial(data, out, execute=True, invoke=lambda *_: pytest.fail("dispatch"))
+    assert not out.exists()
 
 
 def test_frozen_inputs_and_complete_counterbalanced_comparison(tmp_path):
@@ -71,6 +85,7 @@ def test_frozen_inputs_and_complete_counterbalanced_comparison(tmp_path):
     comparison = json.loads((out / "comparison.json").read_text())
     assert comparison["comparisons"][0]["matched_cost_pairs"] == 2
     assert comparison["automatic_promotion"] is False
+    assert comparison["enrollment"]["complete"] is True
 
 
 def test_public_counter_export_matches_enrollment_and_configured_rates():

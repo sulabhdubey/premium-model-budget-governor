@@ -21,6 +21,7 @@ from .predictor import predict_benefit
 from .scanners import scan_text
 from .shadow import build_shadow_packet
 from .telemetry import normalize_usage
+from .long_work import reconcile_work
 from .tournament import rank_candidates
 from .workflow import plan_workflow
 from .leases import budget_action
@@ -37,6 +38,12 @@ except ImportError as exc:  # pragma: no cover - only exercised without optional
 
 
 mcp = MCPServer("Premium Model Budget Governor")
+
+
+@mcp.tool()
+def reconcile_work_observations(packet: dict[str, Any]) -> dict[str, Any]:
+    """Reconcile supplied counter receipts; no file reads, model calls or ledger writes."""
+    return reconcile_work(packet)
 
 
 @mcp.tool()

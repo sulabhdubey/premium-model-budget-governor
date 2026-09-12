@@ -53,6 +53,10 @@ def main():
             enrolled.append({"task_id": task["id"], "arm": profile,
                              "call_id": fixture["id"] + "-" + task["id"] + "-" + profile})
     stop = None
+    comparison_enrollment = [{**entry, "snapshot": manifest_hash,
+                             "rubric": "exact-json-tool-event-unchanged-v1", "repeat": 0}
+                            for entry in enrolled]
+    compare_runs({"baseline": "inherit", "runs": [], "enrollment": comparison_enrollment})
     for entry in enrolled:
         state = budget_action({"action": "status", "task_id": args.budget_task}, args.ledger)
         if state["reserved_credits"] or state["available_credits"] < fixture["estimated_credits_per_call"]:
@@ -104,7 +108,7 @@ def main():
               "enrolled": enrolled, "not_executed": enrolled[len(outcomes):], "stop_reason": stop,
               "budget": state, "limitations": fixture["limitations"], "automatic_promotion": False}
     (output / "results.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
-    comparison = compare_runs({"baseline": "inherit", "runs": runs}) if any(r["arm"] == "inherit" for r in runs) else None
+    comparison = compare_runs({"baseline": "inherit", "runs": runs, "enrollment": comparison_enrollment})
     (output / "comparison.json").write_text(json.dumps(comparison, indent=2), encoding="utf-8")
 
 

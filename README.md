@@ -19,6 +19,21 @@ approving estimated spend, and inspecting usage afterward.
 
 </div>
 
+### What Changes After Installation?
+
+**Installing Governor does not automatically reduce token use in your existing
+Codex chats.** It adds tools and a separate workbench; savings require a workflow
+change that actually avoids unnecessary work without losing needed capabilities.
+
+| Where you work | What Governor can do | What it does not do |
+| --- | --- | --- |
+| Existing Codex chat with its skill/MCP tools | Provide planning guidance and analyze supplied usage | Automatically intercept every turn, remove chat context or guarantee lower consumption |
+| Task explicitly started through the supported Governor runner | Check admission, require approval, record reported usage and retain unknown spend | Enforce a provider-side token cap or prove savings from a single receipt |
+| Product tour or planner demo | Show examples and estimates without a model call | Run your task or measure your account |
+
+Start with one non-sensitive task. Keep the model, tools and reasoning you need;
+compare complete workflows before adopting an optimization.
+
 [![Premium Model Budget Governor: real Workbench previews with direct Astra, explicit hybrids, and opt-in focused discovery](site/assets/tour-poster.png)](https://sulabhdubey.github.io/premium-model-budget-governor/#tour)
 
 <p align="center"><strong>Preview the workflow &nbsp; / &nbsp; Approve the estimate &nbsp; / &nbsp; Inspect the receipt</strong><br>
@@ -33,6 +48,11 @@ website; no model runs in the tour or planner demo.*
 > cheaper, or guarantee the same quality at lower cost.
 
 ### New Evidence, Same Astra
+
+**Latest counterexample:** the [accounted September 12 pilot](docs/ACCOUNTED_TRIAL_2026_09_12.md)
+found 18.19% fewer input tokens but **9.29% higher estimated cost** for focused
+discovery in its matched pair, because cache hits favored inherited discovery.
+All four fixed checks passed. Token reduction alone is not proof of savings.
 
 In a [12-call context pilot](docs/CONTEXT_TRIAL_RESULTS_2026_09_08.md), both Astra
 profiles passed all frozen checks on three authored tasks. The focused catalog

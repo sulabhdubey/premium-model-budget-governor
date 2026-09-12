@@ -7,6 +7,9 @@ from typing import Mapping
 from math import isfinite
 
 
+# Identifies the existing configured estimate table, not a current provider bill.
+RATE_VERSION = "legacy-configured-v1"
+
 RATES = {
     "gpt-5.6-terra": {"input": 50.0, "cached_input": 5.0, "output": 300.0},
     "gpt-5.6-luna": {"input": 5.0, "cached_input": 0.5, "output": 30.0},

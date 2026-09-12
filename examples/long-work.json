@@ -1,0 +1,14 @@
+{
+  "work_units": ["unit-1", "unit-2"],
+  "receipts": [
+    {
+      "receipt_id": "synthetic-1",
+      "work_unit_id": "unit-1",
+      "source_id": "synthetic-turn-1",
+      "counter_kind": "final",
+      "scope": "exclusive",
+      "model": "gpt-6-astra",
+      "usage": {"input_tokens": 100, "output_tokens": 10}
+    }
+  ]
+}

@@ -42,6 +42,10 @@ def run_trial(fixture, output, *, execute=False, invoke=execute_app_server):
                 "image_hashes": {t["id"]: sha256((ROOT / t["image"]).read_bytes()).hexdigest()
                                  for t in fixture["tasks"] if t.get("image")}}
     fingerprint = digest(manifest)
+    comparison_enrollment = [{**entry, "snapshot": fingerprint,
+        "rubric": digest(next(t for t in fixture["tasks"] if t["id"] == entry["task_id"])["oracle"])}
+        for entry in enrolled]
+    compare_runs({"baseline": "inherit", "runs": [], "enrollment": comparison_enrollment})
     if not execute:
         return {"status": "dry_run", "manifest_sha256": fingerprint,
                 "planned_calls": len(enrolled), "budget_credits": fixture["budget_credits"],
@@ -99,7 +103,7 @@ def run_trial(fixture, output, *, execute=False, invoke=execute_app_server):
                           "passed": passed, "spent": state["spent_credits"], "stop": stop}), flush=True)
         if stop:
             break
-    comparison = compare_runs({"baseline": "inherit", "runs": runs}) if runs else None
+    comparison = compare_runs({"baseline": "inherit", "runs": runs, "enrollment": comparison_enrollment})
     (output / "comparison.json").write_text(json.dumps(comparison, indent=2), encoding="utf-8")
     return report
 

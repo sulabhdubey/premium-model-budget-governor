@@ -38,6 +38,23 @@ def request(**changes):
             "budget_credits": 20, "evidence": ["proof.txt"], **changes}
 
 
+@pytest.mark.parametrize("strategy", ["direct", "prepared"])
+def test_receipt_keeps_choices_separate_from_unproven_benefits(tmp_path, strategy):
+    app = service(tmp_path)
+    preview = app.preview(request(strategy=strategy, budget_credits=100))
+    result = app.execute(preview["id"], approved=True)
+    change = result["what_changed"]
+    assert change["context_profile"] == "inherit"
+    assert change["reasoning"] == "low"
+    assert change["attached_text_count"] == 1
+    assert change["attached_image_count"] == 0
+    assert change["baseline_status"] == "not_linked"
+    assert change["savings"] is None
+    assert change["evidence_use_verified"] is False
+    assert "proof.txt" not in json.dumps(change)
+    assert app.history()[0]["what_changed"] == change
+
+
 def test_focused_catalog_preview_binding_and_conservative_estimate(tmp_path):
     calls = []
     def executor(packet, ledger):
@@ -355,6 +372,16 @@ def test_browse_is_project_bound_and_excludes_private_files(tmp_path):
         app.browse("sample", "../")
     with pytest.raises(ValueError):
         app.browse("unknown", ".")
+
+
+def test_preview_estimate_is_retained_without_claiming_savings(tmp_path):
+    app = service(tmp_path)
+    preview = app.preview(request())
+    saved = app.previews[preview["id"]]
+    changed = app._what_changed(saved)
+    assert changed["preview_estimated_credits"] == preview["plan"]["selected"]["estimated_total_credits"]
+    assert changed["estimate_basis"] == "provisional_allowances_not_measured"
+    assert changed["savings"] is None
 
 
 def test_false_predispatch_cancel_with_reservation_is_unknown(tmp_path):

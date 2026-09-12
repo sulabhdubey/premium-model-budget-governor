@@ -1,6 +1,8 @@
 # Human Onboarding Trial
 
-Status: protocol ready; no volunteer sessions recorded.
+Status: protocol ready; no independent volunteer sessions recorded. Owner formative
+observations, when collected, stay in private trial records and are not independent
+validation or publication consent.
 
 An owner may perform a separately labeled **owner formative trial**. It can find
 real usability defects and exercise native folder selection, but familiarity with
@@ -60,3 +62,16 @@ Do not average away a nontechnical participant's failure with developer successe
 
 Publish sanitized observations and limitations, including unsuccessful attempts.
 Automated browser QA is a separate prerequisite and cannot replace these trials.
+
+## Execution-Disabled Preview Session (Local Development)
+
+Use `pm-bg serve --preview-only` with a dedicated trial data directory to disable
+model dispatch through that server. Authenticated execution requests are rejected
+before queuing a job; preview responses mark execution disabled and the interface
+disables approval. The startup option cannot be changed through the browser.
+
+This is a no-model-execution mode, not an air-gapped mode: preview and setup checks
+can invoke the installed Codex host, and explicitly selected evidence is read
+locally. Local project/observation management still writes its own state. It does
+not disable other applications or command-line model runs. Use non-sensitive sample
+material and distinguish facilitator setup from unaided installation.

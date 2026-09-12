@@ -96,7 +96,38 @@ Raw sessions, private prompts, credentials, and SQLite ledgers must not be publi
 The comparator also reports `coverage`: baseline-only and candidate-only runs,
 their totals, and whether every supplied run matches. This is coverage of the
 input packet, not proof that all planned experiments were submitted. An omitted
-task on both sides cannot be detected without an independent enrollment manifest.
+task on both sides cannot be detected without an independently retained enrollment
+manifest. The unreleased enrollment extension below makes that comparison explicit.
+
+### Planned Enrollment (Unreleased)
+
+Optionally supply `enrollment`: a nonempty list of planned run identities using
+`task_id`, `snapshot`, `rubric`, `arm`, and `repeat` (defaults to zero). Use opaque
+labels, never personal paths or prompts. The same identity cannot be enrolled
+twice; the baseline must be included. There is a 10,000-identity limit.
+
+The report's separate `enrollment` section counts missing and unexpected runs,
+both overall and per arm. It includes wholly absent arms and tasks omitted from
+both sides. An empty `runs` list is accepted only with explicit enrollment, and
+produces no invented costs or passing results. Existing inputs without enrollment
+return `status: not_supplied` and `complete: null`.
+
+`enrollment.complete` means supplied identities match the supplied plan, not that
+every call succeeded, costs are valid, or all workflows completed. Continue to
+read quality results, coverage and cost exclusions. Observed pair statistics
+remain descriptive even when enrollment is incomplete; unplanned rows are not
+silently dropped to make a report look compliant.
+
+The order-independent fingerprint covers only normalized run identities, not
+extra fields. It is not a timestamp, signature or proof of preregistration. Retain
+the plan independently before execution: editing both the plan and results can
+still conceal attrition. No automatic policy promotion is enabled.
+
+Try the intentionally incomplete, no-model example:
+
+```sh
+pm-bg experiment --input examples/enrollment-missing.json
+```
 
 `cost_exclusion_reasons` counts each reason once per matched pair. A pair can
 have several reasons: incomplete workflow, non-host receipts, missing calls,

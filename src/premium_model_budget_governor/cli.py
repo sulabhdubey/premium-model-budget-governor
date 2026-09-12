@@ -15,6 +15,7 @@ from .predictor import predict_benefit
 from .scanners import scan_file, scan_text
 from .shadow import build_shadow_packet
 from .telemetry import append_usage
+from .long_work import reconcile_work
 from .tournament import rank_candidates
 from .workflow import plan_workflow
 from .leases import budget_action
@@ -22,9 +23,11 @@ from .experiments import compare_runs, import_codex_receipt
 from .evidence_demand import evidence_packet
 from .host import execute_codex
 from .calibration import calibrate
+from .host_estimation import estimate_host, plan_calibrated
 from .dashboard import export_dashboard
 from .app_server import probe_app_server, execute_app_server
 from .doctor import diagnose, format_diagnosis
+from .context_profile import compare_context_choices
 
 
 DEFAULT_LEDGER = Path.home() / ".pm-bg" / "ledger.jsonl"
@@ -43,6 +46,7 @@ def main(argv: list[str] | None = None) -> int:
     serve.add_argument("--data", default=str(Path.home() / ".pm-bg" / "workbench"))
     serve.add_argument("--port", type=int, default=0)
     serve.add_argument("--no-browser", action="store_true")
+    serve.add_argument("--preview-only", action="store_true", help="Disable model execution in this local server; preview and host checks remain available")
     serve.add_argument("--session-file", help="Optional private launch-link file; contains a local session secret")
     policy = sub.add_parser("policy", help="Propose, explicitly activate, inspect or roll back empirical workflow preferences")
     policy.add_argument("--input", required=True)
@@ -60,13 +64,27 @@ def main(argv: list[str] | None = None) -> int:
     dashboard.add_argument("--ledger", required=True)
     dashboard.add_argument("--output", required=True)
     for name, help_text in [("experiment", "Compare matched runs without inventing usage"),
+                            ("context-choices", "Compare preserving context options without dispatch or host changes"),
                             ("calibrate", "Report matched outcomes without automatic model promotion"),
+                            ("estimate-host", "Forecast from recent comparable host receipts without dispatch"),
+                            ("plan-host", "Plan with matched per-call host calibration; no dispatch"),
                             ("evidence", "Select integrity-checked evidence without truncation")]:
         command = sub.add_parser(name, help=help_text)
         command.add_argument("--input", required=True)
     receipt = sub.add_parser("receipt", help="Import counters from one explicit single-model Codex rollout")
     receipt.add_argument("--input", required=True)
     receipt.add_argument("--call-id", required=True)
+    recover = sub.add_parser("recover", help="Preview saved terminal evidence; --apply settles without a model call")
+    for option in ("ledger", "task-id", "call-id"):
+        recover.add_argument("--" + option, required=True)
+    recover.add_argument("--apply", action="store_true", help="Reconcile validated saved evidence into the ledger")
+    observe = sub.add_parser("observe-rollout", help="Save counters from one explicit rollout without declaring final usage")
+    observe.add_argument("--sample", action="store_true", help="Read a bounded tail; cumulative model attribution stays unknown")
+    for option in ("input", "journal", "observation-id", "work-unit", "source-id"):
+        observe.add_argument("--" + option, required=True)
+    collect = sub.add_parser("collect-rollout", help="Incrementally observe one explicit rollout; no task cost or model attribution")
+    collect.add_argument("--input", help="Omit to read the newest saved observations only")
+    collect.add_argument("--journal", required=True, help="Dedicated collector database, not the budget or observation journal")
     execute = sub.add_parser("run", help="Explicitly execute a governed read-only Codex CLI call")
     execute.add_argument("--input", required=True)
     execute.add_argument("--ledger", default=str(Path.home() / ".pm-bg" / "budget.sqlite3"))
@@ -115,8 +133,21 @@ def main(argv: list[str] | None = None) -> int:
     telemetry.add_argument("--input", required=True)
     telemetry.add_argument("--ledger", default=str(DEFAULT_LEDGER))
 
+    long_work = sub.add_parser("long-work", help="Reconcile explicit work receipts without model calls")
+    long_work.add_argument("--input")
+    long_work.add_argument("--journal", help="Dedicated private observation database, not a budget ledger")
+    long_work.add_argument("--observation-id", help="Immutable observation ID; omit input to read a saved report")
+    observability = sub.add_parser("observability-preview", help="Local content-excluding OTLP log preview; no network delivery")
+    observability.add_argument("--input", required=True)
+    retention = sub.add_parser("observation-retention", help="Preview or explicitly apply backup-first observation cleanup")
+    retention.add_argument("--journal", required=True)
+    retention.add_argument("--before", help="Timezone-aware ISO cutoff for a read-only preview")
+    retention.add_argument("--plan", help="Exact saved preview JSON for approved cleanup")
+    retention.add_argument("--approve", action="store_true")
+
     doctrine = sub.add_parser("doctrine", help="Append or summarize distilled doctrine")
     doctrine.add_argument("--input")
+    doctrine.add_argument("--context", help="Filter inventory against explicit current scope, source, policy and permissions")
     doctrine.add_argument("--ledger", default=str(DEFAULT_DOCTRINE))
 
     args = parser.parse_args(argv)
@@ -169,6 +200,11 @@ def _load_json(path: str) -> dict[str, object]:
 
 
 def _dispatch(args: argparse.Namespace) -> object:
+    if args.cmd == "recover":
+        from .receipt_journal import recover_terminal
+        receipt = recover_terminal(Path(args.ledger), args.task_id, args.call_id, settle=args.apply)
+        return {"status": ("reconciled" if args.apply else "preview") if receipt is not None else "no_terminal_evidence",
+                "receipt": receipt, "model_calls_started": 0}
     if args.cmd == "policy":
         from .reviewed_policy import PolicyStore
         packet = _load_json(args.input)
@@ -193,7 +229,8 @@ def _dispatch(args: argparse.Namespace) -> object:
         roots = [Path(p).resolve(strict=True) for p in (args.project or ["."])]
         projects = {f"{i+1}. {root.name}": root for i, root in enumerate(roots)}
         serve(projects, Path(args.data), port=args.port, open_browser=not args.no_browser,
-              session_file=Path(args.session_file) if args.session_file else None)
+              session_file=Path(args.session_file) if args.session_file else None,
+              preview_only=args.preview_only)
         return {"status": "stopped"}
     if args.cmd == "doctor":
         return diagnose(offline=args.offline)
@@ -205,6 +242,10 @@ def _dispatch(args: argparse.Namespace) -> object:
         return export_dashboard(Path(args.ledger), Path(args.output))
     if args.cmd == "calibrate":
         return calibrate(_load_json(args.input))
+    if args.cmd == "estimate-host":
+        return estimate_host(_load_json(args.input))
+    if args.cmd == "plan-host":
+        return plan_calibrated(_load_json(args.input))
     if args.cmd == "run":
         packet = _load_json(args.input)
         required = ("prompt", "root", "model", "task_id", "call_id", "estimated_credits")
@@ -220,11 +261,13 @@ def _dispatch(args: argparse.Namespace) -> object:
                              task_id=packet["task_id"], call_id=packet["call_id"],
                              estimated_credits=packet["estimated_credits"],
                              timeout_seconds=packet.get("timeout_seconds", 300),
-                             images=[Path(p) for p in images])
+                             images=[Path(p) for p in images], rate_contract=packet.get("rate_contract"))
     if args.cmd == "receipt":
         return import_codex_receipt(Path(args.input), args.call_id)
     if args.cmd == "experiment":
         return compare_runs(_load_json(args.input))
+    if args.cmd == "context-choices":
+        return compare_context_choices(_load_json(args.input))
     if args.cmd == "evidence":
         return evidence_packet(_load_json(args.input))
     if args.cmd == "budget":
@@ -272,11 +315,42 @@ def _dispatch(args: argparse.Namespace) -> object:
         return predict_benefit(_load_json(args.input), ledger=Path(args.ledger) if args.ledger else None)
     if args.cmd == "telemetry":
         return append_usage(_load_json(args.input), Path(args.ledger))
+    if args.cmd == "long-work":
+        from .work_journal import save_observation, read_observation
+        if bool(args.journal) != bool(args.observation_id):
+            raise ValueError("journal and observation-id must be supplied together")
+        if args.journal:
+            if args.input:
+                return save_observation(Path(args.journal), args.observation_id, _load_json(args.input))
+            return read_observation(Path(args.journal), args.observation_id)
+        if not args.input:
+            raise ValueError("input or journal and observation-id required")
+        return reconcile_work(_load_json(args.input))
+    if args.cmd == "observability-preview":
+        from .observability import observability_preview
+        return observability_preview(_load_json(args.input))
+    if args.cmd == "observe-rollout":
+        from .work_journal import observe_rollout
+        return observe_rollout(Path(args.input), Path(args.journal), args.observation_id, args.work_unit, args.source_id, sample=args.sample)
+    if args.cmd == "collect-rollout":
+        from .rollout_cursor import collect_rollout, read_collections
+        if args.input:
+            return collect_rollout(Path(args.input), Path(args.journal))
+        return read_collections(Path(args.journal))
+    if args.cmd == "observation-retention":
+        from .observation_retention import preview_retention, apply_retention
+        if args.before and not args.plan and not args.approve:
+            return preview_retention(Path(args.journal), args.before)
+        if args.plan and args.approve and not args.before:
+            return apply_retention(Path(args.journal), _load_json(args.plan), approved=True)
+        raise ValueError("use before for preview, or plan plus approve for cleanup")
     if args.cmd == "doctrine":
         ledger = Path(args.ledger)
+        if args.input and args.context:
+            raise ValueError("use input for append or context for read-only filtering, not both")
         if args.input:
             return append_doctrine(_load_json(args.input), ledger)
-        return synthesize_doctrine(ledger)
+        return synthesize_doctrine(ledger, current_context=_load_json(args.context) if args.context else None)
     raise ValueError(f"unknown command: {args.cmd}")
 
 

@@ -11,7 +11,7 @@ the CLI.
 ## Install
 
 Download the installer and wheel from the
-[rc.5 prerelease](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.6).
+[rc.6 prerelease](https://github.com/sulabhdubey/premium-model-budget-governor/releases/tag/v0.4.0-rc.6).
 From their folder, use the isolated installation with optional dependencies:
 
 ```sh
@@ -54,10 +54,14 @@ configuration:
 The same example is available at `examples/mcp-config.codex.json`.
 Replace `python` in the configuration with the absolute path of the runtime that
 contains the optional MCP package: on Windows this is normally
-`C:\\Users\\YOUR_USER\\.pm-bg\\runtime\\Scripts\\python.exe`, and on Linux/macOS
-`/home/YOUR_USER/.pm-bg/runtime/bin/python` (use your actual home path).
+the `Scripts/python.exe` file in your installed runtime; on Linux/macOS it is
+`bin/python` in that runtime. Use the absolute runtime location reported by the
+installer, not these relative suffixes or an example user-directory placeholder.
 Bare `python` may resolve to a different installation. JSON is an illustrative
 MCP client format; apply your client's supported configuration format explicitly.
+The guided installer emits `governor-mcp-client.json` after a successful `--mcp`
+installation, using the exact isolated interpreter. A skills-only plugin is not
+an MCP connection; confirm the server's tools are actually available in the client.
 
 ## Tools
 
@@ -80,6 +84,9 @@ MCP client format; apply your client's supported configuration format explicitly
   judging turn.
 - `predict_astra_benefit`: estimate whether premium review is likely to help.
 - `normalize_token_telemetry`: normalize usage data without storing prompts.
+- `reconcile_work_observations` (local development): reconcile supplied counter
+  receipts, retaining missing/overlapping usage as unknown. No log reads, journal
+  writes or model calls. See [long-work observations](LONG_WORK.md).
 
 ## Runtime Test
 
@@ -87,6 +94,9 @@ The repository includes `tests/test_mcp_runtime.py`. When the optional MCP extra
 is installed, this test launches the server over stdio, lists the available
 tools, and exercises routing, whole-workflow planning, evidence selection,
 experiment comparison, and calibration over a real MCP client session.
+The test launches the same package location that pytest imported, avoiding a
+false pass against an older globally installed server. Development coverage also
+checks long-work missing receipts and unsupported cache-write accounting.
 
 ```bash
 python -m pip install -e ".[dev,mcp]"

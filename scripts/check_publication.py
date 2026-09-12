@@ -8,12 +8,18 @@ from premium_model_budget_governor.publication import audit_files
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('files', nargs='+')
+    parser.add_argument('files', nargs='*')
+    parser.add_argument('--docs-root', type=Path, help='Include all Markdown under an explicit documentation directory')
     parser.add_argument('--terms-file', help='Private JSON list of phrases, kept outside version control')
     parser.add_argument('--report', type=Path)
-    args = parser.parse_args()
+    args = parser.parse_intermixed_args()
     terms = json.loads(Path(args.terms_file).read_text(encoding='utf-8')) if args.terms_file else []
-    result = audit_files(args.files, terms)
+    files = list(args.files)
+    if args.docs_root:
+        if args.docs_root.is_symlink() or not args.docs_root.is_dir():
+            parser.error('documentation root must be a regular directory')
+        files.extend(str(path) for path in sorted(args.docs_root.rglob('*.md')))
+    result = audit_files(files, terms)
     output = json.dumps(result, indent=2) + '\n'
     if args.report:
         args.report.write_text(output, encoding='utf-8')

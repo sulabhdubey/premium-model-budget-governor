@@ -17,6 +17,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--wheel", type=Path, required=True)
     parser.add_argument("--mcp", action="store_true")
+    parser.add_argument("--documents", action="store_true")
     parser.add_argument("--regression", action="store_true", help="Install pytest in the isolated runtime and test the wheel")
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
@@ -26,6 +27,7 @@ def main() -> int:
     report = {"schema_version": 1, "platform": platform.system(),
               "python": platform.python_version(), "wheel_sha256": hashlib.sha256(wheel.read_bytes()).hexdigest(),
               "optional_mcp_requested": args.mcp, "regression_requested": args.regression,
+              "optional_documents_requested": args.documents,
               "model_calls_started": 0, "checks": []}
     stage = "initialize"
     env = {key: value for key, value in os.environ.items() if key not in {"PYTHONPATH", "PYTHONHOME"}}
@@ -43,9 +45,11 @@ def main() -> int:
                     raise RuntimeError("command_failed")
                 return result.stdout
 
-            base = [sys.executable, str(installer), "install", "--directory", str(target), "--wheel", str(wheel)]
+            base = [sys.executable, str(installer), "install", "--directory", str(target), "--wheel", str(wheel), "--provenance"]
             if args.mcp:
                 base += ["--mcp"]
+            if args.documents:
+                base += ["--documents"]
             stage = "preview"
             run(base)
             assert not target.exists()
@@ -62,6 +66,35 @@ def main() -> int:
             assert Path(origin["prefix"]).resolve() == target
             assert Path(origin["module"]).resolve().is_relative_to(target)
             report["checks"].append("imports_installed_wheel_not_checkout")
+            stage = "installation_archive_provenance"
+            pip_report = json.loads((target / "pip-install-report.json").read_text(encoding="utf-8"))
+            archives = []
+            for installed in pip_report["install"]:
+                metadata = installed["metadata"]
+                archive = installed.get("download_info", {}).get("archive_info", {})
+                archives.append({"name": metadata["name"], "version": metadata["version"],
+                                 "sha256": archive.get("hashes", {}).get("sha256")})
+            report["installation_archives"] = sorted(archives, key=lambda row: row["name"].lower())
+            own = [row for row in archives if row["name"].replace("_", "-").lower() == "premium-model-budget-governor"]
+            assert len(own) == 1 and own[0]["sha256"] == report["wheel_sha256"]
+            report["checks"].append("pip_archive_hashes_without_urls_or_paths")
+            stage = "installed_inventory"
+            report["installed_inventory"] = json.loads(run([str(python), "-I", "-c", """
+import json
+from importlib.metadata import distributions
+rows = []
+for dist in distributions():
+    metadata = dist.metadata
+    files = list(dist.files or [])
+    rows.append({'name': metadata['Name'], 'version': dist.version,
+                 'license_expression': metadata.get('License-Expression'),
+                 'license_classifiers': [v for v in metadata.get_all('Classifier', []) if v.startswith('License ::')],
+                 'declared_license_files': len(metadata.get_all('License-File', [])),
+                 'native_file_count': sum(str(f).lower().endswith(('.pyd', '.so', '.dll', '.dylib')) for f in files)})
+assert rows and all(row['name'] and row['version'] for row in rows)
+print(json.dumps(sorted(rows, key=lambda row: row['name'].lower())))
+"""]))
+            report["checks"].append("installed_inventory_before_regression_dependencies")
             stage = "doctor"
             diagnosis = json.loads(run([str(executable), "doctor", "--offline", "--json"]))["result"]
             assert diagnosis["offline_planning"] == "ready"
@@ -72,6 +105,30 @@ def main() -> int:
             planned = json.loads(run([str(executable), "plan", "--input", str(root / "examples/astra_preferred.json")]))["result"]
             assert planned["astra_participation"] == "planned"
             report["checks"].append("astra_preferred_example_plans_without_model_call")
+            stage = "installed_incremental_collector"
+            source = outside / "synthetic-rollout.jsonl"
+            journal = outside / "collector.sqlite3"
+
+            def counter(incoming, cached, outgoing):
+                return json.dumps({"type": "event_msg", "payload": {"type": "token_count", "info": {
+                    "total_token_usage": {"input_tokens": incoming, "cached_input_tokens": cached,
+                                          "output_tokens": outgoing, "total_tokens": incoming + outgoing}}}}) + "\n"
+
+            source.write_text(counter(100, 20, 10), encoding="utf-8")
+            collect = [str(executable), "collect-rollout", "--input", str(source), "--journal", str(journal)]
+            first = json.loads(run(collect))["result"]
+            assert first["bootstrap"] and first["counter_difference"] is None
+            with source.open("a", encoding="utf-8") as stream:
+                stream.write(counter(150, 40, 20))
+            second = json.loads(run(collect))["result"]
+            assert second["counter_difference"] == {
+                "input_tokens": 50, "cached_tokens": 20, "output_tokens": 10, "cache_write_tokens": None}
+            assert second["actual_model"] == "unknown" and second["estimated_credits"] is None
+            assert json.loads(run(collect))["result"]["status"] == "no_new_complete_events"
+            history = json.loads(run([str(executable), "collect-rollout", "--journal", str(journal)]))["result"]
+            assert len(history["observations"]) == 2 and history["totals"] is None
+            assert not history["savings_proven"]
+            report["checks"].append("installed_collector_bootstrap_resume_no_duplicate_readback")
             stage = "installed_workbench"
             installed_assets = json.loads(run([str(python), "-I", "-c", """
 import hashlib, http.client, json, tempfile
@@ -127,11 +184,15 @@ print(json.dumps(hashes))
             if args.mcp:
                 stage = "mcp_stdio"
                 run([str(python), "-I", "-c", """
-import anyio, sys
+import anyio, sys, json
+from pathlib import Path
 from mcp.client.session import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
 async def check():
-    params = StdioServerParameters(command=sys.executable, args=['-I', '-m', 'premium_model_budget_governor.mcp_server'])
+    config = json.loads(Path(sys.argv[1]).read_text())['mcpServers']['premium-model-budget-governor']
+    assert Path(config['command']).resolve() == Path(sys.executable).resolve()
+    assert config['args'] == ['-m', 'premium_model_budget_governor.mcp_server']
+    params = StdioServerParameters(command=config['command'], args=config['args'])
     async with stdio_client(params) as (reader, writer):
         async with ClientSession(reader, writer) as session:
             await session.initialize()
@@ -140,8 +201,23 @@ async def check():
             result = await session.call_tool('calibrate_workflow_outcomes', {'packet': {'pairs': []}})
             assert not result.is_error
 anyio.run(check)
-"""])
+""", str(target / "governor-mcp-client.json")])
                 report["checks"].append("installed_mcp_stdio_initialize_list_call")
+            if args.documents:
+                stage = "installed_document_worker"
+                run([str(python), "-I", "-c", """
+from io import BytesIO
+from docx import Document
+from premium_model_budget_governor.document_extract import extract_docx
+document = Document()
+document.add_paragraph('Installed document worker qualification.')
+stream = BytesIO()
+document.save(stream)
+result = extract_docx(stream.getvalue())
+assert result['text'] == 'Installed document worker qualification.'
+assert result['truncated'] is False
+"""])
+                report["checks"].append("installed_document_worker_private_copy_plain_text")
             if args.regression:
                 stage = "regression_dependencies"
                 run([str(python), "-m", "pip", "install", "pytest>=8"])

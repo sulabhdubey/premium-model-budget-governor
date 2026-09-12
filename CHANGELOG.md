@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.5.0.dev1 - Unreleased Development
+
+- Separate development package/plugin versions from the public rc.6 beta.
+- Add shared counter validation, explicit cache assumptions and frozen rate
+  snapshots for CLI/App Server estimates, settlement and terminal recovery.
+- Add preview-first CLI recovery, bounded host transport, local long-work
+  observations, reviewed exports, optional digest and basic DOCX intake.
+- Qualify isolated installations with optional archive provenance and actual MCP
+  checks. Keep platform, private-data and bundled-dependency review limits explicit.
+- Human usability, independent capability/savings evidence and release approval
+  remain open. No automatic existing-chat control or weekly savings guarantee.
+
+- Optional planned-run enrollment exposes omitted tasks, absent arms and unplanned
+  observations. Empty comparisons cannot claim full matching. Enrollment is
+  caller-supplied, not proof of preregistration or successful completion.
+
 ## 0.4.0rc6 - Evaluation Transparency
 
 - Added matched-pair coverage, exclusion reasons and task-balanced cost summaries.

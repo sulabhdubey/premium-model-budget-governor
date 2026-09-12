@@ -1,23 +1,29 @@
 """Opt-in Codex App Server client. Stdio only; no global configuration changes."""
 
 from collections import Counter, deque
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
-from queue import Queue, Empty
+from queue import Queue, Empty, Full
 import shutil
 import signal
 import subprocess
-from threading import Thread
+from threading import Thread, Event
 import time
 
 from .cost import RATES, _token
 from .experiments import normalize_receipt
+from .accounting import estimate_observed
 from .host import _claim_dispatch
 from .receipt_journal import record_terminal
 from .leases import budget_action
 from . import __version__
 from .context_profile import context_profile_config
+
+MAX_LINE_CHARACTERS = 1024 * 1024
+MAX_QUEUED_EVENTS = 32
+MAX_PENDING_EVENTS = 64
 
 
 class ExecutionCancelled(Exception):
@@ -29,7 +35,10 @@ class AppServer:
         self.root = root.resolve(strict=True)
         self.timeout = timeout
         self.pending = deque()
-        self.queue = Queue()
+        self.queue = Queue(maxsize=MAX_QUEUED_EVENTS)
+        self.reader_stop = Event()
+        self.reader_done = Event()
+        self.transport_error = False
         self.sequence = 0
         self.process = None
         self.cancel_event = cancel_event
@@ -54,12 +63,25 @@ class AppServer:
 
     def _read(self):
         try:
-            for line in self.process.stdout:
-                self.queue.put(json.loads(line))
-        except (ValueError, OSError):
-            self.queue.put({"_transport_error": True})
+            while not self.reader_stop.is_set():
+                line = self.process.stdout.readline(MAX_LINE_CHARACTERS + 1)
+                if not line:
+                    break
+                if len(line) > MAX_LINE_CHARACTERS:
+                    raise ValueError("host event exceeds transport bound")
+                message = json.loads(line)
+                if not isinstance(message, dict):
+                    raise ValueError("host event must be an object")
+                while not self.reader_stop.is_set():
+                    try:
+                        self.queue.put(message, timeout=.1)
+                        break
+                    except Full:
+                        continue
+        except (ValueError, OSError, RecursionError):
+            self.transport_error = True
         finally:
-            self.queue.put(None)
+            self.reader_done.set()
 
     def send(self, message):
         self._check_cancel()
@@ -74,6 +96,10 @@ class AppServer:
         deadline = time.monotonic() + (self.timeout if timeout is None else max(.001, timeout))
         while True:
             self._check_cancel()
+            if self.transport_error:
+                raise ValueError("App Server transport failed or exceeded bounded event size")
+            if self.reader_done.is_set() and self.queue.empty():
+                raise ValueError("App Server transport ended")
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 raise TimeoutError("App Server response timed out")
@@ -105,6 +131,8 @@ class AppServer:
                 if not isinstance(response.get("result"), dict):
                     raise ValueError("invalid App Server result")
                 return response["result"]
+            if len(self.pending) >= MAX_PENDING_EVENTS:
+                raise ValueError("App Server deferred event limit exceeded")
             self.pending.append(response)
 
     def event(self, timeout):
@@ -112,6 +140,7 @@ class AppServer:
         return self.pending.popleft() if self.pending else self.receive(timeout)
 
     def __exit__(self, *args):
+        self.reader_stop.set()
         if self.process:
             if self.process.poll() is None:
                 if os.name == "nt":
@@ -210,6 +239,11 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
         raise ValueError("unsupported model or effort")
     profile = packet.get("context_profile", "inherit")
     overrides = context_profile_config(profile, model=model, effort=effort)
+    rate_check = estimate_observed(model, {"input_tokens": 0, "output_tokens": 0},
+                                   contract=packet.get("rate_contract"))
+    if rate_check["estimated_credits"] is None:
+        raise ValueError("rate contract must match requested model and default service tier")
+    rate_snapshot = rate_check["rate_snapshot"]
     root = Path(packet["root"]).resolve(strict=True)
     timeout = _token(packet.get("timeout_seconds", 300), "timeout_seconds")
     if not 1 <= timeout <= 1800:
@@ -231,6 +265,12 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
         if images and "image" not in available.get("inputModalities", []):
             raise ValueError("image capability unavailable on this host")
         require_hooks(client, root, packet.get("required_hook_hashes", []))
+        identity_before = None
+        if packet.get("capture_identity") is True:
+            config = client.request("config/read", {"cwd": str(root), "includeLayers": False})
+            if not isinstance(config.get("config"), dict):
+                raise ValueError("host configuration unavailable")
+            identity_before = sha256(json.dumps(config["config"], sort_keys=True).encode()).hexdigest()
         budget_action({**base, "action": "reserve", "model": model,
                        "estimated_credits": packet.get("estimated_credits"), "ttl_seconds": timeout}, ledger)
         _claim_dispatch(ledger, packet["task_id"], packet["call_id"])
@@ -255,6 +295,11 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
                 params = message.get("params", {})
                 if params.get("threadId") != thread_id or params.get("turnId", turn_id) != turn_id:
                     continue
+                if message.get("method") == "model/rerouted":
+                    # Thread totals cannot attribute a mixed-model turn to rates.
+                    return {"status": "unknown_usage", "call_id": packet["call_id"],
+                            "reservation_retained": True, "accounting_issue": "model_rerouted",
+                            "error": "Host reported model rerouting; reconcile model-specific usage before retry"}
                 if message.get("method") == "hook/completed" and params.get("run", {}).get("status") in {"failed", "blocked"}:
                     raise ValueError("native hook failed or blocked; retain unknown spend")
                 if message.get("method") == "thread/tokenUsage/updated":
@@ -280,18 +325,34 @@ def _execute_app_server(packet: dict, ledger: Path, *, cancel_event=None) -> dic
                         continue
                     if params["turn"]["status"] != "completed" or usage is None:
                         raise ValueError("incomplete turn or missing usage")
-                    credits = normalize_receipt({"call_id": packet["call_id"], "actual_model": model, "usage": usage})["credits"]
+                    identity = None
+                    if identity_before is not None:
+                        config = client.request("config/read", {"cwd": str(root), "includeLayers": False})
+                        if not isinstance(config.get("config"), dict):
+                            raise ValueError("host configuration unavailable after execution")
+                        after = sha256(json.dumps(config["config"], sort_keys=True).encode()).hexdigest()
+                        identity = {"config_fingerprint": identity_before, "config_stable": after == identity_before,
+                                    "reasoning_requested": effort, "context_requested": profile,
+                                    "overrides_submitted": overrides,
+                                    "effective_context_attested": False,
+                                    "source_id": sha256((thread_id + ":" + turn_id).encode()).hexdigest(),
+                                    "scope": "one_turn_in_new_ephemeral_thread"}
+                    credits = normalize_receipt({"call_id": packet["call_id"], "actual_model": model,
+                        "usage": usage, "rate_contract": rate_snapshot})["credits"]
                     record_terminal(ledger, task_id=packet["task_id"], call_id=packet["call_id"],
-                                    model=model, thread_id=thread_id, turn_id=turn_id, usage=usage)
+                                    model=model, thread_id=thread_id, turn_id=turn_id, usage=usage,
+                                    rate_contract=rate_snapshot)
                     status = budget_action({**base, "action": "settle", "actual_model": model,
                         "actual_credits": credits, "cost_basis": "token_rate_estimate"}, ledger)
                     return {"status": "completed", "requested_model": model, "host_configured_model": thread["model"],
                             "context_profile": profile,
+                            "host_identity": identity,
                             "activity": {"completed_items": dict(sorted(completed_items.items())),
                                          "source": "host_item_completed_events", "tool_success_verified": False},
                             "model_identity_source": "App Server configuration, not provider attestation",
                             "call_id": packet["call_id"], "usage": usage, "answer": answer,
                             "estimated_credits": credits, "cost_basis": "token_rate_estimate",
+                            "rate_snapshot": rate_snapshot, "rate_fingerprint": rate_check["rate_fingerprint"],
                             "elapsed_seconds": round(time.monotonic()-started, 3), "budget": status}
             raise TimeoutError("turn timed out")
         except ExecutionCancelled:

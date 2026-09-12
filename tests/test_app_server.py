@@ -43,12 +43,60 @@ def packet(tmp_path):
     return dict(root=str(tmp_path),prompt="test",model="gpt-6-astra",task_id="t",call_id="c",estimated_credits=5,explicit_approval=True)
 
 
+def test_custom_rate_snapshot_is_frozen_before_host_work(tmp_path, monkeypatch):
+    rates = app.estimate_observed("gpt-6-astra", {"input_tokens": 0, "output_tokens": 0})["rate_snapshot"]
+    rates["per_million"]["input"] = 100
+    class Client(FakeClient):
+        def event(self, timeout):
+            rates["per_million"]["input"] = 999
+            return super().event(timeout)
+    monkeypatch.setattr(app, "AppServer", Client)
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action": "open", "task_id": "t", "budget_credits": 10}, ledger)
+    result = app.execute_app_server({**packet(tmp_path), "rate_contract": rates}, ledger)
+    assert result["status"] == "completed"
+    assert result["rate_snapshot"]["per_million"]["input"] == 100
+    assert result["budget"]["spent_credits"] == result["estimated_credits"]
+    from premium_model_budget_governor.receipt_journal import recover_terminal
+    assert recover_terminal(ledger, "t", "c")["rate_snapshot"] == result["rate_snapshot"]
+
+
+def test_mismatched_rate_stops_before_host_or_ledger(tmp_path, monkeypatch):
+    rates = app.estimate_observed("gpt-6-astra", {"input_tokens": 0, "output_tokens": 0})["rate_snapshot"]
+    rates["model"] = "other-model"
+    monkeypatch.setattr(app, "AppServer", lambda *a, **k: pytest.fail("host must not start"))
+    ledger = tmp_path / "unused.sqlite3"
+    with pytest.raises(ValueError, match="rate contract"):
+        app.execute_app_server({**packet(tmp_path), "rate_contract": rates}, ledger)
+    assert not ledger.exists()
+
+
 def test_reserves_before_turn_and_settles_usage(tmp_path, monkeypatch):
     monkeypatch.setattr(app,"AppServer",FakeClient)
     ledger = tmp_path/"ledger.sqlite3"
     budget_action({"action":"open","task_id":"t","budget_credits":10},ledger)
     result = app.execute_app_server(packet(tmp_path), ledger)
     assert result["status"] == "completed" and result["budget"]["reserved_credits"] == 0
+    with pytest.raises(ValueError):
+        app.execute_app_server(packet(tmp_path), ledger)
+
+
+def test_transport_failure_after_dispatch_retains_actual_reservation(tmp_path, monkeypatch):
+    class Client(FakeClient):
+        methods = []
+
+        def event(self, timeout):
+            raise ValueError("App Server bounded transport failure")
+
+    monkeypatch.setattr(app, "AppServer", Client)
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action": "open", "task_id": "t", "budget_credits": 10}, ledger)
+    result = app.execute_app_server(packet(tmp_path), ledger)
+    assert "turn/start" in Client.methods
+    assert result["status"] == "unknown_usage"
+    assert result["reservation_retained"] is True
+    status = budget_action({"action": "status", "task_id": "t"}, ledger)
+    assert status["reserved_credits"] == 5
     with pytest.raises(ValueError):
         app.execute_app_server(packet(tmp_path), ledger)
 
@@ -123,6 +171,31 @@ def test_missing_usage_is_not_free(tmp_path, monkeypatch):
     budget_action({"action":"open","task_id":"t","budget_credits":10},ledger)
     result = app.execute_app_server(packet(tmp_path), ledger)
     assert result["reservation_retained"]
+
+
+@pytest.mark.parametrize("thread,turn,expected", [
+    ("th", "tu", "unknown_usage"),
+    ("foreign", "tu", "completed"),
+    ("th", "foreign", "completed"),
+])
+def test_reroute_cannot_settle_as_requested_model(tmp_path, monkeypatch, thread, turn, expected):
+    class Client(FakeClient):
+        def __init__(self, *args):
+            super().__init__(*args)
+            self.events.insert(1, {"method": "model/rerouted", "params": {
+                "threadId": thread, "turnId": turn, "fromModel": "gpt-6-astra",
+                "toModel": "gpt-5.6-sol", "reason": "PRIVATE"}})
+    monkeypatch.setattr(app, "AppServer", Client)
+    ledger = tmp_path / "ledger.sqlite3"
+    budget_action({"action": "open", "task_id": "t", "budget_credits": 10}, ledger)
+    result = app.execute_app_server(packet(tmp_path), ledger)
+    assert result["status"] == expected
+    assert "PRIVATE" not in str(result)
+    if expected == "unknown_usage":
+        assert result["reservation_retained"]
+        assert result["accounting_issue"] == "model_rerouted"
+        from premium_model_budget_governor.receipt_journal import recover_terminal
+        assert recover_terminal(ledger, "t", "c") is None
 
 
 def test_terminal_journal_survives_settlement_failure(tmp_path, monkeypatch):

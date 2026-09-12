@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+import premium_model_budget_governor
 
 
 pytest.importorskip("mcp")
@@ -19,6 +20,7 @@ def test_mcp_server_routes_model_over_stdio():
         server = StdioServerParameters(
             command=sys.executable,
             args=["-m", "premium_model_budget_governor.mcp_server"],
+            env={"PYTHONPATH": str(Path(premium_model_budget_governor.__file__).resolve().parent.parent)},
         )
         async with stdio_client(server) as (read_stream, write_stream):
             async with ClientSession(read_stream, write_stream) as session:
@@ -31,6 +33,18 @@ def test_mcp_server_routes_model_over_stdio():
                 assert "compare_workflow_experiments" in tool_names
                 assert "select_requested_evidence" in tool_names
                 assert "calibrate_workflow_outcomes" in tool_names
+                assert "reconcile_work_observations" in tool_names
+                observation = await session.call_tool("reconcile_work_observations", {
+                    "packet": {"work_units": ["missing"], "receipts": []}})
+                observation_data = getattr(observation, "structured_content", None) or getattr(observation, "structuredContent")
+                assert observation_data["totals"] is None
+                assert observation_data["missing_work_units"] == ["missing"]
+                telemetry = await session.call_tool("normalize_token_telemetry", {"packet": {
+                    "model": "gpt-6-astra", "usage": {"input_tokens": 100,
+                    "output_tokens": 10, "cache_write_tokens": 20}}})
+                telemetry_data = getattr(telemetry, "structured_content", None) or getattr(telemetry, "structuredContent")
+                assert telemetry_data["estimated_credits"] is None
+                assert telemetry_data["cost_status"] == "unsupported_cache_write_rate"
                 calibration = await session.call_tool("calibrate_workflow_outcomes", {"packet": {"pairs": []}})
                 calibration_data = getattr(calibration, "structured_content", None) or getattr(calibration, "structuredContent")
                 assert calibration_data["automatic_promotion"] is False

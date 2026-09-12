@@ -61,6 +61,53 @@ class Workbench:
                     self.projects[identifier] = root
                     self.saved_projects.add(identifier)
 
+    def observation_history(self):
+        from .work_journal import list_observations
+        return list_observations(self.data / "observations.sqlite3")
+
+    def configure_digest(self, request):
+        from .usage_digest import set_digest_preference
+        if set(request) != {"enabled", "approved"}:
+            raise ValueError("digest accepts enabled and approved only")
+        with self.lock:
+            return set_digest_preference(self.data / "digest-preferences.json", request["enabled"], approved=request["approved"])
+
+    def usage_digest(self):
+        from .usage_digest import digest_preference, build_digest
+        with self.lock:
+            preference = digest_preference(self.data / "digest-preferences.json")
+            if not preference["enabled"]:
+                return {**preference, "report": None}
+            report = build_digest(self.data / "observations.sqlite3")
+            with connection(self.database) as db:
+                report["undated_tasks_excluded"] = db.execute("SELECT COUNT(*) FROM runs").fetchone()[0]
+            return {**preference, "report": report}
+
+    def preview_observation(self, packet):
+        from .long_work import reconcile_work
+        report = reconcile_work(packet)
+        return {"id": secrets.token_hex(16), "report": report, "fingerprint": fingerprint(report)}
+
+    def import_observation(self, request):
+        from .long_work import reconcile_work, _identity
+        from .work_journal import save_observation
+        if request.get("approved") is not True:
+            raise ValueError("explicit observation import approval required")
+        identifier = _identity(request.get("id"))
+        packet = request.get("packet")
+        if not isinstance(packet, dict) or fingerprint(reconcile_work(packet)) != request.get("fingerprint"):
+            raise ValueError("observation preview differs; preview again")
+        return save_observation(self.data / "observations.sqlite3", identifier, packet)
+
+    def observation_retention(self, request):
+        from .observation_retention import preview_retention, apply_retention
+        path = self.data / "observations.sqlite3"
+        if request.get("action") == "preview":
+            return preview_retention(path, request.get("before"))
+        if request.get("action") == "apply":
+            return apply_retention(path, request.get("plan"), approved=request.get("approved"))
+        raise ValueError("observation retention action required")
+
     def project_catalog(self):
         with self.lock:
             rows = []
@@ -211,12 +258,15 @@ class Workbench:
                 raise ValueError("evidence is outside the selected project")
             if self._private(path.relative_to(root)) or self._private(relative):
                 raise ValueError("credential or private configuration paths are excluded")
-            limit = 20_000_000 if image else 80_000
+            document = not image and path.suffix.lower() == ".docx"
+            if not image and path.suffix.lower() in {".pdf", ".doc", ".docm", ".rtf", ".odt", ".pptx", ".xlsx"}:
+                raise InputIssue("document_unsupported")
+            limit = 20_000_000 if image else (2_000_000 if document else 80_000)
             with path.open("rb") as stream:
                 data = stream.read(limit + 1)
             if len(data) > limit:
                 raise ValueError("selected evidence exceeds the per-file size limit")
-            text = None
+            text, extraction = None, None
             if image:
                 valid = ((path.suffix.lower() == ".png" and data.startswith(b"\x89PNG\r\n\x1a\n")) or
                          (path.suffix.lower() in {".jpg", ".jpeg"} and data.startswith(b"\xff\xd8\xff")) or
@@ -224,15 +274,20 @@ class Workbench:
                 if not valid:
                     raise ValueError("image signature or format is unsupported")
             else:
-                try:
-                    text = data.decode("utf-8")
-                except UnicodeDecodeError as exc:
-                    raise ValueError("evidence must be UTF-8 text") from exc
+                if document:
+                    from .document_extract import extract_docx
+                    extraction = extract_docx(data)
+                    text = extraction["text"]
+                else:
+                    try:
+                        text = data.decode("utf-8")
+                    except UnicodeDecodeError as exc:
+                        raise ValueError("evidence must be UTF-8 text") from exc
                 if "\x00" in text or not scan_text(text)["safe_to_include"] or not scan_text(name)["safe_to_include"]:
                     raise ValueError("evidence scan needs attention; content withheld")
             rows.append({"name": name, "path": str(path), "sha256": hashlib.sha256(data).hexdigest(),
-                         "bytes": len(data), "text": text, "blob": data if image else None})
-        if not image and sum(row["bytes"] for row in rows) > 240_000:
+                         "bytes": len(data), "text": text, "blob": data if image else None, "extraction": extraction})
+        if not image and sum(len(row["text"].encode("utf-8")) for row in rows) > 240_000:
             raise ValueError("combined text evidence exceeds 240 KB")
         if image and sum(row["bytes"] for row in rows) > 24_000_000:
             raise ValueError("combined image evidence exceeds 24 MB")
@@ -280,6 +335,8 @@ class Workbench:
         root = self._project_root(project)
         try:
             evidence = self._evidence(root, request.get("evidence", []))
+        except InputIssue:
+            raise
         except (ValueError, OSError):
             raise InputIssue("evidence_invalid") from None
         try:
@@ -357,6 +414,7 @@ class Workbench:
                    "capabilities": capabilities, "estimate_basis": "provisional_allowances_not_measured",
                    "context_allowance_tokens": allowance, "output_allowance_tokens": output,
                    "evidence": [{k: row[k] for k in ("name", "sha256", "bytes")} for row in evidence],
+                   "documents": [{"name": row["name"], **row["extraction"]} for row in evidence if row["extraction"]],
                    "images": [{k: row[k] for k in ("name", "sha256", "bytes")} for row in images],
                    "warnings": ["Estimated credits are not bills or weekly allowance. Cache hits are not assumed.",
                                 "Allowance is not a provider token cap. Usage can exceed the estimate.",
@@ -385,6 +443,17 @@ class Workbench:
                 return {"discarded": False}
             return {"discarded": self.previews.pop(identifier, None) is not None}
 
+    @staticmethod
+    def _what_changed(saved):
+        preview = saved["public"]
+        return {"context_profile": preview["context_profile"], "reasoning": preview["effort"],
+                "strategy": preview["strategy"], "attached_text_count": len(saved["evidence"]),
+                "attached_image_count": len(saved["images"]), "baseline_status": "not_linked",
+                "preview_estimated_credits": preview["plan"]["selected"]["estimated_total_credits"],
+                "estimate_basis": preview["estimate_basis"],
+                "quality_status": "not_independently_assessed",
+                "savings": None, "evidence_use_verified": False}
+
     def execute(self, identifier: str, *, approved: bool = False, cancel_event=None) -> dict:
         if approved is not True:
             raise ValueError("explicit approval of the preview is required")
@@ -406,7 +475,7 @@ class Workbench:
                 raise InputIssue("project_invalid")
             for image, key in [(False, "evidence"), (True, "images")]:
                 current = self._evidence(root, [v["name"] for v in saved[key]], image=image)
-                if [(v["path"], v["sha256"]) for v in current] != [(v["path"], v["sha256"]) for v in saved[key]]:
+                if [(v["path"], v["sha256"], v.get("extraction")) for v in current] != [(v["path"], v["sha256"], v.get("extraction")) for v in saved[key]]:
                     raise ValueError("selected evidence changed; create a new preview")
             with connection(self.database, timeout=15) as db:
                 db.execute("BEGIN IMMEDIATE")
@@ -468,6 +537,7 @@ class Workbench:
             accounting = None
             result = {"status": "unknown_usage"}
         receipt = {"id": identifier, "status": result["status"], "requested_model": stage["model"],
+                   "what_changed": self._what_changed(saved),
                    "context_profile": preview["context_profile"],
                    "stop_requested": result.get("stop_requested") is True,
                    "host_configured_model": result.get("host_configured_model"),
@@ -523,6 +593,7 @@ class Workbench:
             pass
         answer = result.pop("answer", "")
         receipt = {**result,"id":identifier,"strategy":preview["strategy"],"requested_model":"gpt-6-astra",
+                   "context_profile":preview["context_profile"],"what_changed":self._what_changed(saved),
                    "usage":None,"weekly_allowance_remaining":None,"cost_basis":"token_rate_estimate"}
         with connection(self.database) as db:
             db.execute("UPDATE runs SET status=?,receipt=? WHERE id=?", (receipt["status"],json.dumps(receipt),identifier))

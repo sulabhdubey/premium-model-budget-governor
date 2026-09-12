@@ -2,6 +2,12 @@
 
 Completed pilot: [results and limitations](CONTEXT_TRIAL_RESULTS_2026_09_08.md).
 
+Current runner update: future context and tool/skill comparisons supply the full
+planned enrollment to the comparator, including when budget or execution stops
+before a usable run. Missing runs remain visible; completed quality failures are
+retained. Enrollment completeness is not quality or receipt completeness. Historical
+published results are not rewritten by this change, and no new paid trial is implied.
+
 This bounded pilot compares inherited skill discovery with the existing
 experimental focused catalog. Both arms request Astra, low reasoning, standard
 service tier, identical task text, and identical images. Only the per-thread

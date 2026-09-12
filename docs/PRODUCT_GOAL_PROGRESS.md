@@ -4,7 +4,25 @@ Owner: Sulabh Dubey. Engineering: Codex under owner direction.
 Objective: approachable, evidence-backed Astra use within a whole-workflow budget.
 This file tracks the full pinned goal; passing a phase's tests does not complete it.
 
-## Acceptance Register
+## Version Boundaries
+
+The chronological checkpoints below are historical evidence, not a statement that
+their version is the latest download. The public beta is rc.6; the current V2
+development work is local and unreleased. An older CI or wheel result does not
+qualify a later source change, even when a private build retains the same label.
+
+Current development includes shared counter validation, frozen rate snapshots,
+CLI/App Server terminal recovery, long-work observations, reviewed exports,
+basic DOCX intake and isolated installation provenance. See the
+[support matrix](SUPPORT_MATRIX.md), [accounting contract](ACCOUNTING_CONTRACT.md)
+and [dependency review](DEPENDENCY_SECURITY.md) for tested scope and limitations.
+These are not claims that all those changes are in the public rc.6 download.
+
+Independent benefits, owner/volunteer usability, remaining platform journeys,
+final release review and publication approval remain open. The Governor does not
+enforce this existing desktop conversation or establish exact weekly-limit savings.
+
+## Historical Acceptance Register
 
 | Phase | Required outcome | Evidence / current gap |
 | --- | --- | --- |
@@ -205,7 +223,7 @@ No additional paid worker call was needed for baseline inspection.
 2026-09-07, saved project management:
 
 - Added authenticated approved folder registration, local persistence, duplicate
-  handling, a 32-project bound, root/home/credential/data exclusions and reversible
+  handling, a 32-project bound, root, home, credential and data exclusions and reversible
   registration removal. Project files and usage history are never deleted.
 - UI Manage projects supports explicit folder access approval and saved-project
   removal. Launch roots are identified separately. Project changes clear evidence

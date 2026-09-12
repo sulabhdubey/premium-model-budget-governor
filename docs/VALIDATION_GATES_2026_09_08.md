@@ -1,5 +1,27 @@
 # Validation Gate Register
 
+## September 10 Development Addendum
+
+Owner formative steps subsequently occurred with assistance: preview creation,
+prospective-estimate explanation, field-help/hover feedback and an empty Usage
+view reported as blank. Older "awaiting task responses" entries below are historical,
+not the current owner status. Unaided installation, independent volunteers and
+independent quality review remain unverified.
+
+Local development now adds a synthetic first-task guide, explicit Usage empty
+states and persistent choice/attachment metadata for a What Changed receipt.
+Historical receipt inspection never dispatches another model. Missing profile
+metadata remains unknown. See [First task receipts](FIRST_TASK_RECEIPTS.md).
+
+Source checks: 645 passed, 2 skipped. Windows installed-wheel checks passed the
+same regression count, actual MCP round trip and owned uninstall. Development
+wheel SHA-256: e0f9813720df004a3a341dada21e69c124ce9e875c6d05fb3575b8c1afaa888a.
+The identical wheel also passed Ubuntu/WSL Python3.12.3 isolated qualification,
+645 passed and 2 skipped, with actual MCP round trip and owned uninstall.
+Rendered QA passed at 1440/390/320 including sample preservation/non-approval,
+empty state and historical receipt navigation. Execution states were simulated;
+no real model task or independent human success is implied. This is not published.
+
 ## rc6 Publication Addendum
 
 The new rc6 wheel passed **359 tests with one platform-specific skip** in both
@@ -16,8 +38,8 @@ page errors. These are automated checks, not human onboarding results.
 
 The privacy review covers changed public text, trial counter exports and release
 packages. Retained pattern findings were reviewed: placeholder home paths in the
-MCP guide, generic `root/home/repository` wording in installation instructions,
-and the source expression `token = secrets.token_urlsafe(32)`. None is an actual
+MCP guide, slash-separated root, home and repository wording in installation instructions,
+and the source expression generating a random URL-safe token. None is an actual
 personal path or embedded secret. No scan can establish exhaustive confidentiality.
 Private project databases, migration receipts and participant information are not
 part of this release. See [rc6 notes](RELEASE_CANDIDATE_RC6.md).

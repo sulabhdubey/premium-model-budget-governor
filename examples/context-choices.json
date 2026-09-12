@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "estimate_basis": {"unit": "estimated_credits", "version": "synthetic-example-not-pricing"},
+  "required": {
+    "capabilities": ["tools", "images", "skills"],
+    "evidence": ["source-snapshot", "image-snapshot"],
+    "state": ["acceptance-contract"]
+  },
+  "acceptance": [{"id": "outcome-checked", "status": "pending"}],
+  "baseline": {
+    "id": "focused-direct", "action": "continue", "supported": true,
+    "model": "gpt-6-astra", "effort": "high", "snapshot": "synthetic-snapshot",
+    "capabilities": ["tools", "images", "skills"],
+    "evidence": ["source-snapshot", "image-snapshot"],
+    "state": ["acceptance-contract"],
+    "costs": {"preparation": [0, 0], "execution": [8, 10], "verification": [1, 2], "recovery": [0, 1]}
+  },
+  "candidates": [
+    {
+      "id": "compact-with-recovery", "action": "compact", "supported": true,
+      "model": "gpt-6-astra", "effort": "high", "snapshot": "synthetic-snapshot",
+      "capabilities": ["tools", "images", "skills"],
+      "evidence": ["source-snapshot", "image-snapshot"],
+      "state": ["acceptance-contract"],
+      "costs": {"preparation": [2, 3], "execution": [2, 4], "verification": [1, 2], "recovery": [0, 5]}
+    }
+  ]
+}

@@ -1,6 +1,13 @@
 """Allowlisted user-facing errors; never include source or host exception text."""
 
 ISSUES = {
+    "document_dependencies": ("evidence", "DOCX support is optional. Install the documents extra in the Governor environment, then preview again."),
+    "document_invalid": ("evidence", "Document structure is invalid or unsupported. No extracted content was sent."),
+    "document_limit": ("evidence", "Document exceeds bounded parsing or text limits. Select a smaller, reviewed document."),
+    "document_unsupported": ("evidence", "This document contains unsupported content or format. Use reviewed UTF-8 text and separate images; no content was silently omitted."),
+    "document_empty": ("evidence", "No readable body text was found. Scanned or image-only documents need a separate reviewed text representation."),
+    "document_scan": ("evidence", "Extracted document text failed a safety pattern check. Content withheld; review the source locally."),
+    "document_worker": ("evidence", "Document parser timed out or failed. No partial extraction was accepted."),
     "project_invalid": ("project", "Select a registered project."),
     "task_required": ("task", "Enter a task between 1 and 16000 characters."),
     "task_scan": ("task", "Task scan needs attention. Remove credentials or untrusted instructions and review again."),

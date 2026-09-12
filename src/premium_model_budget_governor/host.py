@@ -13,6 +13,9 @@ import time
 
 from .cost import RATES, _token
 from .experiments import normalize_receipt
+from .accounting import estimate_observed
+from .telemetry import normalize_counters
+from .receipt_journal import record_terminal
 from .leases import budget_action
 
 
@@ -65,6 +68,7 @@ def codex_command(executable: str, root: Path, model: str, effort: str, images: 
 
 def parse_events(stdout: str) -> dict:
     usage, answer, turns, failed = {"input_tokens": 0, "cached_tokens": 0, "output_tokens": 0}, "", 0, False
+    assumptions = set()
     for line in stdout.splitlines():
         if not line.strip():
             continue
@@ -79,20 +83,21 @@ def parse_events(stdout: str) -> dict:
             failed = True
         if event.get("type") == "turn.completed":
             raw = event.get("usage", {})
-            incoming = _token(raw.get("input_tokens"), "input_tokens")
-            cached = _token(raw.get("cached_input_tokens", 0), "cached_input_tokens")
-            outgoing = _token(raw.get("output_tokens"), "output_tokens")
-            if cached > incoming:
-                raise ValueError("cached input exceeds total input")
+            counts = normalize_counters(raw)
+            assumptions.update(counts["counter_assumptions"])
+            incoming, cached, outgoing = (counts[k] for k in ("input_tokens", "cached_tokens", "output_tokens"))
+            if counts["cache_write_tokens"]:
+                usage["cache_write_tokens"] = usage.get("cache_write_tokens", 0) + counts["cache_write_tokens"]
             for name, n in [("input_tokens", incoming), ("cached_tokens", cached), ("output_tokens", outgoing)]:
                 usage[name] += n
             turns += 1
-    return {"usage": usage if turns else None, "answer": answer, "completed_turns": turns, "failed": failed}
+    return {"usage": usage if turns else None, "answer": answer, "completed_turns": turns, "failed": failed,
+            "counter_assumptions": sorted(assumptions)}
 
 
 def execute_codex(*, prompt: str, root: Path, model: str, effort: str, ledger: Path,
                   task_id: str, call_id: str, estimated_credits: float, timeout_seconds: int = 300,
-                  images: list[Path] | None = None) -> dict:
+                  images: list[Path] | None = None, rate_contract=None) -> dict:
     """Explicit execution API. Caller opens a task budget and authorizes each call.
 
     Answers are returned to the caller but not written to the ledger. Partial or
@@ -107,6 +112,10 @@ def execute_codex(*, prompt: str, root: Path, model: str, effort: str, ledger: P
     timeout = _token(timeout_seconds, "timeout_seconds")
     if not 1 <= timeout <= 1800:
         raise ValueError("timeout_seconds must be between 1 and 1800")
+    rate_check = estimate_observed(model, {"input_tokens": 0, "output_tokens": 0}, contract=rate_contract)
+    if rate_check["estimated_credits"] is None:
+        raise ValueError("rate contract must match requested model and default tier")
+    rate_snapshot = rate_check["rate_snapshot"]
     base = {"task_id": task_id, "lease_id": call_id}
     budget_action({**base, "action": "reserve", "model": model, "estimated_credits": estimated_credits}, ledger)
     _claim_dispatch(ledger, task_id, call_id)
@@ -130,11 +139,26 @@ def execute_codex(*, prompt: str, root: Path, model: str, effort: str, ledger: P
               "model_identity_source": "CLI requested model; provider identity not exposed in JSON events",
               "host": "codex_cli_inherited_config_read_only", "call_id": call_id}
     if parsed["usage"] is not None and completed.returncode == 0 and not parsed["failed"]:
-        projection = normalize_receipt({"call_id": call_id, "actual_model": model, "usage": parsed["usage"]})
+        projection = normalize_receipt({"call_id": call_id, "actual_model": model, "usage": parsed["usage"],
+                                        "rate_contract": rate_snapshot})
         result["estimated_credits"] = projection["credits"]
-        result["cost_basis"] = "requested_model_standard_rate_projection"
-        result["budget"] = budget_action({**base, "action": "settle", "actual_model": model,
-            "actual_credits": projection["credits"], "cost_basis": "token_rate_estimate"}, ledger)
+        result["rate_snapshot"] = rate_snapshot
+        result["rate_fingerprint"] = rate_check["rate_fingerprint"]
+        if projection["credits"] is None:
+            result.update(status="unknown_usage", reservation_retained=True,
+                          cost_status=projection["cost_status"], cost_basis="unknown")
+            return result
+        result["cost_basis"] = ("requested_model_contract_rate_projection" if rate_contract is not None
+                                else "requested_model_standard_rate_projection")
+        try:
+            record_terminal(ledger, task_id=task_id, call_id=call_id, model=model,
+                            thread_id=None, turn_id=None, usage=parsed["usage"],
+                            rate_contract=rate_snapshot, host_source="codex_cli")
+            result["budget"] = budget_action({**base, "action": "settle", "actual_model": model,
+                "actual_credits": projection["credits"], "cost_basis": "token_rate_estimate"}, ledger)
+        except (ValueError, OSError, sqlite3.Error):
+            result.update(status="unknown_usage", reservation_retained=True,
+                          error="Local receipt or settlement incomplete; recover evidence before retry")
     else:
         result["reservation_retained"] = True
         result["status"] = "unknown_usage" if parsed["usage"] is None else "failed"

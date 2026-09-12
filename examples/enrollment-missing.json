@@ -1,0 +1,8 @@
+{
+  "baseline": "astra-direct",
+  "enrollment": [
+    {"task_id": "fixture-1", "snapshot": "frozen-1", "rubric": "checks-1", "arm": "astra-direct", "repeat": 0},
+    {"task_id": "fixture-1", "snapshot": "frozen-1", "rubric": "checks-1", "arm": "astra-focused", "repeat": 0}
+  ],
+  "runs": []
+}
